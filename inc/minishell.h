@@ -1,8 +1,13 @@
 #include <stdlib.h>
+#include <stdio.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
 typedef struct s_files
 {
 	char			*name;
 	struct s_files	*next;
+	int				append;
 }	t_files;
 
 typedef struct s_cmd
@@ -12,7 +17,7 @@ typedef struct s_cmd
 	t_files 		**stdins; //nombres de archivo de redirecciones stdin
 	t_files 		**stdouts; //nombres de archivo de redirecciones stout
 	t_files 		**stderrs; //nombres de archivo de redirecciones sterr
-	int				heredoc;
+	t_files			**heredocs;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -45,3 +50,11 @@ size_t	ft_strlen(const char *s);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 t_files	*ft_lstlast_files(t_files *lst);
+
+// lexer_setters.c
+void	add_infile(char *raw_infile, t_cmd *raw_cmd);
+void	add_outfile(char *raw_infile, t_cmd *raw_cmd, int append);
+void	add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
+
+
+
