@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/11/29 14:41:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/11/29 16:43:32 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,11 +89,11 @@ void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new)
 		*lst = new;
 		return ;
 	}
-	aux = ft_lstlast(*lst);
+	aux = ft_lstlast_cmd(*lst);
 	aux->next = new;
 }
 
-t_cmd	*ft_lstlast(t_cmd *lst)
+t_cmd	*ft_lstlast_cmd(t_cmd *lst)
 {
 	t_cmd	*aux;
 
@@ -105,35 +105,29 @@ t_cmd	*ft_lstlast(t_cmd *lst)
 	return (aux);
 }
 
-/*
-void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new)
+t_files	*ft_lstlast_files(t_files *lst)
 {
-	t_cmd	*aux;
+	t_files	*aux;
 
-	if (*lst && new)
-	{
-		aux = lst[0];
-		while (aux->next)
-			aux = aux->next;
-		aux->next = new;
-	}
-	else if (new)
-		*lst = new;
+	if (!lst)
+		return (0);
+	aux = lst;
+	while (aux->next)
+		aux = aux->next;
+	return (aux);
 }
-*/
+
 void	ft_lstadd_back_files(t_files **lst, t_files *new)
 {
 	t_files	*aux;
 
-	if (*lst && new)
+	if (!*lst)
 	{
-		aux = lst[0];
-		while (aux->next)
-			aux = aux->next;
-		aux->next = new;
-	}
-	else if (new)
 		*lst = new;
+		return ;
+	}
+	aux = ft_lstlast_files(*lst);
+	aux->next = new;
 }
 
 char	*ft_strdup_space(const char *s1)
@@ -144,7 +138,7 @@ char	*ft_strdup_space(const char *s1)
 
 	i = 0;
     len = 0;
-    while (s1 && s1[len] && s1[len] != ' ')
+    while (s1 && s1[len] && s1[len] != ' ' && s1[len] != '<')
         len++;
     ptr = malloc(sizeof(char) * (len + 1));
     if (ptr)

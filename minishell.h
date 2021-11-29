@@ -43,4 +43,5 @@ void	*ft_calloc(size_t count, size_t size);
 char	*ft_strchr(const char *s, int c);
 size_t	ft_strlen(const char *s);
 void	*ft_memcpy(void *dst, const void *src, size_t n);
-t_cmd	*ft_lstlast(t_cmd *lst);
+t_cmd	*ft_lstlast_cmd(t_cmd *lst);
+t_files	*ft_lstlast_files(t_files *lst);

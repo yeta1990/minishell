@@ -5,25 +5,31 @@
 
 void	add_infile(char *raw_infile, t_cmd *raw_cmd)
 {
-	t_files file;
+	t_files *file;
 
-	file.name = ft_strdup_space(raw_infile);
-	file.next = 0;
-    ft_lstadd_back_files(raw_cmd->stdins, &file);
+	file = malloc(sizeof(t_files));
+	//as bash handles joint stdins (<hola<hola2) as separated
+	//instructions, strdup_space has been modified and
+	//will be modified as long as we extend parse_instruction
+	//functionality
+	file->name = ft_strdup_space(raw_infile);
+	file->next = 0;
+    ft_lstadd_back_files(raw_cmd->stdins, file);
+	printf("added %s\n", file->name);
 }
 
-void	parse_cmd(char *str, t_cmd *raw_cmd)
+void	parse_instruction(char *str, t_cmd *raw_cmd)
 {
     while (str && *str)
     {
         if (*str == '<')
         {
 			str++;
-            if (str && *str == ' ')
+            if (str && *str && *str == ' ')
                 str++;
 			add_infile(str, raw_cmd);
         }
-        str++;
+      	str++;
     }
 }
 
@@ -48,26 +54,25 @@ void    save_cmd(char *str, t_data *data)
 	raw_cmd->stderrs[1] = 0;
     while (split && split[i])
     {
-		parse_cmd(split[i], raw_cmd);
+		parse_instruction(split[i], raw_cmd);
         ft_lstadd_back_cmd(data->cmds, raw_cmd);
         i++;
     }
 }
 
-void	print_data(t_cmd **cmds)
+void	print_data(t_files **files)
 {
 	int	i;
 	int	j;
+	t_files *aux;
 
 	i = 0;
-	j = 0;	
-	while(cmds && cmds[i])
+	j = 0;
+	aux = *files;
+	while (aux)
 	{
-		while (cmds[i]->stdins[0])
-		{
-			printf("%s\n", cmds[i]->stdins[0]->name);
-			cmds[i]->stdins[0] = cmds[i]->stdins[0]->next;
-		}
+		printf("%s\n", aux->name);
+		aux = aux->next;
 		i++;
 	}
 }
@@ -91,7 +96,7 @@ int main(int argc, char **argv, char **envp)
         str = readline("minishell");
         save_cmd(str, &data);
         free(str);
-		print_data(data.cmds);
+		print_data(data.cmds[0]->stdins);
     	return (0);
 	}
 
