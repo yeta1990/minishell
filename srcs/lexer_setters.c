@@ -67,18 +67,28 @@ int	add_heredoc(char *raw_keyword, t_cmd *parsed_instruction)
 int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 {
 	int		size;
+	char	*aux;
 
+	aux = 0;
 	size = 1;
 	while (raw_cmd && *raw_cmd && *raw_cmd == ' ')
 	{
 		raw_cmd++;
 		size++;
 	}
-	if (parsed_instruction->cmd == 0)
+	if (parsed_instruction->cmd_and_its_flags == 0)
 	{
-		parsed_instruction->cmd_complete = create_args(raw_cmd, &(parsed_instruction->cmd), 0);
-//		parsed_instruction->cmd = ft_strdup_space(raw_cmd, &size);
+		parsed_instruction->cmd_and_its_flags = ft_strdup_space(raw_cmd, &size);
+	//	parsed_instruction->cmd_complete = create_args(raw_cmd, &(parsed_instruction->cmd), 0);
+	//	parsed_instruction->cmd = ft_strdup_space(raw_cmd, &size);
 	//	printf("size %i, raw_cmd: %s, word: %s\n", size, raw_cmd, parsed_instruction->cmd);
+	}
+	else 
+	{
+		aux = ft_strjoin(parsed_instruction->cmd_and_its_flags, " ");
+		free(parsed_instruction->cmd_and_its_flags);
+		parsed_instruction->cmd_and_its_flags = ft_strjoin(aux, ft_strdup_space(raw_cmd, &size));
+		free(aux);
 	}
 	return (size);
 }

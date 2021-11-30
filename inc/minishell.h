@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/11/30 15:10:29 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 15:54:10 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,22 +33,28 @@ typedef struct s_files
 	int				append;
 }	t_files;
 
-//cmd: primer parámetro de exexve
-//cmd_complete: segundo parametro de execve
-//stdins: nombres de archivo de redirecciones stdin
-//stdouts: nombres de archivo de redirecciones stout
-//stderrs: nombres de archivo de redirecciones sterr
-//heredocs 
+//	cmd: primer parámetro de exexve
+//	cmd_complete: segundo parametro de execve
+//	cmd_and_its_flags: el lexer une todas las palabras sospechosas 
+//de ser un comando y sus flags en una cadena de carácteres separadas 
+//por espacios. luego esta se utiliza para crear "cmd" y "cmd complete",
+//luego ya es inútil.
+//	stdins: nombres de archivo de redirecciones stdin
+//	stdouts: nombres de archivo de redirecciones stout
+//	stderrs: nombres de archivo de redirecciones sterr
+//	heredocs
 
 typedef struct s_cmd
 {
 	char			*cmd;
 	char			**cmd_complete;
+	char			*cmd_and_its_flags;
 	t_files			**stdins;
 	t_files			**stdouts;
 	t_files			**stderrs;
 	t_files			**heredocs;
 	struct s_cmd	*next;
+	char			***env;
 }	t_cmd;
 
 typedef struct s_history

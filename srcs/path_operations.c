@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:12:15 by albgarci          #+#    #+#             */
-/*   Updated: 2021/11/30 15:11:04 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 15:55:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ char	**path_surgery(char **path_to_cut, int path_emergency)
 	
 	if (path_to_cut && *path_to_cut && path_emergency == 0)
 	{
-		printf("path to cut %s\n", *path_to_cut);
 		e2 = ft_strtrim_full_str(*path_to_cut, "PATH=");
 		e1 = ft_strjoin(e2, ":/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin");
 		free_paths(path_to_cut);

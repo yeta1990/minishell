@@ -4,7 +4,6 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 {
     while (str && *str)
     {
-		printf("str left: %s\n", str);
 		if (*str == '<')
         {
 			str++;
@@ -27,11 +26,10 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 			else if (str && *str && *str != '>')
 				str += add_outfile(str, parsed_instruction, 0);
 		}
-		//cmd parsing needs more work, only for simple testing purposes...
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
-	//	str++;
     }
+	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd), *(parsed_instruction->env));
 }
 
 void    split_and_parse_instruction(char *str, t_data *data)
@@ -57,10 +55,10 @@ void    split_and_parse_instruction(char *str, t_data *data)
 	parsed_instruction->heredocs[0] = 0;
 	parsed_instruction->heredocs[1] = 0;
 	parsed_instruction->cmd = 0;
-	parsed_instruction->cmd_complete = malloc(sizeof(char *) * 2);
-	parsed_instruction->cmd_complete[0] = 0;
-	parsed_instruction->cmd_complete[1] = 0;
+	parsed_instruction->cmd_complete = 0;
+	parsed_instruction->cmd_and_its_flags = 0;
 	parsed_instruction->next = 0;
+	parsed_instruction->env = &(data->env);
     while (split && split[i])
     {
 		parse_instruction(split[i], parsed_instruction);
@@ -124,7 +122,7 @@ void	print_data(t_cmd *cmd)
 		printf("cmd: %s\n", cmd->cmd);
 	if (cmd->cmd_complete)
 	{
-		printf("full cmd: %s\n", cmd->cmd);
+		printf("cmd_complete: ");
 		cmd_complete = cmd->cmd_complete;
 		while(cmd_complete && *cmd_complete)
 		{
@@ -132,6 +130,8 @@ void	print_data(t_cmd *cmd)
 			cmd_complete++;
 		}
 	}
+	if (cmd->cmd_and_its_flags)
+		printf("\ncmd and its flags (useless for execve): %s", cmd->cmd_and_its_flags);
 	printf("\n");
 }
 
