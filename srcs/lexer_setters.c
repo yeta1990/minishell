@@ -19,7 +19,6 @@ int	add_infile(char *raw_infile, t_cmd *parsed_instruction)
 	file->name = ft_strdup_space(raw_infile, &size);
 	file->next = 0;
     ft_lstadd_back_files(parsed_instruction->stdins, file);
-	printf("size infile %i\n", size);
 	return (size);
 }
 
