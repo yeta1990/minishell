@@ -4,44 +4,33 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 {
     while (str && *str)
     {
-        if (*str == '<')
+		printf("str left: %s\n", str);
+		if (*str == '<')
         {
 			str++;
-			if (str && *str && *str == ' ')
+			if (str && *str && *str == '<')
+			{
 				str++;
-			if (str && *str && *str != '<')
-				add_infile(str, parsed_instruction);
+				str += add_heredoc(str, parsed_instruction);
+			}
+			else if (str && *str && *str != '<')
+				str += add_infile(str, parsed_instruction);
         }
-		if (*str == '<')
-		{
-			str++;
-			if (str && *str && *str == ' ')
-				str++;
-			add_heredoc(str, parsed_instruction);
-		}
 		else if (*str == '>')
 		{
 			str++;
-			if (str && *str && *str == ' ')
+			if (str && *str && *str == '>')
+			{
 				str++;
-			if (str && *str && *str != '>')
-				add_outfile(str, parsed_instruction, 0);
-		}
-		if (*str == '>')
-		{	
-			str++;
-			if (str && *str && *str == ' ')
-				str++;
-			add_outfile(str, parsed_instruction, 1);
+				str += add_outfile(str, parsed_instruction, 1);
+			}
+			else if (str && *str && *str != '>')
+				str += add_outfile(str, parsed_instruction, 0);
 		}
 		//cmd parsing needs more work, only for simple testing purposes...
-		if (*str != '<' && *str != '>' && *str != ' ')
-		{
-			parsed_instruction->cmd = ft_strdup_space(str);
-			while (str && *str && *str != ' ')
-				str++;
-		}
-		str++;
+		else if (*str != '<' && *str != '>')
+			str += add_cmd(str, parsed_instruction);
+	//	str++;
     }
 }
 
@@ -68,7 +57,9 @@ void    split_and_parse_instruction(char *str, t_data *data)
 	parsed_instruction->heredocs[0] = 0;
 	parsed_instruction->heredocs[1] = 0;
 	parsed_instruction->cmd = 0;
-	parsed_instruction->cmd_complete = 0;
+	parsed_instruction->cmd_complete = malloc(sizeof(char *) * 2);
+	parsed_instruction->cmd_complete[0] = 0;
+	parsed_instruction->cmd_complete[1] = 0;
 	parsed_instruction->next = 0;
     while (split && split[i])
     {
@@ -129,7 +120,7 @@ void	print_data(t_cmd *cmd)
 		std_aux = std_aux->next;
 		i++;
 	}
-	if (cmd->cmd)
+	if (cmd->cmd != 0)
 		printf("cmd: %s\n", cmd->cmd);
 	if (cmd->cmd_complete)
 	{
@@ -160,7 +151,7 @@ int main(int argc, char **argv, char **envp)
 	data.cmds[1] = 0;
     while (1)
     {
-        str = readline("minishell$ ");
+        str = readline(ANSI_COLOR_GREEN "minishell $ " ANSI_COLOR_RESET);
 		if (str)
  		{
 			split_and_parse_instruction(str, &data);

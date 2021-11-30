@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/11/29 23:47:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/11/30 12:10:15 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ char	**ft_split(char const *s, char c)
 }
 
 
-char	*ft_strdup_space(const char *s1)
+char	*ft_strdup_space(const char *s1, int *size)
 {
 	size_t	i;
     size_t  len;
@@ -94,6 +94,7 @@ char	*ft_strdup_space(const char *s1)
     ptr = malloc(sizeof(char) * (len + 1));
     if (ptr)
 	{
+		*size += len;
 		while (len-- > 0)
 		{
 			*(ptr + i) = *(s1 + i);
