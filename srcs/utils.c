@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/11/30 12:10:15 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/01 11:43:27 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,20 +15,32 @@
 static int	get_nwords(char const *s, char c)
 {
 	int	nwords;
+	int	f_dquote;
+	int	f_quote;
 
+	f_dquote = 0;
+	f_quote = 0;
 	nwords = 0;
 	if (!*s)
 		return (0);
 	while (*s)
 	{
-		if (*s == c)
+		if ((*s == '"') && f_dquote == 0 && f_quote == 0)
+			f_dquote = 1;
+		else if ((*s == '"') && f_dquote == 1)
+			f_dquote = 0;
+		if ((*s == '\'') && f_quote == 0 && f_dquote == 0)
+			f_quote = 1;
+		else if ((*s == '\'') && f_quote == 1)
+			f_quote = 0;
+		if ((*s != c) || ((*s == c) && ((f_dquote && ft_strchr(s, '"')) || (f_quote && ft_strchr(s, '\'')))))
+			s++;
+		else
 		{
 			nwords++;
 			while (*s == c)
 				s++;
 		}
-		else
-			s++;
 	}
 	nwords++;
 	return (nwords);
@@ -104,4 +116,9 @@ char	*ft_strdup_space(const char *s1, int *size)
 		return (ptr);
 	}
 	return (0);
+}
+
+int main(void)
+{
+	printf("%d\n", get_nwords("echo \"|\"", '|'));
 }
