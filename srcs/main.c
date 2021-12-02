@@ -39,7 +39,7 @@ void    split_and_parse_instruction(char *str, t_data *data)
     t_cmd   *parsed_instruction;
 
     i = 0;
-	split = ft_split(str, '|');
+	split = ft_split_w_quotes(str, '|');
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *) * 2);
@@ -59,12 +59,12 @@ void    split_and_parse_instruction(char *str, t_data *data)
 	parsed_instruction->cmd_and_its_flags = 0;
 	parsed_instruction->next = 0;
 	parsed_instruction->env = &(data->env);
-    while (split && split[i])
-    {
+ //   while (split && split[i])
+   // {
 		parse_instruction(split[i], parsed_instruction);
         ft_lstadd_back_cmd(data->cmds, parsed_instruction);
-        i++;
-    }
+//        i++;
+  //  }
 }
 
 int main(int argc, char **argv, char **envp)

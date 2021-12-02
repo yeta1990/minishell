@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/11/30 16:05:29 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/02 17:14:14 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ char	**ft_split_mod(char const *str, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
+char	**ft_split_w_quotes(char const *str, char c);
 
 //test_printers.c
 void	print_t_cmd(t_cmd *cmd);
