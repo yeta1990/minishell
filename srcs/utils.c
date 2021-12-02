@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/02 17:16:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/02 23:59:38 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,11 +85,20 @@ char	*ft_strdup_space(const char *s1, int *size)
 	size_t	i;
     size_t  len;
 	char	*ptr;
+	char	*aux;
 
 	i = 0;
     len = 0;
-    while (s1 && s1[len] && s1[len] != ' ' && s1[len] != '<' && s1[len] != '>')
-        len++;
+	if (s1 && *s1 == '"')
+	{
+		aux = (char *)s1 + 1;
+		if (ft_strchr(aux, '"'))
+			len = (ft_strchr(aux, '"') - aux) + 2;
+		printf("len %li\n", len);
+	}
+	else
+	    while (s1 && s1[len] && s1[len] != ' ' && s1[len] != '<' && s1[len] != '>')
+    	    len++;
     ptr = malloc(sizeof(char) * (len + 1));
     if (ptr)
 	{

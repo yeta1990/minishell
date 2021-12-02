@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   split_quotes.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/02 17:19:51 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/03 00:25:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,20 @@ static int	get_nwords(char const *s, char c)
 			f_quote = 1;
 		else if ((*s == '\'') && f_quote == 1)
 			f_quote = 0;
-		if ((*s != c) || ((*s == c) && ((f_dquote && ft_strchr(s, '"')) || (f_quote && ft_strchr(s, '\'')))))
+		if (*s != c)
 			s++;
+		else if ((*s == c) && ((f_dquote && ft_strchr(s, '"')) || (f_quote && ft_strchr(s, '\''))))
+			s += ft_strchr(s, '"') - s;
 		else
 		{
 			nwords++;
+			printf("s left: %s\n", s);
 			while (*s == c)
 				s++;
 		}
 	}
 	nwords++;
+	printf("%s %i words\n", s, nwords);
 	return (nwords);
 }
 

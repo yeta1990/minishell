@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/01 10:39:21 by crisfern         ###   ########.fr       */
+/*   Updated: 2021/12/03 00:17:25 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@ char	**create_args(char *raw_cmd, char **cmd, char *envp[])
 {
 	char	**args;
 
-	args = ft_split(raw_cmd, ' ');
+	printf("raw cmd %s\n", raw_cmd);
+	args = ft_split_w_quotes(raw_cmd, ' ');
 	if (!args || !(*args))
 	{
 		ft_putstr_fd("pipex: : command not found\n", 2);
