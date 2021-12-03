@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/02 17:14:14 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/03 15:54:21 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new);
 void	ft_lstadd_back_files(t_files **lst, t_files *new);
 t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 t_files	*ft_lstlast_files(t_files *lst);
+t_files	*ft_lstnew(void *content);
 
 // lexer_setters.c
 int		add_infile(char *raw_infile, t_cmd *raw_cmd);

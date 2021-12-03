@@ -50,3 +50,14 @@ void	ft_lstadd_back_files(t_files **lst, t_files *new)
 	aux->next = new;
 }
 
+t_files	*ft_lstnew(void *content)
+{
+	t_files	*element;
+
+	element = malloc(sizeof(t_files));
+	if (!element)
+		return (NULL);
+	element->name = content;
+	element->next = NULL;
+	return (element);
+}
