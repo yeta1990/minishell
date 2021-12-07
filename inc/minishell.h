@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/03 15:54:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 14:15:57 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,9 @@ char	**get_paths(char *envp[]);
 char	**path_surgery(char **path_to_cut, int path_emergency);
 void	free_paths(char **paths);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
+
+// get_char_pos.c
+char	**split_quote_sensitive(char *str);
 
 //utils
 char	**ft_split(char const *s, char c);

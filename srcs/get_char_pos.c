@@ -6,27 +6,13 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:55:09 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/07 14:03:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 14:53:48 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//
-//gccw get_char_pos.c -I../inc list_utils.c ../../libft/ft_substr.c ../../libft/ft_memcpy.c ../../libft/ft_strdup.c -o m && ./m | cat -e
-
-
 #include "minishell.h"
 
-size_t	ft_strlen(const char *s)
-{
-	size_t	i;
-
-	i = 0;
-	while (s && s[i])
-		i++;
-	return (i);
-}
-
-int	get_char_pos(char *str, char c)
+static int	get_char_pos(char *str, char c)
 {
 	size_t	i;
 
@@ -40,7 +26,6 @@ int	get_char_pos(char *str, char c)
 		i++;
 	}
 	return (ft_strlen(str) + 1);
-
 }
 
 int	has_closed_quotes(char *str)
@@ -76,39 +61,21 @@ int	has_closed_quotes(char *str)
 	}
 	return (0);
 }
-void	cut_outside_quotes(char *aux, t_files **full_strings)
+
+void	cut_outside_quotes(char *aux, t_files **full_strings, char c)
 {
 	int	cut_len;
 
 	cut_len = 0;
-	while (aux && *aux && *aux != '\"')
+	while (aux && *aux && *aux != c)
 	{
 		while (aux && *aux && *aux == ' ')
 			aux++;
-		if (get_char_pos(aux + 1, ' ') < get_char_pos(aux + 1, '\"') && *aux != '\"')
+		if (get_char_pos(aux + 1, ' ') < get_char_pos(aux + 1, c) && *aux != c)
 			ft_lstadd_back_files(full_strings, ft_lstnew(ft_substr(aux, 0, get_char_pos(aux + 1, ' '))));
-		else if (*aux != '\"')
-			ft_lstadd_back_files(full_strings, ft_lstnew(ft_substr(aux, 0, get_char_pos(aux + 1, '\"'))));
-		while (aux && *aux && *aux != ' ' && *aux != '\"')
-			aux++;
-	}
-}
-
-
-void	cut_outside_simple_quotes(char *aux, t_files **full_strings)
-{
-	int	cut_len;
-
-	cut_len = 0;
-	while (aux && *aux && *aux != '\'')
-	{
-		while (aux && *aux && *aux == ' ')
-			aux++;
-		if (get_char_pos(aux + 1, ' ') < get_char_pos(aux + 1, '\'') && *aux != '\'')
-			ft_lstadd_back_files(full_strings, ft_lstnew(ft_substr(aux, 0, get_char_pos(aux + 1, ' '))));
-		else if (*aux != '\'')
-			ft_lstadd_back_files(full_strings, ft_lstnew(ft_substr(aux, 0, get_char_pos(aux + 1, '\''))));
-		while (aux && *aux && *aux != ' ' && *aux != '\'')
+		else if (*aux != c)
+			ft_lstadd_back_files(full_strings, ft_lstnew(ft_substr(aux, 0, get_char_pos(aux + 1, c))));
+		while (aux && *aux && *aux != ' ' && *aux != c)
 			aux++;
 	}
 }
@@ -128,16 +95,40 @@ void	cut_end_quotes(char *aux, t_files **full_strings)
 	}
 }
 
-int main(void)
+char **from_list_to_double_char(t_files **full_strings)
 {
-	char	*str = " pepe\" hola\"en medio\" que tal\"\"\"muy bien \"hola\'";
+	char	**s;
+	t_files	*aux;
+	int		size;
+
+	size = 0;
+	aux = *full_strings;
+	s = 0;
+	while (aux)
+	{
+		aux = aux->next;
+		size++;
+	}
+	s = malloc(sizeof(char *) * size + 1);
+
+	aux = *full_strings;
+	size = 0;
+	while (aux)
+	{
+		s[size] = ft_strdup(aux->name);
+		aux = aux->next;
+		size++;
+	}
+	s[size] = 0; 
+	return (s);
+}
+
+char **split_quote_sensitive(char *str)
+{
 	int		quotes_type;
 	char	*aux;
 	t_files	**full_strings; 
-		// linked list to store each piece of cmd, instead of 
-		// current split in cmd arrange
-		// after the list preparation, we will have to convert linked list
-		// into char **
+
 	full_strings = malloc(sizeof(t_files *));
 	full_strings[0] = 0;
 	aux = str;
@@ -146,7 +137,7 @@ int main(void)
 	{
 		if (quotes_type == 1)
 		{
-			cut_outside_simple_quotes(aux, full_strings);
+			cut_outside_quotes(aux, full_strings, '\'');
 			while (*aux != '\'')
 				aux++;
 			if (has_closed_quotes(aux) == 1)
@@ -158,7 +149,7 @@ int main(void)
 		}
 		else if (quotes_type == 2)
 		{
-			cut_outside_quotes(aux, full_strings);
+			cut_outside_quotes(aux, full_strings, '\"');
 			while (*aux != '\"')
 				aux++;
 			if (has_closed_quotes(aux) == 2)
@@ -171,20 +162,5 @@ int main(void)
 		quotes_type = has_closed_quotes(aux);
 	}
 	cut_end_quotes(aux, full_strings);
-	
-	///////////////////////////////////////////
-	//// not saving the last part of the string!
-	//// also replicate the same logic in the first
-	//// and middle parts of the string
-	///////////////////////////////////////////
-	//append all strings separated by spaces to the end of the list
-
-	t_files *f;
-	f = *full_strings;
-	printf("======list======\n");
-	while (f)
-	{
-		printf("%s\n", f->name);
-		f = f->next;
-	}
+	return (from_list_to_double_char(full_strings));
 }
