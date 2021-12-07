@@ -32,14 +32,17 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd), *(parsed_instruction->env));
 }
 
-void    split_and_parse_instruction(char *str, t_data *data)
+t_cmd *split_and_parse_instruction(char *str, t_data *data)
 {
-    char **split;
+//    char **split;
     int     i;
     t_cmd   *parsed_instruction;
 
     i = 0;
-	split = ft_split_w_quotes(str, '|');
+//	split = ft_split_w_quotes(str, '|');
+//	while (split && *split)
+//		i++;
+	printf("%s", str);	
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *) * 2);
@@ -61,8 +64,10 @@ void    split_and_parse_instruction(char *str, t_data *data)
 	parsed_instruction->env = &(data->env);
  //   while (split && split[i])
    // {
-		parse_instruction(split[i], parsed_instruction);
-        ft_lstadd_back_cmd(data->cmds, parsed_instruction);
+		parse_instruction(str, parsed_instruction);
+		return (parsed_instruction);
+	
+    //    ft_lstadd_back_cmd(data->cmds, parsed_instruction);
 //        i++;
   //  }
 }
@@ -72,6 +77,7 @@ int main(int argc, char **argv, char **envp)
     char    *str;
     t_data   data;
 	int		i;
+	char	**instructions;
 
 	i = 0;
 	argc += 0;
@@ -86,16 +92,24 @@ int main(int argc, char **argv, char **envp)
         str = readline(ANSI_COLOR_GREEN "minishell $ " ANSI_COLOR_RESET);
 		if (str)
  		{
-			split_and_parse_instruction(str, &data);
-        	free(str);
+			i = 0;
+			instructions = ft_split_w_quotes(str, '|');
+			while (instructions && *instructions && i < 2)
+			{
+				//ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(*instructions, &data));
+				printf("instr: %s\n", instructions[i]);
+			//	instructions++;
+				i++;
+			}
+			free(str);
 
-			if (ft_strlen(str) > 0)
+		/*	if (ft_strlen(str) > 0)
 			{
 				print_t_cmd(data.cmds[0]);
 				//we should free data.cmds after each iteration to prevent minishell
 				//from leaks and ease the work
 				data.cmds[0] = 0;
-			}
+			}*/
 		}
 		if (argc == 1000000)
 			return (0);

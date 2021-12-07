@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/03 00:25:29 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/07 20:37:48 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,7 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 			else if (!f_dquote && !f_quote)
 			{
 				aux = ft_strchr(str, c);
+				printf("aux: %s\n", aux);
 				ptr[i++] = ft_substr(str, 0, aux - str);
 				while (*aux == c)
 					aux++;
@@ -113,17 +114,37 @@ char	**ft_split_w_quotes(char const *s, char c)
 	return (0);
 }
 
-/*
 int main(void)
 {
 	char **sp;
 	sp = 0;
-	sp = ft_split_w_quotes("echo hola | que tal ", '|');
+	sp = ft_split_w_quotes("echo hola | que tal | bien  ", '|');
+	printf("echo hola | que tal | bien \n");
 	while (*sp)
 	{
 		printf("%s\n", *sp);
 		sp++;
 	}
+	printf("\n\n");	
+	char **sp2;
+	sp2 = 0;
+	sp2 = ft_split_w_quotes("echo \"hola | que\" tal | bien  ", '|');
+	printf("echo \"hola | que\" tal | bien \n");
+	while (*sp2)
+	{
+		printf("%s\n", *sp2);
+		sp2++;
+	}
+	printf("\n\n");	
+	char **sp3;
+	sp3 = 0;
+	sp3 = ft_split_w_quotes("echo \"hola | que\"", '|');
+	printf("echo \"hola | que\"\n");
+	while (*sp3)
+	{
+		printf("%s\n", *sp3);
+		sp3++;
+	}
 
 //	printf("%d\n", get_nwords("echo \"|\"", '|'));
-}*/
+}
