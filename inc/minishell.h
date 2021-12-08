@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/07 14:15:57 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:11:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,12 @@ void	free_paths(char **paths);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
 
 // get_char_pos.c
+int		has_closed_quotes(char *str);
+int		get_char_pos(char *str, char c);
 char	**split_quote_sensitive(char *str);
+
+//split_quotes.c
+int		get_char_pos_final_quotes(char q, char *str);
 
 //utils
 char	**ft_split(char const *s, char c);
@@ -117,6 +122,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
+void	free_double_string(char **str);
 
 //test_printers.c
 void	print_t_cmd(t_cmd *cmd);

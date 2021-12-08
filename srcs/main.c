@@ -42,7 +42,7 @@ t_cmd *split_and_parse_instruction(char *str, t_data *data)
 //	split = ft_split_w_quotes(str, '|');
 //	while (split && *split)
 //		i++;
-	printf("%s", str);	
+//	printf("%s", str);	
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *) * 2);
@@ -76,31 +76,34 @@ int main(int argc, char **argv, char **envp)
 {
     char    *str;
     t_data   data;
-	int		i;
 	char	**instructions;
+	int		i;
 
 	i = 0;
 	argc += 0;
 	while (argv[i])
 		i++;
 	data.env = envp;
-	data.cmds = malloc(sizeof(t_cmd *) * 2);
+	data.cmds = malloc(sizeof(t_cmd *) * 4);
 	data.cmds[0] = 0;
 	data.cmds[1] = 0;
+
+	i = 0;
     while (1)
     {
         str = readline(ANSI_COLOR_GREEN "minishell $ " ANSI_COLOR_RESET);
 		if (str)
  		{
-			i = 0;
 			instructions = ft_split_w_quotes(str, '|');
-			while (instructions && *instructions && i < 2)
+			while (instructions && instructions[i])
 			{
-				//ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(*instructions, &data));
-				printf("instr: %s\n", instructions[i]);
-			//	instructions++;
+				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
+			//	printf("\ninstr: %s\n", instructions[i]);
+				print_t_cmd(data.cmds[i]);
 				i++;
 			}
+			i = 0;
+			free_double_string(instructions);
 			free(str);
 
 		/*	if (ft_strlen(str) > 0)

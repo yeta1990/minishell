@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/02 23:59:38 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:06:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,7 @@ char	*ft_strdup_space(const char *s1, int *size)
 		aux = (char *)s1 + 1;
 		if (ft_strchr(aux, '"'))
 			len = (ft_strchr(aux, '"') - aux) + 2;
-		printf("len %li\n", len);
+	//	printf("len %li\n", len);
 	}
 	else
 	    while (s1 && s1[len] && s1[len] != ' ' && s1[len] != '<' && s1[len] != '>')

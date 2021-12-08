@@ -6,18 +6,20 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/07 20:37:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 17:23:09 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_nwords(char const *s, char c)
+static int	get_nwords(char const *str, char c)
 {
 	int	nwords;
 	int	f_dquote;
 	int	f_quote;
+	char	*s;
 
+	s = (char *)str;
 	f_dquote = 0;
 	f_quote = 0;
 	nwords = 0;
@@ -35,18 +37,16 @@ static int	get_nwords(char const *s, char c)
 			f_quote = 0;
 		if (*s != c)
 			s++;
-		else if ((*s == c) && ((f_dquote && ft_strchr(s, '"')) || (f_quote && ft_strchr(s, '\''))))
-			s += ft_strchr(s, '"') - s;
+		else if ((*s == c) && ((f_dquote && ft_strchr(s, '\"')) || (f_quote && ft_strchr(s, '\''))))
+			s += ft_strchr(s, '\"') - s;
 		else
 		{
 			nwords++;
-			printf("s left: %s\n", s);
 			while (*s == c)
 				s++;
 		}
 	}
 	nwords++;
-	printf("%s %i words\n", s, nwords);
 	return (nwords);
 }
 
@@ -54,39 +54,71 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 {
 	int		i;
 	char	*aux;
-	int		f_dquote;
-	int		f_quote;
+	int		len;
 
-	f_dquote = 0;
-	f_quote = 0;
 	i = 0;
+	len = 0;
+	c += 0;
 	if ((nwords > 0) && *str)
 	{
-		while (i < (nwords - 1))
+		aux = str;
+		while (*aux)
 		{
-			if (ft_strchr(str, '"') && f_dquote == 0 && f_quote == 0)
-				f_dquote = 1;
-			else if (ft_strchr(str, '"') && f_dquote == 1)
-				f_dquote = 0;
-			if (ft_strchr(str, '\'') && f_quote == 0 && f_dquote == 0)
-				f_quote = 1;
-			else if (ft_strchr(str, '\'') && f_quote == 1)
-				f_quote = 0;
-			if (ft_strchr(str, c) && ((f_dquote && ft_strchr(str, '"')) || (f_quote && ft_strchr(str, '\''))))
-				str = ft_strchr(str, c) + 1;
-			else if (!f_dquote && !f_quote)
-			{
-				aux = ft_strchr(str, c);
-				printf("aux: %s\n", aux);
-				ptr[i++] = ft_substr(str, 0, aux - str);
-				while (*aux == c)
+			while (*aux == '|')
 					aux++;
-				str = aux;
+			if (has_closed_quotes(aux) == 0) 
+			{
+				while (aux && aux[len] && aux[len] != '|')
+					len++;
+			//	printf("aux: %s, len %i\n", aux, len);
+				ptr[i++] = ft_substr(aux, 0, len);
+			//	printf("ptr: %s\n", ptr[0]);
+				aux +=len;
+				len = 0;
 			}
+			else if (has_closed_quotes(aux) == 1)
+			{
+				len = get_char_pos_final_quotes('\'', aux);
+				while (aux && aux[len] && aux[len] != '|')
+					len++;
+			//	printf("2aux: %s, len %i\n", aux, len);
+				ptr[i++] = ft_substr(aux, 0, len);
+				aux += len - 1;
+				len = 0;
+			}
+			else if (has_closed_quotes(aux) == 2)
+			{
+				len = get_char_pos_final_quotes('\"', aux);
+				while (aux && aux[len] && aux[len] != '|')
+					len++;
+			//	printf("3aux: %s, len %i\n", aux, len);
+				ptr[i++] = ft_substr(aux, 0, len);
+				aux += len - 1;
+				len = 0;
+			}
+		aux++;
 		}
-		ptr[i++] = ft_strdup(str);
-		ptr[i] = 0;
+	ptr[i] = 0;
 	}
+}
+
+int	get_char_pos_final_quotes(char q, char *str)
+{
+	int	i;
+
+	i = 0;
+	if (!str)
+		return (0);
+	while (str && str[i])
+	{
+		while (str[i] != q)
+			i++;
+		i += 2;
+		while (str[i] != q)
+			i++;
+		return (i + 1);
+	}
+	return (i);
 }
 
 char	**ft_split_w_quotes(char const *s, char c)
@@ -113,38 +145,54 @@ char	**ft_split_w_quotes(char const *s, char c)
 	}
 	return (0);
 }
-
+/*
 int main(void)
 {
 	char **sp;
 	sp = 0;
-	sp = ft_split_w_quotes("echo hola | que tal | bien  ", '|');
 	printf("echo hola | que tal | bien \n");
+	sp = ft_split_w_quotes("echo hola | que tal | bien  \0", '|');
+
 	while (*sp)
 	{
-		printf("%s\n", *sp);
+		printf("->%s\n", *sp);
 		sp++;
 	}
 	printf("\n\n");	
 	char **sp2;
-	sp2 = 0;
-	sp2 = ft_split_w_quotes("echo \"hola | que\" tal | bien  ", '|');
 	printf("echo \"hola | que\" tal | bien \n");
+	sp2 = 0;
+	sp2 = ft_split_w_quotes("echo \"hola | que\" tal | bien  \0", '|');
+
 	while (*sp2)
 	{
-		printf("%s\n", *sp2);
+		printf("->%s\n", *sp2);
 		sp2++;
 	}
 	printf("\n\n");	
 	char **sp3;
-	sp3 = 0;
-	sp3 = ft_split_w_quotes("echo \"hola | que\"", '|');
 	printf("echo \"hola | que\"\n");
+	sp3 = 0;
+	sp3 = ft_split_w_quotes("echo \"hola\"| | que\"\0", '|');
+
 	while (*sp3)
 	{
-		printf("%s\n", *sp3);
+		printf("->%s\n", *sp3);
 		sp3++;
 	}
 
+
+	char **sp4;
+	printf("\necho hola \n");
+	sp4 = 0;
+	sp4 = ft_split_w_quotes("\0", '|');
+
+	while (*sp4)
+	{
+		printf("->%s\n", *sp4);
+		sp4++;
+	}
+
+
 //	printf("%d\n", get_nwords("echo \"|\"", '|'));
-}
+}*/

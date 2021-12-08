@@ -6,13 +6,13 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:55:09 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/07 14:53:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/08 15:51:23 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_char_pos(char *str, char c)
+int	get_char_pos(char *str, char c)
 {
 	size_t	i;
 
