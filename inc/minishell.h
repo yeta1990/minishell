@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 12:59:04 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 18:55:14 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,10 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/wait.h>
+# include <string.h>
+# include <fcntl.h>
+# include <errno.h>
 
 # define COLOR_RED     "\x1b[31m"
 # define COLOR_GR   "\x1b[32m"
@@ -125,5 +129,14 @@ void	free_files(t_files *first);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
+
+//executor.c
+int		execute_commands(t_data *data);
+void	ft_exec_first(t_cmd *data, int fds[2]);
+int		ft_exec_last(t_cmd *data, int fds[2]);
+
+//ft_files.c
+void	ft_dup_inile(char *file);
+void	ft_dup_output(char *file);
 
 #endif

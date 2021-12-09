@@ -60,6 +60,7 @@ void	check_leaks(void)
 {
 	system("leaks minishell");
 }
+
 int main(int argc, char **argv)
 {
     char    *str;
@@ -67,7 +68,7 @@ int main(int argc, char **argv)
 	char	**instructions;
 	int		i;
 
-	atexit(check_leaks);
+//	atexit(check_leaks);
 	i = 0;
 	argc += 0;
 	while (argv[i])
@@ -91,7 +92,7 @@ int main(int argc, char **argv)
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				i++;
-			}
+			}	
 			//leaks checker, only for testing purposes
 			if (strcmp("exit", data.cmds[0]->cmd_complete[0]) == 0)
 			{
@@ -101,6 +102,7 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
+			execute_commands(&data);
 			print_t_cmd(data.cmds);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
