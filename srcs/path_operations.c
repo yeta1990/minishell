@@ -6,31 +6,21 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:12:15 by albgarci          #+#    #+#             */
-/*   Updated: 2021/11/30 15:55:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 12:58:34 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**get_paths(char *envp[])
+char	**get_paths(char *path)
 {
-	int		i;
 	char	**raw_path;
 
-	i = 0;
 	raw_path = malloc(sizeof(char *) * 2);
-	if (envp)
+	if (path)
 	{
-		while (envp && envp[i])
-		{
-			if (ft_memcmp(envp[i], "PATH=/", 6) == 0)
-			{
-				raw_path[0] = ft_strdup(envp[i]);
-				raw_path[1] = 0;
-				break ;
-			}
-			i++;
-		}
+		raw_path[0] = ft_strdup(path);
+		raw_path[1] = 0;
 		return (path_surgery((raw_path), 0));
 	}
 	return (path_surgery((raw_path), 1));

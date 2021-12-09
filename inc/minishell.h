@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 09:54:49 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 12:59:04 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,16 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
-# define ANSI_COLOR_RED     "\x1b[31m"
-# define ANSI_COLOR_GREEN   "\x1b[32m"
-# define ANSI_COLOR_YELLOW  "\x1b[33m"
-# define ANSI_COLOR_BLUE    "\x1b[34m"
-# define ANSI_COLOR_MAGENTA "\x1b[35m"
-# define ANSI_COLOR_CYAN    "\x1b[36m"
-# define ANSI_COLOR_RESET   "\x1b[0m"
+# define COLOR_RED     "\x1b[31m"
+# define COLOR_GR   "\x1b[32m"
+# define COLOR_YELLOW  "\x1b[33m"
+# define COLOR_BLUE    "\x1b[34m"
+# define COLOR_MAGENTA "\x1b[35m"
+# define COLOR_CYAN    "\x1b[36m"
+# define COLOR_RES   "\x1b[0m"
+# define RL_S "\1"
+# define RL_E "\2"
+
 typedef struct s_files
 {
 	char			*name;
@@ -54,27 +57,19 @@ typedef struct s_cmd
 	t_files			**stderrs;
 	t_files			**heredocs;
 	struct s_cmd	*next;
-	char			***env;
 }	t_cmd;
 
-typedef struct s_history
-{
-	char				*cmd_line;
-	struct s_history	*next;
-}	t_history;
 
 typedef struct s_data
 {
 	int			num_cmds;
 	int			num_pipes;
-	char		**env;
-	t_history	**history;
 	t_cmd		**cmds;
 }	t_data;
 
 //cmd_arrange.c
-int	is_cmd(char *file, char **cmd_ok, char *envp[]);
-char	**create_args(char *raw_cmd, char **cmd, char *envp[]);
+int	is_cmd(char *file, char **cmd_ok);
+char	**create_args(char *raw_cmd, char **cmd);
 void	cmd_not_raw(char **args);
 
 // list_utils.c
@@ -91,7 +86,7 @@ int		add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
-char	**get_paths(char *envp[]);
+char	**get_paths(char *path);
 char	**path_surgery(char **path_to_cut, int path_emergency);
 void	free_paths(char **paths);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
@@ -122,7 +117,11 @@ char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
+
+//freezers
 void	free_double_string(char **str);
+void	free_data(t_data *data);
+void	free_files(t_files *first);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);

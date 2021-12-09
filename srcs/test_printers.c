@@ -73,7 +73,9 @@ void	print_t_cmd(t_cmd **cmds)
 		}
 		if (cmd_aux->cmd_and_its_flags)
 			printf("\ncmd and its flags (useless for execve): %s", cmd_aux->cmd_and_its_flags);
+		printf("\n#########################\n");
 		printf("\n");
+
 		cmd_aux = cmd_aux->next;
 	}
 }

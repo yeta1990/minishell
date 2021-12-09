@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:55:09 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 15:51:23 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 13:27:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,6 @@ char **from_list_to_double_char(t_files **full_strings)
 		size++;
 	}
 	s = malloc(sizeof(char *) * size + 1);
-
 	aux = *full_strings;
 	size = 0;
 	while (aux)
@@ -119,7 +118,9 @@ char **from_list_to_double_char(t_files **full_strings)
 		aux = aux->next;
 		size++;
 	}
-	s[size] = 0; 
+	s[size] = 0;
+	free_files(*full_strings);
+	free(full_strings);
 	return (s);
 }
 

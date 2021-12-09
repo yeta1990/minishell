@@ -6,19 +6,19 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 17:00:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 12:54:23 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	is_cmd(char *file, char **cmd_ok, char *envp[])
+int	is_cmd(char *file, char **cmd_ok)
 {
 	int		j;
 	char	*cmd_try;
 	char	**paths;
 
-	paths = get_paths(envp);
+	paths = get_paths(getenv("PATH"));
 	j = 0;
 	while (paths[j])
 	{
@@ -38,11 +38,10 @@ int	is_cmd(char *file, char **cmd_ok, char *envp[])
 	return (0);
 }
 
-char	**create_args(char *raw_cmd, char **cmd, char *envp[])
+char	**create_args(char *raw_cmd, char **cmd)
 {
 	char	**args;
 
-//	printf("raw cmd %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
 	if (!args || !(*args))
 	{
@@ -51,7 +50,7 @@ char	**create_args(char *raw_cmd, char **cmd, char *envp[])
 		exit(127);
 	}
 	cmd_not_raw(args);
-	is_cmd(args[0], cmd, envp);
+	is_cmd(args[0], cmd);
 	 /*if (!(is_cmd(args[0], cmd, envp)))
 	{
 		ft_putstr_fd("pipex: ", 2);
