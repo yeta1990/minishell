@@ -67,6 +67,7 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 {
 	int		size;
 	char	*aux;
+	char	*word;
 
 	aux = 0;
 	size = 1;
@@ -83,7 +84,9 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 	{
 		aux = ft_strjoin(parsed_instruction->cmd_and_its_flags, " ");
 		free(parsed_instruction->cmd_and_its_flags);
-		parsed_instruction->cmd_and_its_flags = ft_strjoin(aux, ft_strdup_space(raw_cmd, &size));
+		word = ft_strdup_space(raw_cmd, &size);
+		parsed_instruction->cmd_and_its_flags = ft_strjoin(aux, word);
+		free(word);
 		free(aux);
 	}
 	return (size);

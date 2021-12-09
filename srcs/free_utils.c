@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 15:07:37 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 15:37:32 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	free_data(t_data *data)
 		cmd_aux = *data->cmds;
 		*data->cmds = cmd_aux->next;
 		free(cmd_aux->cmd);
-		free_double_string(cmd_aux->cmd_complete);
 		free(cmd_aux->cmd_and_its_flags);
 		free_files(*cmd_aux->stdins);
 		free(cmd_aux->stdins);
@@ -47,6 +46,7 @@ void	free_data(t_data *data)
 		free_files(*cmd_aux->heredocs);
 		free(cmd_aux->heredocs);
 		free(cmd_aux);
+		free_double_string(cmd_aux->cmd_complete);
 	}
 	free(data->cmds);
 	data->num_cmds = 0;

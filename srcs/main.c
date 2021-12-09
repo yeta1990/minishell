@@ -107,8 +107,6 @@ int main(int argc, char **argv)
 			free(str);
 			free_data(&data);
 		}
-		if (argc == 1000000)
-			return (0);
 	}
    	return (0);
 }
