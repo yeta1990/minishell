@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/08 17:11:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/09 09:54:49 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,6 @@ char	**ft_split_w_quotes(char const *str, char c);
 void	free_double_string(char **str);
 
 //test_printers.c
-void	print_t_cmd(t_cmd *cmd);
+void	print_t_cmd(t_cmd **cmds);
 
 #endif

@@ -39,10 +39,6 @@ t_cmd *split_and_parse_instruction(char *str, t_data *data)
     t_cmd   *parsed_instruction;
 
     i = 0;
-//	split = ft_split_w_quotes(str, '|');
-//	while (split && *split)
-//		i++;
-//	printf("%s", str);	
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *) * 2);
@@ -84,7 +80,7 @@ int main(int argc, char **argv, char **envp)
 	while (argv[i])
 		i++;
 	data.env = envp;
-	data.cmds = malloc(sizeof(t_cmd *) * 4);
+	data.cmds = malloc(sizeof(t_cmd *) * 2);
 	data.cmds[0] = 0;
 	data.cmds[1] = 0;
 
@@ -99,9 +95,10 @@ int main(int argc, char **argv, char **envp)
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
 			//	printf("\ninstr: %s\n", instructions[i]);
-				print_t_cmd(data.cmds[i]);
+
 				i++;
 			}
+			print_t_cmd(data.cmds);
 			i = 0;
 			free_double_string(instructions);
 			free(str);
