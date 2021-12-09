@@ -70,11 +70,8 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 
 	aux = 0;
 	size = 1;
-	while (raw_cmd && *raw_cmd && *raw_cmd == ' ')
-	{
-		raw_cmd++;
+	while (raw_cmd && raw_cmd[size] && raw_cmd[size] == ' ')
 		size++;
-	}
 	if (parsed_instruction->cmd_and_its_flags == 0)
 	{
 		parsed_instruction->cmd_and_its_flags = ft_strdup_space(raw_cmd, &size);

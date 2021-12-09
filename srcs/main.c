@@ -76,14 +76,14 @@ int main(int argc, char **argv)
 	i = 0;
     while (1)
     {
-
 //		write(1, COLOR_GR "minishell" COLOR_RES, 22);
 //		printf(COLOR_GREEN "minishell $ " COLOR_RESET);
 //        str = readline(COLOR_GR "minishell $ " COLOR_RES "\2");
         str = readline("minishell $ ");
 		if (str)
  		{
-			data.cmds = malloc(sizeof(t_cmd *) * 1);
+			i = 0;
+			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			add_history(str);
 			instructions = ft_split_w_quotes(str, '|');
@@ -102,7 +102,6 @@ int main(int argc, char **argv)
 				exit(0);
 			}
 			print_t_cmd(data.cmds);
-			i = 0;
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);
