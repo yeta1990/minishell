@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 18:55:14 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 09:36:30 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ void	ft_exec_first(t_cmd *data, int fds[2]);
 int		ft_exec_last(t_cmd *data, int fds[2]);
 
 //ft_files.c
-void	ft_dup_inile(char *file);
+void	ft_dup_infile(char *file);
 void	ft_dup_output(char *file);
 
 #endif

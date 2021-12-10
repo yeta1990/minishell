@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 16:11:41 by crisfern         ###   ########.fr       */
+/*   Updated: 2021/12/10 10:52:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,12 @@ int	is_cmd(char *file, char **cmd_ok)
 char	**create_args(char *raw_cmd, char **cmd)
 {
 	char	**args;
-
+	
+	printf("raw_cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
 	if (!args || !(*args))
 	{
-		ft_putstr_fd("pipex: : command not found\n", 2);
+		ft_putstr_fd("minishell : command not found\n", 2);
 		free_paths(args);
 		exit(127);
 	}

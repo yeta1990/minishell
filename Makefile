@@ -22,7 +22,7 @@ RM		= rm -f
 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) 
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -L/usr/include
 all:		$(NAME)
 
 clean:

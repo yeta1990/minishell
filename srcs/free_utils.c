@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 15:37:32 by crisfern         ###   ########.fr       */
+/*   Updated: 2021/12/10 10:44:05 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	free_double_string(char **str)
 		free(str[i]);
 		i++;
 	}
-	free(str[i]);
+//	free(str[i]);
 	free(str);
 }
 

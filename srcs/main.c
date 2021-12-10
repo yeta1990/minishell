@@ -1,8 +1,11 @@
 #include "minishell.h"
 #include <string.h>
 
-void	parse_instruction(char *str, t_cmd *parsed_instruction)
+void	parse_instruction(char *s, t_cmd *parsed_instruction)
 {
+	char *str;
+
+	str = s;
     while (str && *str)
     {
 		if (*str == '<')
@@ -75,12 +78,12 @@ int main(int argc, char **argv)
 		i++;
 
 	i = 0;
-    while (1)
-    {
 //		write(1, COLOR_GR "minishell" COLOR_RES, 22);
 //		printf(COLOR_GREEN "minishell $ " COLOR_RESET);
 //        str = readline(COLOR_GR "minishell $ " COLOR_RES "\2");
-        str = readline("minishell $ ");
+	while (1)
+	{
+		str = readline("minishell $ ");
 		if (str)
  		{
 			i = 0;
@@ -92,7 +95,7 @@ int main(int argc, char **argv)
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				i++;
-			}	
+			}
 			//leaks checker, only for testing purposes
 			if (strcmp("exit", data.cmds[0]->cmd_complete[0]) == 0)
 			{
@@ -103,11 +106,14 @@ int main(int argc, char **argv)
 				exit(0);
 			}
 			execute_commands(&data);
-			print_t_cmd(data.cmds);
+		//	print_t_cmd(data.cmds);
+			wait(NULL);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);
+			str = 0;
 			free_data(&data);
+	//		exit (0);
 		}
 	}
    	return (0);

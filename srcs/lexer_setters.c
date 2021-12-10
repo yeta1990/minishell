@@ -71,6 +71,7 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 
 	aux = 0;
 	size = 1;
+//	printf("raw_cmd in add_cmd: %s\n", raw_cmd);
 	while (raw_cmd && raw_cmd[size] && raw_cmd[size] == ' ')
 		size++;
 	if (parsed_instruction->cmd_and_its_flags == 0)

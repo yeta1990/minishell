@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/08 17:23:09 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/10 12:27:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	get_nwords(char const *str, char c)
 		}
 	}
 	nwords++;
+//	printf("words: %i\n", nwords);
 	return (nwords);
 }
 
@@ -137,7 +138,15 @@ char	**ft_split_w_quotes(char const *s, char c)
 		{
 			nwords = get_nwords(str, c);
 			ptr = ft_calloc((nwords + 1), sizeof(char *));
-			if (ptr)
+			//this first if is a workaround to prevent an
+			//unexpected bug when there aren't any pipes. 
+			//plase don't erase me while norminetting :__)
+			if (ptr && nwords == 1)
+			{
+				ptr[0] = ft_strdup(s);
+				ptr[1] = 0;
+			}
+			else if (ptr)
 				save_words(ptr, str, c, nwords);
 			free(str);
 			return (ptr);
