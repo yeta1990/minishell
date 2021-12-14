@@ -105,20 +105,16 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
-			execute_commands(&data);
 			print_t_cmd(data.cmds);
-			wait(NULL);
+			execute_commands(&data);
+		//	wait(NULL);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);
 			str = 0;
-			printf("s->%s", str);
 			free_data(&data);
-	//		exit (0);
 		}
 		str = 0;
-		i++;
-		printf("%i", i);
 	}
    	return (0);
 }

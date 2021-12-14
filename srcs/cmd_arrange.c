@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/10 10:52:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/14 11:04:48 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ char	**create_args(char *raw_cmd, char **cmd)
 	
 	printf("raw_cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
-	if (!args || !(*args))
+	//in case of a wrong command, it forced an exit, but
+	//I'm not sure whether this is the best place to check it, or 
+	//it would be better in the executor
+/*	if (!args || !(*args))
 	{
 		ft_putstr_fd("minishell : command not found\n", 2);
 		free_paths(args);
 		exit(127);
-	}
+	}*/
 	cmd_not_raw(args);
 	is_cmd(args[0], cmd);
 	 /*if (!(is_cmd(args[0], cmd, envp)))
