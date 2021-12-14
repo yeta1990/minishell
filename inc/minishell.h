@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 12:59:04 by albgarci         ###   ########.fr       */
+/*   Updated: 2021/12/14 12:37:04 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <sys/param.h>
 
 # define COLOR_RED     "\x1b[31m"
 # define COLOR_GR   "\x1b[32m"
@@ -68,7 +69,7 @@ typedef struct s_data
 }	t_data;
 
 //cmd_arrange.c
-int	is_cmd(char *file, char **cmd_ok);
+int		is_cmd(char *file, char **cmd_ok);
 char	**create_args(char *raw_cmd, char **cmd);
 void	cmd_not_raw(char **args);
 
@@ -117,6 +118,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
+int		ft_strcmp(char *s1, char *s2);
 
 //freezers
 void	free_double_string(char **str);
@@ -125,5 +127,12 @@ void	free_files(t_files *first);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
+
+//envp.c
+char	**create_env(char **envp);
+char	**create_exp(char **envp);
+
+//builtins.c
+void	check_builtins(t_data data, char *str, char **instructions, char ***env, char ***exp);
 
 #endif

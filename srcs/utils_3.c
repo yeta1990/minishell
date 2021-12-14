@@ -62,3 +62,24 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (0);
 }
 
+int	ft_strcmp(char *s1, char *s2)
+{
+	int	a;
+
+	a = 0;
+	while ((*s1 != '\0') || (*s2 != '\0'))
+	{
+		if (*s1 != *s2)
+		{
+			a = *s1 - *s2;
+			break ;
+		}
+		else
+		{
+			a = 0;
+		}
+		s1 ++;
+		s2 ++;
+	}
+	return (a);
+}

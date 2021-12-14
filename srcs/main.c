@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
+/*   Updated: 2021/12/14 12:29:57 by crisfern         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 #include <string.h>
 
@@ -33,12 +45,12 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd));
 }
 
-t_cmd *split_and_parse_instruction(char *str)
+t_cmd	*split_and_parse_instruction(char *str)
 {
-    int     i;
-    t_cmd   *parsed_instruction;
+	int		i;
+	t_cmd	*parsed_instruction;
 
-    i = 0;
+	i = 0;
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *));
@@ -56,32 +68,33 @@ t_cmd *split_and_parse_instruction(char *str)
 	parse_instruction(str, parsed_instruction);
 	return (parsed_instruction);
 }
+
 void	check_leaks(void)
 {
 	system("leaks minishell");
 }
-int main(int argc, char **argv)
+
+int	main(int argc, char **argv, char **envp)
 {
-    char    *str;
-    t_data   data;
+	char	*str;
+	t_data	data;
 	char	**instructions;
 	int		i;
+	char	**env;
+	char	**exp;
 
 	atexit(check_leaks);
 	i = 0;
 	argc += 0;
+	env = create_env(envp);
+	exp = create_exp(envp);
 	while (argv[i])
 		i++;
-
-	i = 0;
-    while (1)
-    {
-//		write(1, COLOR_GR "minishell" COLOR_RES, 22);
-//		printf(COLOR_GREEN "minishell $ " COLOR_RESET);
-//        str = readline(COLOR_GR "minishell $ " COLOR_RES "\2");
-        str = readline("minishell $ ");
+	while (1)
+	{
+		str = readline("minishell $ ");
 		if (str)
- 		{
+		{
 			i = 0;
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
@@ -92,15 +105,7 @@ int main(int argc, char **argv)
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				i++;
 			}
-			//leaks checker, only for testing purposes
-			if (strcmp("exit", data.cmds[0]->cmd_complete[0]) == 0)
-			{
-				free_double_string(instructions);
-				ft_bzero(str, ft_strlen(str));
-				free(str);
-				free_data(&data);
-				exit(0);
-			}
+			check_builtins(data, str, instructions, &env, &exp);
 			print_t_cmd(data.cmds);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
@@ -108,5 +113,5 @@ int main(int argc, char **argv)
 			free_data(&data);
 		}
 	}
-   	return (0);
+	return (0);
 }
