@@ -95,6 +95,7 @@ int main(int argc, char **argv)
 			while (instructions && instructions[i])
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
+				data.num_cmds++;
 				i++;
 			}
 			//leaks checker, only for testing purposes

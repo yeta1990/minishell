@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/10 15:49:39 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/10 18:09:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,25 +16,32 @@ int	execute_commands(t_data *data)
 {
 	t_cmd 	*node;
 	int		fds[2];
-	int		waits;
-	int		i;
 
-	waits = 0;
-	i = 0;
 	node = *data->cmds;
-	while (node)
+	if (pipe(fds) < 0)
 	{
-		if (pipe(fds) < 0)
-		{
-			perror("minishell");
-			exit(1);
-		}
-	//	printf("->>>>>>>>%i, %i", fds[0], fds[1]);
+		perror("minishell");
+		exit(1);
+	}
+	if (data->num_cmds == 1)
+	{
+		ft_exec_first(node, fds);
+		wait(NULL);
+	}
+	else if (data->num_cmds == 2)
+	{
+		
+	}
+	else if (data->num_cmds >= 3)
+	{
+	
+	}
+/*	while (node)
+	{
 		ft_exec_first(node, fds);
 		node = node->next;
 		wait(NULL);
-		waits++;
-	}
+	}*/
 /*	while (i < waits)
 	{
 		wait(NULL);
