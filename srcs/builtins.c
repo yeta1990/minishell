@@ -6,11 +6,40 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 13:02:30 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/10 17:19:25 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char	*is_echo_flag(char *str)
+{
+	char	*init;
+	int		flag;
+
+	flag = 0;
+	if (str)
+	{
+		while (*str)
+		{
+			while (*str == ' ')
+				str++;
+			init = str;
+			if (*str++ != '-')
+				break ;
+			while (*str == 'n')
+				str++;
+			if ((*str != '\0') && (*str != ' '))
+				break ;
+			flag = 1;
+		}
+		if (flag)
+			return (ft_strdup(init));
+		else
+			return (ft_strjoin(init, "\n"));
+	}
+	return (0);
+}
 
 void	check_builtins(t_data data, char *str, char **instructions, char ***env, char ***exp)
 {
@@ -32,6 +61,20 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 	if (ft_strcmp("cd", data.cmds[0]->cmd_complete[0]) == 0)
 	{
 		chdir(data.cmds[0]->cmd_complete[1]);
+		buf2 = getcwd(buf1, MAXPATHLEN);
+		free(buf2);
+		i = 0;
+		while (*(aux_env + i))
+		{
+			if (aux_env[i][0] == 'P' && aux_env[i][1] == 'W' && aux_env[i][2] == 'D' && aux_env[i][3] == '=')
+			{
+				free(aux_env[i]);
+				aux_env[i] = buf1;
+				printf("La cadena %s\n", aux_env[i]);
+				break ;
+			}
+			i++;
+		}
 	}
 	if (ft_strcmp("env", data.cmds[0]->cmd_complete[0]) == 0)
 	{
@@ -51,9 +94,13 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 			i++;
 		}
 	}
-	if (ft_strcmp("echo -n", data.cmds[0]->cmd_complete[0]) == 0)
+	if (ft_strcmp("echo", data.cmds[0]->cmd_complete[0]) == 0)
 	{
-		printf("HOLA");
+		char	*aux;
+		aux = data.cmds[0]->cmd_and_its_flags + 4;
+		aux = is_echo_flag(aux);
+		printf("%s", aux);
+		free(aux); 
 	}
 	if (ft_strcmp("exit", data.cmds[0]->cmd_complete[0]) == 0)
 	{
