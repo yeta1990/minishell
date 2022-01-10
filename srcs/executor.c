@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 12:44:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:49:39 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	execute_commands(t_data *data)
 			perror("minishell");
 			exit(1);
 		}
-		printf("->>>>>>>>%i, %i", fds[0], fds[1]);
+	//	printf("->>>>>>>>%i, %i", fds[0], fds[1]);
 		ft_exec_first(node, fds);
 		node = node->next;
 		wait(NULL);
@@ -71,7 +71,7 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 //		maybe necessary to handle pipes and redirections
 		if (cmd->next)
 		{
-			printf("hay siguiente\n");
+//			printf("hay siguiente\n");
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}

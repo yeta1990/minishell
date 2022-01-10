@@ -59,7 +59,7 @@ int	add_heredoc(char *raw_keyword, t_cmd *parsed_instruction)
 	keyword->name = ft_strdup_space(raw_keyword, &size);
 	keyword->next = 0;
 	ft_lstadd_back_files(parsed_instruction->heredocs, keyword);
-	printf("size heredoc %i\n", size);
+//	printf("size heredoc %i\n", size);
 	return (size);
 }
 
@@ -70,25 +70,23 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 	char	*word;
 
 	aux = 0;
-	size = 1;
+	size = 0;
 //	printf("raw_cmd in add_cmd: %s\n", raw_cmd);
 	while (raw_cmd && raw_cmd[size] && raw_cmd[size] == ' ')
 		size++;
 	if (parsed_instruction->cmd_and_its_flags == 0)
 	{
 		parsed_instruction->cmd_and_its_flags = ft_strdup_space(raw_cmd, &size);
-	//	parsed_instruction->cmd_complete = create_args(raw_cmd, &(parsed_instruction->cmd), 0);
-	//	parsed_instruction->cmd = ft_strdup_space(raw_cmd, &size);
-	//	printf("size %i, raw_cmd: %s, word: %s\n", size, raw_cmd, parsed_instruction->cmd);
 	}
 	else 
 	{
-		aux = ft_strjoin(parsed_instruction->cmd_and_its_flags, " ");
+		aux = ft_strdup(parsed_instruction->cmd_and_its_flags);
 		free(parsed_instruction->cmd_and_its_flags);
 		word = ft_strdup_space(raw_cmd, &size);
 		parsed_instruction->cmd_and_its_flags = ft_strjoin(aux, word);
 		free(word);
 		free(aux);
 	}
+//	printf("returned %i\n", size);
 	return (size);
 }

@@ -34,6 +34,6 @@ fclean:		clean
 re:			fclean all
 
 san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -fsanitize=address
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -fsanitize=address -g3
 
 .PHONY:		all clean fclean re

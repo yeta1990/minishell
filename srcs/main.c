@@ -42,6 +42,7 @@ t_cmd *split_and_parse_instruction(char *str)
     t_cmd   *parsed_instruction;
 
     i = 0;
+//	printf("str: %s\n", str);
 	parsed_instruction = malloc(sizeof(t_cmd));
 	parsed_instruction->next = 0;
 	parsed_instruction->stdins = malloc(sizeof(t_files *));
@@ -84,7 +85,7 @@ int main(int argc, char **argv)
 	while (1)
 	{
 		str = readline("minishell $ ");
-		if (str)
+		if (str && ft_strlen(str) > 0)
  		{
 			i = 0;
 			data.cmds = malloc(sizeof(t_cmd *));
@@ -105,7 +106,7 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
-			print_t_cmd(data.cmds);
+		//	print_t_cmd(data.cmds);
 			execute_commands(&data);
 		//	wait(NULL);
 			free_double_string(instructions);

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 12:30:42 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/10 15:36:47 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,7 @@ void	free_data(t_data *data)
 		free_files(*cmd_aux->heredocs);
 		free(cmd_aux->heredocs);
 		cmd_aux->heredocs = 0;
+		cmd_aux->next = 0;
 		free(cmd_aux);
 		free_double_string(cmd_aux->cmd_complete);
 	}

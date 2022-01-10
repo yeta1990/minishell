@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 11:04:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/10 17:06:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ char	**create_args(char *raw_cmd, char **cmd)
 {
 	char	**args;
 	
-	printf("raw_cmd: %s\n", raw_cmd);
+//	printf("raw_cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
 	//in case of a wrong command, it forced an exit, but
 	//I'm not sure whether this is the best place to check it, or 
