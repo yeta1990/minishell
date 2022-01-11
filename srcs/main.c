@@ -83,6 +83,7 @@ int main(int argc, char **argv)
 		i++;
 
 	i = 0;
+	data.last_code = 0;
 	while (1)
 	{
 		str = readline("minishell $ ");
@@ -92,7 +93,7 @@ int main(int argc, char **argv)
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
-			data.last_code = 0;
+
 			add_history(str);
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
@@ -112,7 +113,8 @@ int main(int argc, char **argv)
 				exit(0);
 			}
 			data.last_code = execute_commands(&data);
-	//		print_t_cmd(data.cmds);
+			printf("exit status code: %i\n", data.last_code);
+		//	print_t_cmd(data.cmds);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 13:32:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 17:42:06 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,13 +60,14 @@ int	is_cmd(char *file, char **cmd_ok)
 		j++;
 	}
 	free_paths(paths);
+	*cmd_ok = ft_strdup(file);
 	return (0);
 }
 
 char	**create_args(char *raw_cmd, char **cmd)
 {
 	char	**args;
-	
+
 //	printf("raw_cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
 	//in case of a wrong command, it forced an exit, but

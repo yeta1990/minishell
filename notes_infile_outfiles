@@ -1,0 +1,20 @@
+
+
+###### INFILES #######
+<infile does nothing
+in <infile | cat, cat doesn't receive any content nor redirection
+
+
+
+##### OUTFILEs ######
+
+>outfile creates an empty file
+>outfile >outfile2 creates two empty files
+
+<infile >outfile creates the file adios but empty, although infile isn't empty
+<infile >outfile >outfile2 creates two empty files
+<infile_wrong >outfile doesn't create anything, only shows an error "No such file or directory"
+
+<infile command (ex. cat) >outfile creates or replaces outfile with the output of the command
+<infile command >outfile1 >outfile2 creates two files, but output of the command is only sent to last outfile!
+
