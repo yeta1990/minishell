@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 12:12:39 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:37:00 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 	{
 		close(fds2[0]);
 		dup2(fds[0], 0);
+		if (ft_lstlast_files(*(cmd->stdins)))
+			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
 		close(fds[0]);
 		dup2(fds2[1], 1);
 		close(fds2[1]);
@@ -61,9 +63,7 @@ int	execute_commands(t_data *data)
 		exit(1);
 	}
 	if (data->num_cmds == 1)
-	{
 		ft_exec_first(node, fds);
-	}
 	else if (data->num_cmds == 2)
 	{
 		ft_exec_first(node, fds);
@@ -76,7 +76,6 @@ int	execute_commands(t_data *data)
 		node = node->next;
 		middle_exec_handler(&node, fds, data->num_cmds);
 		ft_exec_last(node, fds);
-
 	}
 	while (wait(NULL) != -1)
 		 ;
@@ -85,10 +84,8 @@ int	execute_commands(t_data *data)
 
 void	ft_exec_first(t_cmd *cmd, int fds[2])
 {
-//	int		child_status;
 	pid_t	child;
 	char	*env_path;
-//	int		fd;
 
 	env_path = getenv("PATH");
 	child = fork();
@@ -102,7 +99,6 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 		if (ft_lstlast_files(*(cmd->stdins)))
 			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
 		close(fds[0]);
-//		maybe necessary to handle pipes and redirections
 		if (cmd->next)
 		{
 			dup2(fds[1], 1);
@@ -115,9 +111,7 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 		}
 	}
 	else
-	{
 		close(fds[1]);
-	}
 }
 
 int	ft_exec_last(t_cmd *cmd, int fds[2])
@@ -146,6 +140,5 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 	}
 	else
 		close(fds[0]);
-//	waitpid(child, &child_status, 0);
 	return (WEXITSTATUS(child_status));
 }

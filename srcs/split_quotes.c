@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/10 12:27:28 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:34:39 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 			}
 		aux++;
 		}
-	ptr[i] = 0;
+	ptr[nwords] = 0;
 	}
 }
 

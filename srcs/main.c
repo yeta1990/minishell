@@ -83,9 +83,6 @@ int main(int argc, char **argv)
 		i++;
 
 	i = 0;
-//		write(1, COLOR_GR "minishell" COLOR_RES, 22);
-//		printf(COLOR_GREEN "minishell $ " COLOR_RESET);
-//        str = readline(COLOR_GR "minishell $ " COLOR_RES "\2");
 	while (1)
 	{
 		str = readline("minishell $ ");
@@ -98,6 +95,7 @@ int main(int argc, char **argv)
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
 			{
+			//	printf("%i: %s\n", i, instructions[i]);
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				data.num_cmds++;
 				i++;
@@ -111,9 +109,8 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
-	//		print_t_cmd(data.cmds);
+		//	print_t_cmd(data.cmds);
 			execute_commands(&data);
-		//	wait(NULL);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);
