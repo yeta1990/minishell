@@ -6,11 +6,36 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 11:04:00 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 13:32:21 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_raw_cmd(char *file, char **cmd_ok)
+{
+	int		pos;
+	char	*aux;
+
+	pos = ft_strlen(file) - 1;
+	if (access(file, X_OK) != -1)
+	{
+		if (cmd_ok)
+			*cmd_ok = ft_strdup(file);
+		while (pos >= 0)
+		{
+			if (file[pos] == '/')
+			{
+				aux = ft_substr(file, pos, ft_strlen(file) - pos + 1);
+				free(file);
+				file = aux;
+			}
+			pos--;
+		}
+		return (1);
+	}
+	return (0);
+}
 
 int	is_cmd(char *file, char **cmd_ok)
 {
@@ -18,8 +43,8 @@ int	is_cmd(char *file, char **cmd_ok)
 	char	*cmd_try;
 	char	**paths;
 
-	paths = get_paths(getenv("PATH"));
 	j = 0;
+	paths = get_paths(getenv("PATH"));
 	while (paths[j])
 	{
 		cmd_try = ft_strjoin(paths[j], file);
@@ -53,8 +78,9 @@ char	**create_args(char *raw_cmd, char **cmd)
 		free_paths(args);
 		exit(127);
 	}*/
-	cmd_not_raw(args);
-	is_cmd(args[0], cmd);
+//	cmd_not_raw(args);
+	if (!(is_raw_cmd(args[0], cmd)))
+		is_cmd(args[0], cmd);
 	 /*if (!(is_cmd(args[0], cmd, envp)))
 	{
 		ft_putstr_fd("pipex: ", 2);
@@ -65,25 +91,4 @@ char	**create_args(char *raw_cmd, char **cmd)
 		exit(127);
 	}*/
 	return (args);
-}
-
-void	cmd_not_raw(char **args)
-{
-	int		pos;
-	char	*aux;
-
-	pos = ft_strlen(args[0]) - 1;
-	if (access(args[0], X_OK) != -1)
-	{
-		while (pos >= 0)
-		{
-			if (args[0][pos] == '/')
-			{
-				aux = ft_substr(args[0], pos, ft_strlen(args[0]) - pos + 1);
-				free(args[0]);
-				args[0] = aux;
-			}
-			pos--;
-		}
-	}
 }

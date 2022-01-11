@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	char	**instructions;
 	int		i;
 
-//	atexit(check_leaks);
+	atexit(check_leaks);
 	i = 0;
 	argc += 0;
 	while (argv[i])

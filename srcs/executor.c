@@ -6,11 +6,13 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 12:37:00 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:49:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+extern char** environ;
 
 void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 {
@@ -27,7 +29,7 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 		close(fds[0]);
 		dup2(fds2[1], 1);
 		close(fds2[1]);
-		execve(cmd->cmd, &(cmd->cmd_complete[0]), 0);
+		execve(cmd->cmd, &(cmd->cmd_complete[0]), environ);
 		perror("minishell");
 		exit(1);
 	}
@@ -104,7 +106,7 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}
-		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), 0) < 0)
+		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 		{
 			perror("minishell");
 			exit(errno);
@@ -134,7 +136,7 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 		else
 			dup2(fds[0], 0);
 		close(fds[0]);
-		execve(cmd->cmd, &(cmd->cmd_complete[0]), 0);
+		execve(cmd->cmd, &(cmd->cmd_complete[0]), environ);
 		perror("minishell");
 		exit(errno);
 	}
