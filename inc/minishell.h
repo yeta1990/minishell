@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 12:37:04 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:56:41 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,9 @@ void	print_t_cmd(t_cmd **cmds);
 //envp.c
 char	**create_env(char **envp);
 char	**create_exp(char **envp);
+void	free_env(char **env);
+char	**add_entry(char **old_arr, char *new_str);
+char	*export_join(char *str);
 
 //builtins.c
 void	check_builtins(t_data data, char *str, char **instructions, char ***env, char ***exp);

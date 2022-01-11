@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 12:29:57 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:54:12 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,11 +106,13 @@ int	main(int argc, char **argv, char **envp)
 				i++;
 			}
 			check_builtins(data, str, instructions, &env, &exp);
-			print_t_cmd(data.cmds);
+			//print_t_cmd(data.cmds);
 			free_double_string(instructions);
-			ft_bzero(str, ft_strlen(str));
+			//ft_bzero(str, ft_strlen(str));
 			free(str);
 			free_data(&data);
+			//free_env(env);
+			//free_env(exp);
 		}
 	}
 	return (0);

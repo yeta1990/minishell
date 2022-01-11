@@ -6,13 +6,46 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/10 17:19:25 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:44:57 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*is_echo_flag(char *str)
+int	search_word(char **arr, char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (arr[i])
+	{
+		j = 0;
+		while (arr[i][j] && str[j])
+		{
+			printf("%c %c\n", str[j], arr[i][j]);
+			if (str[j] != arr[i][j])
+			{
+				break ;
+			}
+			else if (str[j] == '=')
+			{
+				printf("SALI EN 1 %d", i);
+				return (i);
+			}
+			else if (!str[j])
+			{
+				printf("SALI EN 2");
+				return (i);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
+
+char	*echo_flag(char *str)
 {
 	char	*init;
 	int		flag;
@@ -43,40 +76,45 @@ char	*is_echo_flag(char *str)
 
 void	check_builtins(t_data data, char *str, char **instructions, char ***env, char ***exp)
 {
-	char	*buf1 = NULL;
-	char	*buf2 = NULL;
+	char	*buf = NULL;
 	char	**aux_env;
 	char	**aux_exp;
+	char	*old_pwd = NULL;
 	int		i;
 	
 	aux_env = *env;
 	aux_exp = *exp;
 	if (ft_strcmp("pwd", data.cmds[0]->cmd_complete[0]) == 0)
 	{
-		buf2 = getcwd(buf1, MAXPATHLEN);
-		printf("%s\n", buf2);
-		free(buf1);
-		free(buf2);
+		buf = getcwd(NULL, MAXPATHLEN);
+		printf("%s\n", buf);
+		free(buf);
 	}
 	if (ft_strcmp("cd", data.cmds[0]->cmd_complete[0]) == 0)
 	{
+		old_pwd = getcwd(NULL, MAXPATHLEN);
 		chdir(data.cmds[0]->cmd_complete[1]);
-		buf2 = getcwd(buf1, MAXPATHLEN);
-		free(buf2);
+		buf = getcwd(NULL, MAXPATHLEN);
+		printf("%s\n", buf);
 		i = 0;
 		while (*(aux_env + i))
 		{
 			if (aux_env[i][0] == 'P' && aux_env[i][1] == 'W' && aux_env[i][2] == 'D' && aux_env[i][3] == '=')
 			{
 				free(aux_env[i]);
-				aux_env[i] = buf1;
-				printf("La cadena %s\n", aux_env[i]);
-				break ;
+				aux_env[i] = ft_strjoin("PWD=", buf);
+			}
+			else if (aux_env[i][0] == 'O' && aux_env[i][1] == 'L' && aux_env[i][2] == 'D' && aux_env[i][3] == 'P' && aux_env[i][4] == 'W' && aux_env[i][5] == 'D' && aux_env[i][6] == '=')
+			{
+				free(aux_env[i]);
+				aux_env[i] = ft_strjoin("OLDPWD=", old_pwd);
 			}
 			i++;
 		}
+		free(old_pwd);
+		free(buf);
 	}
-	if (ft_strcmp("env", data.cmds[0]->cmd_complete[0]) == 0)
+	if ((ft_strcmp("env", data.cmds[0]->cmd_complete[0]) == 0) && (!data.cmds[0]->cmd_complete[1]))
 	{
 		i = 0;
 		while (*(aux_env + i))
@@ -85,7 +123,7 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 			i++;
 		}
 	}
-	if (ft_strcmp("export", data.cmds[0]->cmd_complete[0]) == 0)
+	if ((ft_strcmp("export", data.cmds[0]->cmd_complete[0]) == 0) && (!data.cmds[0]->cmd_complete[1]))
 	{
 		i = 0;
 		while (*(aux_exp + i))
@@ -94,11 +132,61 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 			i++;
 		}
 	}
+	else if (ft_strcmp("export", data.cmds[0]->cmd_complete[0]) == 0)
+	{
+		int		index_env;
+		int		index_exp;
+		char	*sign;
+		sign = 0;
+		index_env = 0;
+		index_exp = 0;
+		i = 1;
+		while (data.cmds[0]->cmd_complete[i])
+		{
+			sign = ft_strchr(data.cmds[0]->cmd_complete[i], '=');
+			index_env = search_word(aux_env, data.cmds[0]->cmd_complete[i]);
+			index_exp = search_word(aux_exp, data.cmds[0]->cmd_complete[i]);
+			if (sign)
+			{
+				if ((index_exp >=0) && (index_env >=0))
+				{
+					printf("AQUI 1");
+					free(aux_exp[index_exp]);
+					aux_exp[index_exp] = export_join(data.cmds[0]->cmd_complete[i]);
+					free(aux_env[index_env]);
+					aux_exp[index_env] = ft_strdup(data.cmds[0]->cmd_complete[i]);
+				}
+				else if (index_exp >=0)
+				{
+					printf("AQUI 2");
+					free(aux_exp[index_exp]);
+					aux_exp[index_exp] = export_join(data.cmds[0]->cmd_complete[i]);
+					*env = add_entry(aux_env, ft_strdup(data.cmds[0]->cmd_complete[i]));
+				}
+				else
+				{
+					printf("AQUI 3");
+					*exp = add_entry(aux_exp, ft_strdup(data.cmds[0]->cmd_complete[i]));
+					*env = add_entry(aux_env, ft_strdup(data.cmds[0]->cmd_complete[i]));
+				}
+			}
+			else
+			{
+				printf("%d\n", index_exp);
+				if (index_exp < 0)
+				{
+					printf("AQUI 4");
+					*exp = add_entry(aux_exp, ft_strdup(data.cmds[0]->cmd_complete[i]));
+				}
+			}
+			i++;
+		}
+	}
 	if (ft_strcmp("echo", data.cmds[0]->cmd_complete[0]) == 0)
 	{
 		char	*aux;
 		aux = data.cmds[0]->cmd_and_its_flags + 4;
-		aux = is_echo_flag(aux);
+		aux = echo_flag(aux);
 		printf("%s", aux);
 		free(aux); 
 	}
@@ -111,3 +199,4 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 		exit(0);
 	}
 }
+

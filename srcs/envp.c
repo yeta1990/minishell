@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/14 12:29:46 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:56:34 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@ char	**create_env(char **envp)
 	return (env);
 }
 
-static char	*export_join(char *str)
+char	*export_join(char *str)
 {
 	char	*first;
 	char	*last;
@@ -80,4 +80,36 @@ char	**create_exp(char **envp)
 		i++;
 	}
 	return (exp);
+}
+
+void	free_env(char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		free(env[i]);
+		i++;
+	}
+	free(env);
+}
+
+char	**add_entry(char **old_arr, char *new_str)
+{
+	int		i;
+	int		size;
+	char	**arr;
+
+	i = 0;
+	size = get_env_size(old_arr) + 1;
+	arr = ft_calloc(size + 1, sizeof(char *));
+	while (old_arr[i])
+	{
+		arr[i] = old_arr[i];
+		i++;
+	}
+	arr[i] = new_str;
+	free(old_arr);
+	return (arr);
 }
