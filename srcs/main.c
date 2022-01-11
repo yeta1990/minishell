@@ -8,6 +8,8 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction)
 	str = s;
     while (str && *str)
     {
+		while (*str && *str == ' ')
+			str++;
 		if (*str == '<')
         {
 			str++;
@@ -32,6 +34,8 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction)
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
+		while (*str && *str == ' ')
+			str++;
     }
 	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd));
 }
@@ -107,7 +111,7 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
-		//	print_t_cmd(data.cmds);
+	//		print_t_cmd(data.cmds);
 			execute_commands(&data);
 		//	wait(NULL);
 			free_double_string(instructions);

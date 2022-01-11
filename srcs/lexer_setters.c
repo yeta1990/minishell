@@ -72,15 +72,13 @@ int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 	aux = 0;
 	size = 0;
 //	printf("raw_cmd in add_cmd: %s\n", raw_cmd);
-	while (raw_cmd && raw_cmd[size] && raw_cmd[size] == ' ')
-		size++;
 	if (parsed_instruction->cmd_and_its_flags == 0)
 	{
 		parsed_instruction->cmd_and_its_flags = ft_strdup_space(raw_cmd, &size);
 	}
 	else 
 	{
-		aux = ft_strdup(parsed_instruction->cmd_and_its_flags);
+		aux = ft_strjoin (parsed_instruction->cmd_and_its_flags, " ");
 		free(parsed_instruction->cmd_and_its_flags);
 		word = ft_strdup_space(raw_cmd, &size);
 		parsed_instruction->cmd_and_its_flags = ft_strjoin(aux, word);
