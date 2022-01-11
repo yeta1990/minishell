@@ -6,56 +6,46 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 11:23:59 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 12:12:39 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	exec_last(t_cmd *cmd, int fds[2])
+void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 {
-//	int		child_status;
-	pid_t	child;
-	char	*env_path;
-//	int		fd;
+	int		child;
 
-	env_path = getenv("PATH");
+	pipe(fds2);
 	child = fork();
-	if (child == -1)
+	if (child == 0)
 	{
-		perror("minishell");
-		exit(errno);
-	}
-	else if (child == 0)
-	{
-		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
-		
+		close(fds2[0]);
+		dup2(fds[0], 0);
 		close(fds[0]);
-//		maybe necessary to handle pipes and redirections
-		if (cmd->next)
-		{
-//			printf("hay siguiente\n");
-			dup2(fds[1], 1);
-			close(fds[1]);
-		}
-		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), 0) < 0)
-		{
-			perror("minishell");
-			exit(errno);
-		}
+		dup2(fds2[1], 1);
+		close(fds2[1]);
+		execve(cmd->cmd, &(cmd->cmd_complete[0]), 0);
+		perror("minishell");
+		exit(1);
 	}
-	else
+}
+
+void	middle_exec_handler(t_cmd **cmd, int fds[2], int num_cmds)
+{
+	int		fds2[2];
+	int		i;
+
+	i = 1;
+	while (i < num_cmds - 1)
 	{
-//		maybe necessary to handle pipes and redirections
-//		dup2(fds[1], 1);
-		close(fds[1]);
-	//	close(fds[0]);
-//		this wait must disappear, instead it have to be placed 
-//		at the end of all processes. i'm leaving both cases, with and
-//		without wnohang just in case
-//		waitpid(child, &child_status, 0);
-//		waitpid(child, &child_status, WNOHANG);
+		exec_middle(*cmd, fds, fds2);
+		*cmd = (*cmd)->next;
+		close(fds[0]);
+		close(fds2[1]);
+		fds[0] = fds2[0];
+		fds[1] = fds2[1];
+		i++;
 	}
 }
 
@@ -73,20 +63,23 @@ int	execute_commands(t_data *data)
 	if (data->num_cmds == 1)
 	{
 		ft_exec_first(node, fds);
-		wait(NULL);
 	}
 	else if (data->num_cmds == 2)
 	{
 		ft_exec_first(node, fds);
 		node = node->next;
 		ft_exec_last(node, fds);
-		wait(NULL);
-		wait(NULL);
 	}
 	else if (data->num_cmds >= 3)
 	{
-	
+		ft_exec_first(node, fds);
+		node = node->next;
+		middle_exec_handler(&node, fds, data->num_cmds);
+		ft_exec_last(node, fds);
+
 	}
+	while (wait(NULL) != -1)
+		 ;
 	return (1);
 }
 
@@ -124,12 +117,6 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 	else
 	{
 		close(fds[1]);
-	//	close(fds[0]);
-//		this wait must disappear, instead it have to be placed 
-//		at the end of all processes. i'm leaving both cases, with and
-//		without wnohang just in case
-//		waitpid(child, &child_status, 0);
-//		waitpid(child, &child_status, WNOHANG);
 	}
 }
 
@@ -157,7 +144,8 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 		perror("minishell");
 		exit(errno);
 	}
+	else
+		close(fds[0]);
 //	waitpid(child, &child_status, 0);
-	close(fds[0]);
 	return (WEXITSTATUS(child_status));
 }
