@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 11:02:00 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 11:23:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,23 +87,6 @@ int	execute_commands(t_data *data)
 	{
 	
 	}
-/*	while (node)
-	{
-		ft_exec_first(node, fds);
-		node = node->next;
-		wait(NULL);
-	}*/
-/*	while (i < waits)
-	{
-		wait(NULL);
-		i++;
-	}*/
-	//	wait(NULL);
-	//	node = node->next;
-
-//	dup2(fd_original, 0);
-	//	return (ft_exec_last(node, fds));
-
 	return (1);
 }
 
@@ -129,7 +112,6 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 //		maybe necessary to handle pipes and redirections
 		if (cmd->next)
 		{
-//			printf("hay siguiente\n");
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}
@@ -141,8 +123,6 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 	}
 	else
 	{
-//		maybe necessary to handle pipes and redirections
-//		dup2(fds[1], 1);
 		close(fds[1]);
 	//	close(fds[0]);
 //		this wait must disappear, instead it have to be placed 
@@ -168,15 +148,16 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 	}
 	if (child == 0)
 	{
-		dup2(fds[0], 0);
+		if (ft_lstlast_files(*(cmd->stdins)))
+			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
+		else
+			dup2(fds[0], 0);
 		close(fds[0]);
-	//	print_t_cmd(&cmd);
-	//	printf("%s\n", cmd->cmd_and_its_flags);
-		execve(cmd->cmd, &(cmd->cmd_complete[0]), &env_path);
-		perror("minishell1");
+		execve(cmd->cmd, &(cmd->cmd_complete[0]), 0);
+		perror("minishell");
 		exit(errno);
 	}
-	waitpid(child, &child_status, 0);
+//	waitpid(child, &child_status, 0);
 	close(fds[0]);
 	return (WEXITSTATUS(child_status));
 }
