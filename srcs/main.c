@@ -1,6 +1,6 @@
 #include "minishell.h"
 #include <string.h>
-
+#include <sys/wait.h>
 void	parse_instruction(char *s, t_cmd *parsed_instruction)
 {
 	char *str;
@@ -76,7 +76,7 @@ int main(int argc, char **argv)
 	char	**instructions;
 	int		i;
 
-	atexit(check_leaks);
+//	atexit(check_leaks);
 	i = 0;
 	argc += 0;
 	while (argv[i])
@@ -91,6 +91,8 @@ int main(int argc, char **argv)
 			i = 0;
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
+			data.num_cmds = 0;
+			data.last_code = 0;
 			add_history(str);
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
@@ -109,8 +111,8 @@ int main(int argc, char **argv)
 				free_data(&data);
 				exit(0);
 			}
-		//	print_t_cmd(data.cmds);
-			execute_commands(&data);
+			data.last_code = execute_commands(&data);
+	//		print_t_cmd(data.cmds);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);

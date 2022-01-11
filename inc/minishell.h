@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 10:47:43 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:54:17 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_data
 {
 	int			num_cmds;
 	int			num_pipes;
+	int			last_code;
 	t_cmd		**cmds;
 }	t_data;
 

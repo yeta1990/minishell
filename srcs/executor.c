@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 12:49:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/11 16:50:05 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ int	execute_commands(t_data *data)
 {
 	t_cmd 	*node;
 	int		fds[2];
+	int		last_status;
 
+	last_status = 0;
 	node = *data->cmds;
 	if (pipe(fds) < 0)
 	{
@@ -70,18 +72,22 @@ int	execute_commands(t_data *data)
 	{
 		ft_exec_first(node, fds);
 		node = node->next;
-		ft_exec_last(node, fds);
+		last_status = ft_exec_last(node, fds);
 	}
 	else if (data->num_cmds >= 3)
 	{
 		ft_exec_first(node, fds);
 		node = node->next;
 		middle_exec_handler(&node, fds, data->num_cmds);
-		ft_exec_last(node, fds);
+		last_status = ft_exec_last(node, fds);
 	}
-	while (wait(NULL) != -1)
+	while (wait(&last_status) != -1)
 		 ;
-	return (1);
+	if (WIFEXITED(last_status))
+	{
+		return (WEXITSTATUS(last_status));
+	}
+	return (0);
 }
 
 void	ft_exec_first(t_cmd *cmd, int fds[2])
@@ -142,5 +148,6 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 	}
 	else
 		close(fds[0]);
+	waitpid(child, &child_status, WNOHANG);
 	return (WEXITSTATUS(child_status));
 }
