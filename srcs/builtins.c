@@ -6,11 +6,33 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 16:44:57 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/12 12:30:19 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	search_word_del(char **arr, char *str)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (arr[i])
+	{
+		j = 0;
+		while (arr[i][j] && str[j])
+		{
+			if (str[j] != arr[i][j])
+				break ;
+			else if ((!str[j + 1] && (arr[i][j + 1] == '=')) || (!str[j + 1] && !arr[i][j + 1]))
+				return (i);
+			j++;
+		}
+		i++;
+	}
+	return (-1);
+}
 
 int	search_word(char **arr, char *str)
 {
@@ -23,21 +45,10 @@ int	search_word(char **arr, char *str)
 		j = 0;
 		while (arr[i][j] && str[j])
 		{
-			printf("%c %c\n", str[j], arr[i][j]);
 			if (str[j] != arr[i][j])
-			{
 				break ;
-			}
-			else if (str[j] == '=')
-			{
-				printf("SALI EN 1 %d", i);
+			else if (((str[j + 1] == '=') && (arr[i][j + 1] == '=')) || ((str[j + 1] == '=') && !arr[i][j + 1]) || (!str[j + 1] && (arr[i][j + 1] == '=')) || (!str[j + 1] && !arr[i][j + 1]))
 				return (i);
-			}
-			else if (!str[j])
-			{
-				printf("SALI EN 2");
-				return (i);
-			}
 			j++;
 		}
 		i++;
@@ -150,35 +161,43 @@ void	check_builtins(t_data data, char *str, char **instructions, char ***env, ch
 			{
 				if ((index_exp >=0) && (index_env >=0))
 				{
-					printf("AQUI 1");
 					free(aux_exp[index_exp]);
 					aux_exp[index_exp] = export_join(data.cmds[0]->cmd_complete[i]);
 					free(aux_env[index_env]);
-					aux_exp[index_env] = ft_strdup(data.cmds[0]->cmd_complete[i]);
+					aux_env[index_env] = ft_strdup(data.cmds[0]->cmd_complete[i]);
 				}
 				else if (index_exp >=0)
 				{
-					printf("AQUI 2");
 					free(aux_exp[index_exp]);
 					aux_exp[index_exp] = export_join(data.cmds[0]->cmd_complete[i]);
 					*env = add_entry(aux_env, ft_strdup(data.cmds[0]->cmd_complete[i]));
 				}
 				else
 				{
-					printf("AQUI 3");
 					*exp = add_entry(aux_exp, ft_strdup(data.cmds[0]->cmd_complete[i]));
 					*env = add_entry(aux_env, ft_strdup(data.cmds[0]->cmd_complete[i]));
 				}
 			}
 			else
 			{
-				printf("%d\n", index_exp);
 				if (index_exp < 0)
-				{
-					printf("AQUI 4");
 					*exp = add_entry(aux_exp, ft_strdup(data.cmds[0]->cmd_complete[i]));
-				}
 			}
+			i++;
+		}
+	}
+	if (ft_strcmp("unset", data.cmds[0]->cmd_complete[0]) == 0)
+	{
+		int		index_env;
+		int		index_exp;
+		while (data.cmds[0]->cmd_complete[i])
+		{
+			index_env = search_word_del(aux_env, data.cmds[0]->cmd_complete[i]);
+			index_exp = search_word_del(aux_exp, data.cmds[0]->cmd_complete[i]);
+			if (index_exp >= 0)
+				*exp = del_entry(aux_exp, index_exp);
+			if (index_env >= 0)
+				*env = del_entry(aux_env, index_env);
 			i++;
 		}
 	}
