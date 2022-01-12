@@ -27,13 +27,27 @@ in <infile | cat, cat doesn't receive any content nor redirection
 << EOF << EFF cat opens two times stdin, but cat only receives the last string
 << cat | wc -l opens stdin but nothing is sent to pipe
 
+heredoc must receive an alphanumeric EOF 
+
+%n@%m:%1d/$ echo hola << eo | <<<oa cat
+> eo
+oa
+
+
 ########## Works:
 <1 <2 cat >out4 << EOF | cat
 echo hola | <1 <2 cat >out4 << EOF | cat
 
-######### 'm going to wait until our builtin is ready to test again...
+######### Doesn't work 
 
 <1 <2 cat >out4 << EOF | echo hola -> it prints "hola" in the heredoc. as we have to rewrite the "echo" builtin, I'm going to wait until our builtin is ready to test again...hopefully it will work
 
+<<< or << without any other word, has to throw an error: 
+bash: syntax error near unexpected token `newline'. error code 258
 
+<<<< 
+bash: syntax error near unexpected token `<'. error code 258
 
+<1<2cat show throw an error, but parser is jumping the second '<'
+parsing errors suppose inmediat exit of the program, exit(258) and 
+syntax error near...

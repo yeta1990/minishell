@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 15:41:44 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/12 17:10:54 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	ft_dup_output(t_files **stdouts)
 			fdout = open(f->name, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		if (fdout < 0)
 		{
-			ft_putstr_fd("pipex: ", 2);
+			ft_putstr_fd("minishell: ", 2);
 			write(2, f->name, ft_strlen(f->name));
 			ft_putstr_fd(": ", 2);
 			ft_putstr_fd(strerror(errno), 2);

@@ -64,6 +64,7 @@ t_cmd *split_and_parse_instruction(char *str)
 	parse_instruction(str, parsed_instruction);
 	return (parsed_instruction);
 }
+
 void	check_leaks(void)
 {
 	system("leaks minishell");
@@ -96,26 +97,26 @@ int main(int argc, char **argv)
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
-
 			add_history(str);
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
 			{
-			//	printf("%i: %s\n", i, instructions[i]);
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				data.num_cmds++;
 				i++;
 			}
-			//leaks checker, only for testing purposes
-			if (strcmp("exit", data.cmds[0]->cmd_complete[0]) == 0)
+			if (data.num_cmds > 0 && data.cmds[0]->cmd_complete[0] != 0)
 			{
-				free_double_string(instructions);
-				ft_bzero(str, ft_strlen(str));
-				free(str);
-				free_data(&data);
-				exit(0);
+				if (ft_strncmp("exit", data.cmds[0]->cmd_complete[0], 4) == 0)
+				{
+					free_double_string(instructions);
+					ft_bzero(str, ft_strlen(str));
+					free(str);
+					free_data(&data);
+					exit(0);
+				}
 			}
-			data.last_code = execute_commands(&data);
+
 			if (argc == 2 && argv[1][0] == 49)
 			{
 				printf("test mode 1\n");
@@ -132,7 +133,7 @@ int main(int argc, char **argv)
 				printf("exit status code: %i\n", data.last_code);
 				print_t_cmd(data.cmds);
 			}
-
+			data.last_code = execute_commands(&data);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);
