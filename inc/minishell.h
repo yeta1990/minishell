@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 16:54:17 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:01:13 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,6 @@
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
-
-# define COLOR_RED     "\x1b[31m"
-# define COLOR_GR   "\x1b[32m"
-# define COLOR_YELLOW  "\x1b[33m"
-# define COLOR_BLUE    "\x1b[34m"
-# define COLOR_MAGENTA "\x1b[35m"
-# define COLOR_CYAN    "\x1b[36m"
-# define COLOR_RES   "\x1b[0m"
-# define RL_S "\1"
-# define RL_E "\2"
 
 typedef struct s_files
 {
@@ -85,9 +75,9 @@ t_files	*ft_lstlast_files(t_files *lst);
 t_files	*ft_lstnew(void *content);
 
 // lexer_setters.c
-int		add_infile(char *raw_infile, t_cmd *raw_cmd);
-int		add_outfile(char *raw_infile, t_cmd *raw_cmd, int append);
-int		add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
+int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
+//int		add_outfile(char *raw_infile, t_cmd *raw_cmd, int append);
+//int		add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -122,6 +112,7 @@ char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //freezers
 void	free_double_string(char **str);
@@ -130,6 +121,7 @@ void	free_files(t_files *first);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
+void	help_usage(void);
 
 //executor.c
 int		execute_commands(t_data *data);
@@ -137,8 +129,10 @@ void	ft_exec_first(t_cmd *data, int fds[2]);
 int		ft_exec_last(t_cmd *data, int fds[2]);
 
 //ft_files.c
-void	ft_dup_infile(char *file);
-void	ft_dup_output(char *file);
+void	ft_dup_infile(t_files **stdins);
+void	ft_dup_output(t_files **stdouts);
+//void	ft_dup_infile(char *file);
+//void	ft_dup_output(char *file);
 
 char	*ft_strtrim(char const *s1, char const *set);
 

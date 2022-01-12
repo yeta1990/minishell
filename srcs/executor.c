@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 20:12:23 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/12 14:05:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,10 +51,12 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 		close(fds2[0]);
 		dup2(fds[0], 0);
 		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
+			ft_dup_infile(cmd->stdins);
 		close(fds[0]);
 		dup2(fds2[1], 1);
 		close(fds2[1]);
+		if (ft_lstlast_files(*(cmd->stdouts)))
+			ft_dup_output(cmd->stdouts);
 		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 	}
@@ -122,13 +124,16 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 	else if (child == 0)
 	{
 		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
+			ft_dup_infile(cmd->stdins);
+			//ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
 		close(fds[0]);
 		if (cmd->next)
 		{
 			dup2(fds[1], 1);
 			close(fds[1]);
 		}
+		if (ft_lstlast_files(*(cmd->stdouts)))
+			ft_dup_output(cmd->stdouts);
 		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 	}
@@ -152,10 +157,13 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 	if (child == 0)
 	{
 		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
+			ft_dup_infile(cmd->stdins);
+			//ft_dup_infile(ft_lstlast_files(*(cmd->stdins))->name);
 		else
 			dup2(fds[0], 0);
 		close(fds[0]);
+		if (ft_lstlast_files(*(cmd->stdouts)))
+			ft_dup_output(cmd->stdouts);
 		if (execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 	}

@@ -6,7 +6,7 @@ in <infile | cat, cat doesn't receive any content nor redirection
 
 
 
-##### OUTFILEs ######
+###### OUTFILEs ######
 
 >outfile creates an empty file
 >outfile >outfile2 creates two empty files
@@ -17,4 +17,13 @@ in <infile | cat, cat doesn't receive any content nor redirection
 
 <infile command (ex. cat) >outfile creates or replaces outfile with the output of the command
 <infile command >outfile1 >outfile2 creates two files, but output of the command is only sent to last outfile!
+
+
+###### HEREDOC #######
+
+<< EOF opens stdin until EOF is exactly written in a line
+<< EOF cat shows all lines except for EOF, after writting EOF
+<< EOF <infile cat opens stdin, but doesn't do anything with that string received, cat only gets "infile" content.
+<< EOF << EFF cat opens two times stdin, but cat only receives the last string
+<< cat | wc -l opens stdin but nothing is sent to pipe
 

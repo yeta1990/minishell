@@ -16,10 +16,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction)
 			if (str && *str && *str == '<')
 			{
 				str++;
-				str += add_heredoc(str, parsed_instruction);
+				str += add_redirection(str, parsed_instruction, 1, 0);
 			}
 			else if (str && *str && *str != '<')
-				str += add_infile(str, parsed_instruction);
+				str += add_redirection(str, parsed_instruction, 0, 0);
         }
 		else if (*str == '>')
 		{
@@ -27,10 +27,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction)
 			if (str && *str && *str == '>')
 			{
 				str++;
-				str += add_outfile(str, parsed_instruction, 1);
+				str += add_redirection(str, parsed_instruction, 1, 1);
 			}
 			else if (str && *str && *str != '>')
-				str += add_outfile(str, parsed_instruction, 0);
+				str += add_redirection(str, parsed_instruction, 0, 1);
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
@@ -76,7 +76,10 @@ int main(int argc, char **argv)
 	char	**instructions;
 	int		i;
 
-//	atexit(check_leaks);
+	if (argc == 1)
+		help_usage();
+	if (argc == 2 && argv[1][0] == 51)
+		atexit(check_leaks);
 	i = 0;
 	argc += 0;
 	while (argv[i])
@@ -113,8 +116,23 @@ int main(int argc, char **argv)
 				exit(0);
 			}
 			data.last_code = execute_commands(&data);
-			printf("exit status code: %i\n", data.last_code);
-		//	print_t_cmd(data.cmds);
+			if (argc == 2 && argv[1][0] == 49)
+			{
+				printf("test mode 1\n");
+				print_t_cmd(data.cmds);
+			}
+			if (argc == 2 && argv[1][0] == 48)
+			{
+				printf("test mode 0\n");
+				printf("exit status code: %i\n", data.last_code);
+			}
+			if (argc == 2 && argv[1][0] == 50)
+			{
+				printf("test mode 1\n");
+				printf("exit status code: %i\n", data.last_code);
+				print_t_cmd(data.cmds);
+			}
+
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);

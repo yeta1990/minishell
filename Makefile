@@ -4,7 +4,7 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/ft_memcmp.c srcs/ft_strjoin.c srcs/ft_memmove.c \
 		  srcs/cmd_arrange.c srcs/ft_putstr_fd.c srcs/test_printers.c \
 		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c \
-		  srcs/executor.c srcs/ft_files.c
+		  srcs/executor.c srcs/ft_files.c srcs/ft_strncmp.c
 
 INCS	= inc
 
