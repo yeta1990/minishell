@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 14:03:32 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/12 15:41:44 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,29 +102,7 @@ void	ft_dup_output(t_files **stdouts)
 			close(1);
 			dup(fdout);
 		}
+		close(fdout);
 		f = f->next;
 	}
 }
-
-
-/*
-void	ft_dup_output(char *file)
-{
-	int	fdout;
-
-	fdout = open(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
-	if (fdout < 0)
-	{
-		ft_putstr_fd("pipex: ", 2);
-		write(2, file, ft_strlen(file));
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(strerror(errno), 2);
-		ft_putstr_fd("\n", 2);
-		exit(errno);
-	}
-	close(1);
-	dup(fdout);
-}
-*/
-
-

@@ -27,3 +27,13 @@ in <infile | cat, cat doesn't receive any content nor redirection
 << EOF << EFF cat opens two times stdin, but cat only receives the last string
 << cat | wc -l opens stdin but nothing is sent to pipe
 
+########## Works:
+<1 <2 cat >out4 << EOF | cat
+echo hola | <1 <2 cat >out4 << EOF | cat
+
+######### 'm going to wait until our builtin is ready to test again...
+
+<1 <2 cat >out4 << EOF | echo hola -> it prints "hola" in the heredoc. as we have to rewrite the "echo" builtin, I'm going to wait until our builtin is ready to test again...hopefully it will work
+
+
+
