@@ -1,0 +1,26 @@
+
+########## tests
+syntaxis: 
+
+#num   -> number of test (to make note of it in "bugs" file)
+command
+prompt in bash
+###############
+
+#1
+<1<2
+bash: syntax error near unexpected token `1'
+
+#2
+<1 <2
+
+#3
+<1<<2
+bash: syntax error near unexpected token `1'
+
+#4
+<1<<<2 
+bash: syntax error near unexpected token `1'
+
+#5
+
