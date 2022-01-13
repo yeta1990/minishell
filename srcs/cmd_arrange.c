@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 15:22:08 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 18:22:23 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,24 @@ int	is_cmd(char *file, char **cmd_ok)
 char	**create_args(char *raw_cmd, char **cmd)
 {
 	char	**args;
+	char	*aux;
+	int		i;
 
+	i = 0;
 	args = split_quote_sensitive(raw_cmd);
+	if (args)
+	{
+		while (args && args[i])
+		{
+			aux = args[i];
+			aux = ft_strtrim(args[i], "\"");
+			free(args[i]);
+			args[i] = ft_strdup(aux);
+			if (aux)
+				free(aux);
+			i++;
+		}
+	}
 	if (!(is_raw_cmd(args[0], cmd)))
 		is_cmd(args[0], cmd);
 	return (args);
