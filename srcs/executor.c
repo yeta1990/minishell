@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 17:17:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 00:00:11 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,9 @@ void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 		close(fds2[1]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+		if (cmd->cmd && check_builtins(data, cmd) == 1)
+			exit(0);
+		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
 			exit(0);
@@ -132,7 +134,9 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 		close(fds[0]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+		if (cmd->cmd && check_builtins(data, cmd) == 1)
+			exit(0);
+		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
 			exit(0);

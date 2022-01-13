@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 12:44:22 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 23:55:06 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ void	ft_dup_infile(t_files **stdins)
 			dup2(fd, 0);
 			close(fd);
 		}
+		close(fd);
 		f = f->next;
 	}
 }
