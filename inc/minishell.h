@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 12:26:54 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 13:19:55 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,12 +60,13 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-
 typedef struct s_data
 {
 	int			num_cmds;
 	int			num_pipes;
 	t_cmd		**cmds;
+	char		**env;
+	char		**exp;
 }	t_data;
 
 //cmd_arrange.c
@@ -129,14 +130,30 @@ void	free_files(t_files *first);
 void	print_t_cmd(t_cmd **cmds);
 
 //envp.c
+int		get_env_size(char **envp);
 char	**create_env(char **envp);
 char	**create_exp(char **envp);
 void	free_env(char **env);
-char	**add_entry(char **old_arr, char *new_str);
 char	*export_join(char *str);
-char	**del_entry(char **old_arr, int index);
 
-//builtins.c
-void	check_builtins(t_data data, char *str, char **instructions, char ***env, char ***exp);
+//builtins1.c
+void	pwd_builtin(void);
+void	cd_bultin(t_data *data);
+void	env_builtin(t_data *data);
+void	exit_builtin(t_data *data, char *str, char **instructions);
+int		check_builtins(t_data *data, char *str, char **instructions);
+
+//builtins2.c
+char	*echo_flag(char *str);
+void	echo_builtin(t_data *data);
+void	update_env(t_data *data, int index_exp, int i);
+void	export_builtin(t_data *data);
+void	unset_builtin(t_data *data);
+
+//builtins3.c
+int		search_word_del(char **arr, char *str);
+int		search_word(char **arr, char *str);
+char	**add_entry(char **old_arr, char *new_str);
+char	**del_entry(char **old_arr, int index);
 
 #endif

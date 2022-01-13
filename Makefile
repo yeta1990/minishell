@@ -3,7 +3,8 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/ft_strtrim_full_string.c srcs/ft_split_mod.c \
 		  srcs/ft_memcmp.c srcs/ft_strjoin.c srcs/ft_memmove.c \
 		  srcs/cmd_arrange.c srcs/ft_putstr_fd.c srcs/test_printers.c \
-		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c srcs/builtins.c srcs/envp.c
+		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c srcs/builtins1.c \
+		  srcs/builtins2.c srcs/builtins3.c srcs/envp.c
 
 INCS	= inc
 

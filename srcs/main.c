@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/11 12:54:12 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:07:14 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,14 +80,12 @@ int	main(int argc, char **argv, char **envp)
 	t_data	data;
 	char	**instructions;
 	int		i;
-	char	**env;
-	char	**exp;
 
 	atexit(check_leaks);
 	i = 0;
 	argc += 0;
-	env = create_env(envp);
-	exp = create_exp(envp);
+	data.env = create_env(envp);
+	data.exp = create_exp(envp);
 	while (argv[i])
 		i++;
 	while (1)
@@ -105,14 +103,12 @@ int	main(int argc, char **argv, char **envp)
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
 				i++;
 			}
-			check_builtins(data, str, instructions, &env, &exp);
+			check_builtins(&data, str, instructions);
 			//print_t_cmd(data.cmds);
 			free_double_string(instructions);
 			//ft_bzero(str, ft_strlen(str));
 			free(str);
 			free_data(&data);
-			//free_env(env);
-			//free_env(exp);
 		}
 	}
 	return (0);
