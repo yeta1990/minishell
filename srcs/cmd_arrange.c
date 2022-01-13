@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 10:02:41 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 13:24:51 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,8 @@ int	is_cmd(char *file, char **cmd_ok)
 	}
 	free_paths(paths);
 	*cmd_ok = 0;
+	if (file)
+		*cmd_ok = ft_strdup(file);
 	return (0);
 }
 

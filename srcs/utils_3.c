@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_3.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/13 12:45:52 by albgarci          #+#    #+#             */
+/*   Updated: 2022/01/13 12:58:59 by albgarci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*ft_strchr(const char *s, int c)
@@ -61,4 +73,3 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	}
 	return (0);
 }
-

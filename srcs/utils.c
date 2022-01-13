@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/11 11:02:30 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:58:36 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,37 +83,40 @@ char	**ft_split(char const *s, char c)
 char	*ft_strdup_space(const char *s1, int *size)
 {
 	size_t	i;
-    size_t  len;
+	size_t	l;
 	char	*ptr;
-	char	*aux;
 
 	i = 0;
-    len = 0;
-	if (s1 && *s1 == '"')
+	l = std_space_get_cut_position((char *) s1);
+	ptr = malloc(sizeof(char) * (l + 1));
+	if (ptr)
 	{
-		aux = (char *)s1 + 1;
-		if (ft_strchr(aux, '"'))
-			len = (ft_strchr(aux, '"') - aux) + 2;
-	//	printf("len %li\n", len);
-	}
-	else
-	    while (s1 && s1[len] && s1[len] != ' ' && s1[len] != '<' && s1[len] != '>')
-    	    len++;
-//	printf("s1->%s\n", s1);
-//	while (s1 && s1[len] && s1[len] == ' ')
-//		len++;
-    ptr = malloc(sizeof(char) * (len + 1));
-    if (ptr)
-	{
-		*size += len;
-		while (len-- > 0)
+		*size += l;
+		while (l-- > 0)
 		{
 			*(ptr + i) = *(s1 + i);
 			i++;
 		}
 		*(ptr + i) = 0;
-//		printf("ptr->%s\n", s1);
 		return (ptr);
 	}
 	return (0);
+}
+
+int	std_space_get_cut_position(char	*s1)
+{
+	size_t	l;
+	char	*aux;
+
+	l = 0;
+	if (s1 && *s1 == '"')
+	{
+		aux = s1 + 1;
+		if (ft_strchr(aux, '"'))
+			l = (ft_strchr(aux, '"') - aux) + 2;
+	}
+	else
+		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
+			l++;
+	return (l);
 }

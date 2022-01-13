@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 17:10:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:44:22 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ void	run_heredoc(t_files **f)
 	close(fd);
 	fd = open("/tmp/minishell", O_WRONLY | O_CREAT | O_APPEND, 0644);
 	str = readline("> ");
-	while(ft_strlen(str) == 0 || check_eof(str, (*f)->name) == 0) 
+	while (ft_strlen(str) == 0 || check_eof(str, (*f)->name) == 0)
 	{
 		write(fd, str, ft_strlen(str));
 		write(fd, "\n", 1);
@@ -57,14 +57,7 @@ void	ft_dup_infile(t_files **stdins)
 			run_heredoc(&f);
 		fd = open(f->name, O_RDONLY | O_NONBLOCK);
 		if (fd < 0)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			write(2, f->name, ft_strlen(f->name));
-			ft_putstr_fd(": ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-			exit(errno);
-		}
+			file_error(f->name, errno);
 		if (f->append == 1)
 			unlink("/tmp/minishell");
 		if (!(f->next))
@@ -89,14 +82,7 @@ void	ft_dup_output(t_files **stdouts)
 		if (f->append == 1)
 			fdout = open(f->name, O_CREAT | O_WRONLY | O_APPEND, 0666);
 		if (fdout < 0)
-		{
-			ft_putstr_fd("minishell: ", 2);
-			write(2, f->name, ft_strlen(f->name));
-			ft_putstr_fd(": ", 2);
-			ft_putstr_fd(strerror(errno), 2);
-			ft_putstr_fd("\n", 2);
-			exit(errno);
-		}
+			file_error(f->name, errno);
 		if (!(f->next))
 		{
 			close(1);

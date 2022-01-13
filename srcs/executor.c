@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 10:33:31 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 13:26:57 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,9 @@ int	execute_commands(t_data *data)
 		;
 	if (WIFEXITED(last_status))
 		return (WEXITSTATUS(last_status));
+	else if (WIFSIGNALED(last_status))
+		if (WTERMSIG(last_status) == SIGSEGV)
+			return (transform_error_code(0, 11));
 	return (0);
 }
 
@@ -100,8 +103,11 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 			ft_dup_output(cmd->stdouts);
 		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
-		else
+		else if (cmd->cmd)
 			exit(0);
+		//	else if (execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+	//		exit(transform_error_code(cmd->cmd, (int) errno));
+		exit(0);
 	}
 	else
 		close(fds[1]);

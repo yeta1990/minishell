@@ -116,24 +116,27 @@ int main(int argc, char **argv)
 					exit(0);
 				}
 			}
-
 			if (argc == 2 && argv[1][0] == 49)
 			{
 				printf("test mode 1\n");
 				print_t_cmd(data.cmds);
+				data.last_code = execute_commands(&data);
 			}
-			if (argc == 2 && argv[1][0] == 48)
+			else if (argc == 2 && argv[1][0] == 48)
 			{
 				printf("test mode 0\n");
+				data.last_code = execute_commands(&data);
 				printf("exit status code: %i\n", data.last_code);
 			}
-			if (argc == 2 && argv[1][0] == 50)
+			else if (argc == 2 && argv[1][0] == 50)
 			{
-				printf("test mode 1\n");
-				printf("exit status code: %i\n", data.last_code);
+				printf("test mode 2\n");
 				print_t_cmd(data.cmds);
+				data.last_code = execute_commands(&data);
+				printf("exit status code: %i\n", data.last_code);
 			}
-			data.last_code = execute_commands(&data);
+			else
+				data.last_code = execute_commands(&data);
 			free_double_string(instructions);
 			ft_bzero(str, ft_strlen(str));
 			free(str);

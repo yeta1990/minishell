@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 10:43:05 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 13:11:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,9 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 t_files	*ft_lstlast_files(t_files *lst);
 t_files	*ft_lstnew(void *content);
 
+// list_utils_2.c
+char	**from_list_to_double_char(t_files **full_strings);
+
 // lexer_setters.c
 int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
@@ -95,6 +98,7 @@ int		get_char_pos_final_quotes(char q, char *str);
 //utils
 char	**ft_split(char const *s, char c);
 char	*ft_strdup_space(const char *s1, int *size);
+int		std_space_get_cut_position(char *s1);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -135,6 +139,7 @@ char	*ft_strtrim(char const *s1, char const *set);
 
 //error_handlers.c
 int	transform_error_code(char *cmd, int err);
+void	file_error(char *filename, int errn);
 void	std_error(int errn);
 
 #endif
