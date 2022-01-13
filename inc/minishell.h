@@ -6,11 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2022/01/13 13:19:55 by crisfern         ###   ########.fr       */
-=======
-/*   Updated: 2022/01/13 13:11:07 by albgarci         ###   ########.fr       */
->>>>>>> ed56ba7a169088eafceae4d7a46728f58f91766a
+/*   Updated: 2022/01/13 15:21:14 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,24 +18,11 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-<<<<<<< HEAD
 # include <sys/param.h>
-
-# define COLOR_RED     "\x1b[31m"
-# define COLOR_GR   "\x1b[32m"
-# define COLOR_YELLOW  "\x1b[33m"
-# define COLOR_BLUE    "\x1b[34m"
-# define COLOR_MAGENTA "\x1b[35m"
-# define COLOR_CYAN    "\x1b[36m"
-# define COLOR_RES   "\x1b[0m"
-# define RL_S "\1"
-# define RL_E "\2"
-=======
 # include <sys/wait.h>
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
->>>>>>> ed56ba7a169088eafceae4d7a46728f58f91766a
 
 typedef struct s_files
 {
@@ -158,7 +141,7 @@ void	ft_dup_output(t_files **stdouts);
 char	*ft_strtrim(char const *s1, char const *set);
 
 //error_handlers.c
-int	transform_error_code(char *cmd, int err);
+int		transform_error_code(char *cmd, int err);
 void	file_error(char *filename, int errn);
 void	std_error(int errn);
 
