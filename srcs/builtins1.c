@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 17:21:17 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 17:25:55 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	env_builtin(t_data *data)
 
 void	exit_builtin(t_data *data, t_cmd *cmd)
 {
-	if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
+	if (cmd->cmd && ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 	{
 		if (data->num_cmds == 1)
 			ft_putstr_fd("exit\n", 1);
