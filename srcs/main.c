@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 15:16:55 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 16:53:35 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,19 +118,9 @@ int	main(int argc, char **argv, char **envp)
 				data.num_cmds++;
 				i++;
 			}
-			check_builtins(&data, str, instructions);
-			//print_t_cmd(data.cmds);
-			if (data.num_cmds > 0 && data.cmds[0]->cmd_complete[0] != 0)
-			{
-				if (ft_strncmp("exit", data.cmds[0]->cmd_complete[0], 4) == 0)
-				{
-					free_double_string(instructions);
-					ft_bzero(str, ft_strlen(str));
-					free(str);
-					free_data(&data);
-					exit(0);
-				}
-			}
+			free_double_string(instructions);
+			free(str);
+			str = 0;
 			if (argc == 2 && argv[1][0] == 49)
 			{
 				printf("test mode 1\n");
@@ -152,14 +142,9 @@ int	main(int argc, char **argv, char **envp)
 			}
 			else
 				data.last_code = execute_commands(&data);
-			free_double_string(instructions);
-			//ft_bzero(str, ft_strlen(str));
-			free(str);
-			str = 0;
 			free_data(&data);
 			reset_data(&data);
 		}
-		str = 0;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 15:21:14 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 17:16:09 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ void	help_usage(void);
 
 //executor.c
 int		execute_commands(t_data *data);
-void	ft_exec_first(t_cmd *data, int fds[2]);
-int		ft_exec_last(t_cmd *data, int fds[2]);
+void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2]);
+int		ft_exec_last(t_data *data, t_cmd *cmd, int fds[2]);
 
 //ft_files.c
 void	ft_dup_infile(t_files **stdins);
@@ -156,8 +156,8 @@ char	*export_join(char *str);
 void	pwd_builtin(void);
 void	cd_bultin(t_data *data);
 void	env_builtin(t_data *data);
-void	exit_builtin(t_data *data, char *str, char **instructions);
-int		check_builtins(t_data *data, char *str, char **instructions);
+void	exit_builtin(t_data *data, t_cmd *cmd);
+int		check_builtins(t_data *data, t_cmd *cmd);
 
 //builtins2.c
 char	*echo_flag(char *str);

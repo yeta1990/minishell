@@ -14,7 +14,7 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-#CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror
 
 NAME	= minishell
 
