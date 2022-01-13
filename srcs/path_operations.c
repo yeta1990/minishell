@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:12:15 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 12:58:34 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:45:38 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ char	**path_surgery(char **path_to_cut, int path_emergency)
 	char	*e1;
 	char	*e2;
 	char	**env;
-	
+
 	if (path_to_cut && *path_to_cut && path_emergency == 0)
 	{
 		e2 = ft_strtrim_full_str(*path_to_cut, "PATH=");
@@ -40,7 +40,7 @@ char	**path_surgery(char **path_to_cut, int path_emergency)
 		env = ft_split_mod(e1, ':');
 		free(e2);
 		free(e1);
-		}
+	}
 	else
 	{
 		e1 = ft_strdup(":/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin");

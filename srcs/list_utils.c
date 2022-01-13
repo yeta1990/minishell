@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   list_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/01/13 13:04:19 by albgarci          #+#    #+#             */
+/*   Updated: 2022/01/13 13:04:21 by albgarci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new)
@@ -11,6 +23,7 @@ void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new)
 	}
 	aux = ft_lstlast_cmd(*lst);
 	aux->next = new;
+	new->next = 0;
 }
 
 t_cmd	*ft_lstlast_cmd(t_cmd *lst)

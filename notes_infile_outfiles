@@ -1,0 +1,53 @@
+
+
+###### INFILES #######
+<infile does nothing
+in <infile | cat, cat doesn't receive any content nor redirection
+
+
+
+###### OUTFILEs ######
+
+>outfile creates an empty file
+>outfile >outfile2 creates two empty files
+
+<infile >outfile creates the file adios but empty, although infile isn't empty
+<infile >outfile >outfile2 creates two empty files
+<infile_wrong >outfile doesn't create anything, only shows an error "No such file or directory"
+
+<infile command (ex. cat) >outfile creates or replaces outfile with the output of the command
+<infile command >outfile1 >outfile2 creates two files, but output of the command is only sent to last outfile!
+
+
+###### HEREDOC #######
+
+<< EOF opens stdin until EOF is exactly written in a line
+<< EOF cat shows all lines except for EOF, after writting EOF
+<< EOF <infile cat opens stdin, but doesn't do anything with that string received, cat only gets "infile" content.
+<< EOF << EFF cat opens two times stdin, but cat only receives the last string
+<< cat | wc -l opens stdin but nothing is sent to pipe
+
+heredoc must receive an alphanumeric EOF 
+
+%n@%m:%1d/$ echo hola << eo | <<<oa cat
+> eo
+oa
+
+
+########## Works:
+<1 <2 cat >out4 << EOF | cat
+echo hola | <1 <2 cat >out4 << EOF | cat
+
+######### Doesn't work 
+
+<1 <2 cat >out4 << EOF | echo hola -> it prints "hola" in the heredoc. as we have to rewrite the "echo" builtin, I'm going to wait until our builtin is ready to test again...hopefully it will work
+
+<<< or << without any other word, has to throw an error: 
+bash: syntax error near unexpected token `newline'. error code 258
+
+<<<< 
+bash: syntax error near unexpected token `<'. error code 258
+
+<1<2cat show throw an error, but parser is jumping the second '<'
+parsing errors suppose inmediat exit of the program, exit(258) and 
+syntax error near...

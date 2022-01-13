@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2021/12/08 17:23:09 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 12:59:58 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ static int	get_nwords(char const *str, char c)
 		}
 	}
 	nwords++;
+//	printf("words: %i\n", nwords);
 	return (nwords);
 }
 
@@ -98,7 +99,7 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 			}
 		aux++;
 		}
-	ptr[i] = 0;
+	ptr[nwords] = 0;
 	}
 }
 
@@ -137,7 +138,12 @@ char	**ft_split_w_quotes(char const *s, char c)
 		{
 			nwords = get_nwords(str, c);
 			ptr = ft_calloc((nwords + 1), sizeof(char *));
-			if (ptr)
+			if (ptr && nwords == 1)
+			{
+				ptr[0] = ft_strdup(s);
+				ptr[1] = 0;
+			}
+			else if (ptr)
 				save_words(ptr, str, c, nwords);
 			free(str);
 			return (ptr);
@@ -145,54 +151,3 @@ char	**ft_split_w_quotes(char const *s, char c)
 	}
 	return (0);
 }
-/*
-int main(void)
-{
-	char **sp;
-	sp = 0;
-	printf("echo hola | que tal | bien \n");
-	sp = ft_split_w_quotes("echo hola | que tal | bien  \0", '|');
-
-	while (*sp)
-	{
-		printf("->%s\n", *sp);
-		sp++;
-	}
-	printf("\n\n");	
-	char **sp2;
-	printf("echo \"hola | que\" tal | bien \n");
-	sp2 = 0;
-	sp2 = ft_split_w_quotes("echo \"hola | que\" tal | bien  \0", '|');
-
-	while (*sp2)
-	{
-		printf("->%s\n", *sp2);
-		sp2++;
-	}
-	printf("\n\n");	
-	char **sp3;
-	printf("echo \"hola | que\"\n");
-	sp3 = 0;
-	sp3 = ft_split_w_quotes("echo \"hola\"| | que\"\0", '|');
-
-	while (*sp3)
-	{
-		printf("->%s\n", *sp3);
-		sp3++;
-	}
-
-
-	char **sp4;
-	printf("\necho hola \n");
-	sp4 = 0;
-	sp4 = ft_split_w_quotes("\0", '|');
-
-	while (*sp4)
-	{
-		printf("->%s\n", *sp4);
-		sp4++;
-	}
-
-
-//	printf("%d\n", get_nwords("echo \"|\"", '|'));
-}*/

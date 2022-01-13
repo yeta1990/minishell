@@ -6,27 +6,32 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 10:07:14 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 15:16:55 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
-
-void	parse_instruction(char *str, t_cmd *parsed_instruction)
+#include <sys/wait.h>
+void	parse_instruction(char *s, t_cmd *parsed_instruction)
 {
+	char *str;
+
+	str = s;
     while (str && *str)
     {
+		while (*str && *str == ' ')
+			str++;
 		if (*str == '<')
         {
 			str++;
 			if (str && *str && *str == '<')
 			{
 				str++;
-				str += add_heredoc(str, parsed_instruction);
+				str += add_redirection(str, parsed_instruction, 1, 0);
 			}
 			else if (str && *str && *str != '<')
-				str += add_infile(str, parsed_instruction);
+				str += add_redirection(str, parsed_instruction, 0, 0);
         }
 		else if (*str == '>')
 		{
@@ -34,13 +39,15 @@ void	parse_instruction(char *str, t_cmd *parsed_instruction)
 			if (str && *str && *str == '>')
 			{
 				str++;
-				str += add_outfile(str, parsed_instruction, 1);
+				str += add_redirection(str, parsed_instruction, 1, 1);
 			}
 			else if (str && *str && *str != '>')
-				str += add_outfile(str, parsed_instruction, 0);
+				str += add_redirection(str, parsed_instruction, 0, 1);
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
+		while (*str && *str == ' ')
+			str++;
     }
 	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd));
 }
@@ -81,35 +88,78 @@ int	main(int argc, char **argv, char **envp)
 	char	**instructions;
 	int		i;
 
-	atexit(check_leaks);
+	if (argc == 1)
+		help_usage();
+	if (argc == 2 && argv[1][0] == 51)
+		atexit(check_leaks);
 	i = 0;
 	argc += 0;
 	data.env = create_env(envp);
 	data.exp = create_exp(envp);
 	while (argv[i])
 		i++;
+
+	i = 0;
+	data.last_code = 0;
 	while (1)
 	{
 		str = readline("minishell $ ");
-		if (str)
-		{
+		if (str && ft_strlen(str) > 0)
+ 		{
 			i = 0;
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
+			data.num_cmds = 0;
 			add_history(str);
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
+				data.num_cmds++;
 				i++;
 			}
 			check_builtins(&data, str, instructions);
 			//print_t_cmd(data.cmds);
+			if (data.num_cmds > 0 && data.cmds[0]->cmd_complete[0] != 0)
+			{
+				if (ft_strncmp("exit", data.cmds[0]->cmd_complete[0], 4) == 0)
+				{
+					free_double_string(instructions);
+					ft_bzero(str, ft_strlen(str));
+					free(str);
+					free_data(&data);
+					exit(0);
+				}
+			}
+			if (argc == 2 && argv[1][0] == 49)
+			{
+				printf("test mode 1\n");
+				print_t_cmd(data.cmds);
+				data.last_code = execute_commands(&data);
+			}
+			else if (argc == 2 && argv[1][0] == 48)
+			{
+				printf("test mode 0\n");
+				data.last_code = execute_commands(&data);
+				printf("exit status code: %i\n", data.last_code);
+			}
+			else if (argc == 2 && argv[1][0] == 50)
+			{
+				printf("test mode 2\n");
+				print_t_cmd(data.cmds);
+				data.last_code = execute_commands(&data);
+				printf("exit status code: %i\n", data.last_code);
+			}
+			else
+				data.last_code = execute_commands(&data);
 			free_double_string(instructions);
 			//ft_bzero(str, ft_strlen(str));
 			free(str);
+			str = 0;
 			free_data(&data);
+			reset_data(&data);
 		}
+		str = 0;
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:55:09 by albgarci          #+#    #+#             */
-/*   Updated: 2021/12/09 16:10:30 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/13 13:14:24 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,27 +30,23 @@ int	get_char_pos(char *str, char c)
 
 int	has_closed_quotes(char *str)
 {
-	int		simple;
+	int		smpl;
 	int		dble;
 	char	*aux;
 	int		close;
 
-	simple = 0;
-	dble = 0;
-	aux = 0;
-	close = 0;
-	simple = get_char_pos(str, '\'');
+	smpl = get_char_pos(str, '\'');
 	dble = get_char_pos(str, '\"');
-	if ((simple > 0 && dble > 0 && simple < dble) || (simple > 0 && dble <= 0))
+	if ((smpl > 0 && dble > 0 && smpl < dble) || (smpl > 0 && dble <= 0))
 	{
-		aux = str + simple;
+		aux = str + smpl;
 		close = get_char_pos(aux, '\'');
 		if (close == (int) ft_strlen(aux) + 1)
-			return (has_closed_quotes(str + simple));
+			return (has_closed_quotes(str + smpl));
 		else
 			return (1);
 	}
-	else if ((simple > 0 && dble > 0 && dble < simple) || (dble > 0 && simple <= 0))
+	else if ((smpl > 0 && dble > 0 && dble < smpl) || (dble > 0 && smpl <= 0))
 	{
 		aux = str + dble;
 		close = get_char_pos(aux, '\"');
@@ -95,40 +91,11 @@ void	cut_end_quotes(char *aux, t_files **full_strings)
 	}
 }
 
-char **from_list_to_double_char(t_files **full_strings)
-{
-	char	**s;
-	t_files	*aux;
-	int		size;
-
-	size = 0;
-	aux = *full_strings;
-	s = 0;
-	while (aux)
-	{
-		aux = aux->next;
-		size++;
-	}
-	s = malloc(sizeof(char *) * size + 1);
-	aux = *full_strings;
-	size = 0;
-	while (aux)
-	{
-		s[size] = ft_strdup(aux->name);
-		aux = aux->next;
-		size++;
-	}
-	s[size] = 0;
-	free_files(*full_strings);
-	free(full_strings);
-	return (s);
-}
-
-char **split_quote_sensitive(char *str)
+char	**split_quote_sensitive(char *str)
 {
 	int		quotes_type;
 	char	*aux;
-	t_files	**full_strings; 
+	t_files	**full_strings;
 
 	full_strings = malloc(sizeof(t_files *));
 	full_strings[0] = 0;

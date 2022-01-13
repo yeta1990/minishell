@@ -6,7 +6,11 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2022/01/13 13:19:55 by crisfern         ###   ########.fr       */
+=======
+/*   Updated: 2022/01/13 13:11:07 by albgarci         ###   ########.fr       */
+>>>>>>> ed56ba7a169088eafceae4d7a46728f58f91766a
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +22,7 @@
 # include <unistd.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+<<<<<<< HEAD
 # include <sys/param.h>
 
 # define COLOR_RED     "\x1b[31m"
@@ -29,6 +34,12 @@
 # define COLOR_RES   "\x1b[0m"
 # define RL_S "\1"
 # define RL_E "\2"
+=======
+# include <sys/wait.h>
+# include <string.h>
+# include <fcntl.h>
+# include <errno.h>
+>>>>>>> ed56ba7a169088eafceae4d7a46728f58f91766a
 
 typedef struct s_files
 {
@@ -64,6 +75,7 @@ typedef struct s_data
 {
 	int			num_cmds;
 	int			num_pipes;
+	int			last_code;
 	t_cmd		**cmds;
 	char		**env;
 	char		**exp;
@@ -81,10 +93,11 @@ t_cmd	*ft_lstlast_cmd(t_cmd *lst);
 t_files	*ft_lstlast_files(t_files *lst);
 t_files	*ft_lstnew(void *content);
 
+// list_utils_2.c
+char	**from_list_to_double_char(t_files **full_strings);
+
 // lexer_setters.c
-int		add_infile(char *raw_infile, t_cmd *raw_cmd);
-int		add_outfile(char *raw_infile, t_cmd *raw_cmd, int append);
-int		add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
+int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -104,6 +117,7 @@ int		get_char_pos_final_quotes(char q, char *str);
 //utils
 char	**ft_split(char const *s, char c);
 char	*ft_strdup_space(const char *s1, int *size);
+int		std_space_get_cut_position(char *s1);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -120,14 +134,33 @@ void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
 int		ft_strcmp(char *s1, char *s2);
+int		ft_strncmp(const char *s1, const char *s2, size_t n);
 
 //freezers
 void	free_double_string(char **str);
 void	free_data(t_data *data);
 void	free_files(t_files *first);
+void	reset_data(t_data *data);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
+void	help_usage(void);
+
+//executor.c
+int		execute_commands(t_data *data);
+void	ft_exec_first(t_cmd *data, int fds[2]);
+int		ft_exec_last(t_cmd *data, int fds[2]);
+
+//ft_files.c
+void	ft_dup_infile(t_files **stdins);
+void	ft_dup_output(t_files **stdouts);
+
+char	*ft_strtrim(char const *s1, char const *set);
+
+//error_handlers.c
+int	transform_error_code(char *cmd, int err);
+void	file_error(char *filename, int errn);
+void	std_error(int errn);
 
 //envp.c
 int		get_env_size(char **envp);

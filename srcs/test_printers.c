@@ -24,7 +24,10 @@ void	print_t_cmd(t_cmd **cmds)
 			printf("---stdins---\n");
 		while (std_aux)
 		{
-			printf("added infile: %s\n", std_aux->name);
+			if (std_aux->append == 0)
+				printf("added infile: %s\n", std_aux->name);
+			if (std_aux->append == 1)
+				printf("added heredoc: %s\n", std_aux->name);
 			std_aux = std_aux->next;
 			i++;
 		}
@@ -78,4 +81,17 @@ void	print_t_cmd(t_cmd **cmds)
 
 		cmd_aux = cmd_aux->next;
 	}
+}
+
+void	help_usage(void)
+{
+	printf("#############  minishell ###############\n");
+	printf("#                                      #\n");
+	printf("# available test modes:                #\n");
+	printf("# - last exit code: ./minishell 0      #\n");
+	printf("# - lexer result ./minishell 1         #\n");
+	printf("# - last exit + lexer: ./minishell 2   #\n");
+	printf("# - leaks: ./minishell 3               #\n");
+	printf("#                                      #\n");
+	printf("########################################\n\n");
 }

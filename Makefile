@@ -4,7 +4,10 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/ft_memcmp.c srcs/ft_strjoin.c srcs/ft_memmove.c \
 		  srcs/cmd_arrange.c srcs/ft_putstr_fd.c srcs/test_printers.c \
 		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c srcs/builtins1.c \
-		  srcs/builtins2.c srcs/builtins3.c srcs/envp.c
+		  srcs/builtins2.c srcs/builtins3.c srcs/envp.c \
+		  srcs/free_utils.c \
+		  srcs/executor.c srcs/ft_files.c srcs/ft_strncmp.c \
+		  srcs/error_handlers.c srcs/list_utils_2.c
 
 INCS	= inc
 
@@ -22,7 +25,7 @@ RM		= rm -f
 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) 
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -L/usr/include
 all:		$(NAME)
 
 clean:
@@ -34,6 +37,6 @@ fclean:		clean
 re:			fclean all
 
 san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -fsanitize=address
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -g0 -O -fsanitize=address 
 
 .PHONY:		all clean fclean re
