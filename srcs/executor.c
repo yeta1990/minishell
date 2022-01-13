@@ -6,46 +6,20 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 17:56:40 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:33:31 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern char** environ;
-
-int	transform_error_code(char *cmd, int err)
-{
-	// other errors to take into account
-	// in bash, when "< /dev/random cat", ctrl-C, exit code 130
-	// in bash, when pressing ctrl-C, exit code 1
-	// segfault, 134
-	if (err == 13)
-	{
-		write(2, "minishell: ", 11);
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": Permission denied\n", 20);
-		return (126);
-	}
-	else if (err == 2)
-	{
-		write(2, "minishell: ", 11);
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": command not found\n", 20); 
-		return (127);
-	}
-	else
-	{
-		perror("minishell");
-		return (1);
-	}
-}
+extern char	**environ;
 
 void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 {
 	int		child;
 
-	pipe(fds2);
+	if (pipe(fds2) < 0)
+		std_error(errno);
 	child = fork();
 	if (child == 0)
 	{
@@ -85,24 +59,21 @@ void	middle_exec_handler(t_cmd **cmd, int fds[2], int num_cmds)
 
 int	execute_commands(t_data *data)
 {
-	t_cmd 	*node;
+	t_cmd	*node;
 	int		fds[2];
 	int		last_status;
 
 	last_status = 0;
 	node = *data->cmds;
 	if (pipe(fds) < 0)
-	{
-		perror("minishell");
-		exit(1);
-	}
+		std_error(errno);
 	ft_exec_first(node, fds);
 	node = node->next;
 	middle_exec_handler(&node, fds, data->num_cmds);
 	if (data->num_cmds > 1)
 		last_status = ft_exec_last(node, fds);
 	while (wait(&last_status) != -1)
-		 ;
+		;
 	if (WIFEXITED(last_status))
 		return (WEXITSTATUS(last_status));
 	return (0);
@@ -111,15 +82,10 @@ int	execute_commands(t_data *data)
 void	ft_exec_first(t_cmd *cmd, int fds[2])
 {
 	pid_t	child;
-	char	*env_path;
 
-	env_path = getenv("PATH");
 	child = fork();
 	if (child == -1)
-	{
-		perror("minishell");
-		exit(errno);
-	}
+		std_error(errno);
 	else if (child == 0)
 	{
 		if (ft_lstlast_files(*(cmd->stdins)))
@@ -145,15 +111,10 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 {
 	int		child_status;
 	pid_t	child;
-	char	*env_path;
 
-	env_path = getenv("PATH");
 	child = fork();
 	if (child == -1)
-	{
-		perror("minishell");
-		exit(errno);
-	}
+		std_error(errno);
 	if (child == 0)
 	{
 		if (ft_lstlast_files(*(cmd->stdins)))

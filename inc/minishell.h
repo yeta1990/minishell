@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/12 14:01:13 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:43:05 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,6 @@ t_files	*ft_lstnew(void *content);
 
 // lexer_setters.c
 int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
-//int		add_outfile(char *raw_infile, t_cmd *raw_cmd, int append);
-//int		add_heredoc(char *raw_keyword, t_cmd *raw_cmd);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -118,6 +116,7 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 void	free_double_string(char **str);
 void	free_data(t_data *data);
 void	free_files(t_files *first);
+void	reset_data(t_data *data);
 
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
@@ -131,9 +130,11 @@ int		ft_exec_last(t_cmd *data, int fds[2]);
 //ft_files.c
 void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
-//void	ft_dup_infile(char *file);
-//void	ft_dup_output(char *file);
 
 char	*ft_strtrim(char const *s1, char const *set);
+
+//error_handlers.c
+int	transform_error_code(char *cmd, int err);
+void	std_error(int errn);
 
 #endif

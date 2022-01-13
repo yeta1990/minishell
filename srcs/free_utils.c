@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/10 15:36:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/13 10:41:35 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,42 +27,46 @@ void	free_double_string(char **str)
 	str = 0;
 }
 
-void	free_data(t_data *data)
+void	reset_data(t_data *data)
 {
-	t_cmd *cmd_aux;
-
-	while (*data->cmds)
-	{
-		cmd_aux = *data->cmds;
-		*data->cmds = cmd_aux->next;
-		free(cmd_aux->cmd);
-		ft_bzero(cmd_aux->cmd_and_its_flags, ft_strlen(cmd_aux->cmd_and_its_flags));
-		free(cmd_aux->cmd_and_its_flags);
-		free_files(*cmd_aux->stdins);
-		free(cmd_aux->stdins);
-		cmd_aux->stdins = 0;
-		free_files(*cmd_aux->stdouts);
-		free(cmd_aux->stdouts);
-		cmd_aux->stdouts = 0;
-		free_files(*cmd_aux->stderrs);
-		free(cmd_aux->stderrs);
-		cmd_aux->stderrs = 0;
-		free_files(*cmd_aux->heredocs);
-		free(cmd_aux->heredocs);
-		cmd_aux->heredocs = 0;
-		cmd_aux->next = 0;
-		free(cmd_aux);
-		free_double_string(cmd_aux->cmd_complete);
-	}
 	free(data->cmds);
 	data->cmds = 0;
 	data->num_cmds = 0;
 	data->num_pipes = 0;
 }
 
+void	free_data(t_data *data)
+{
+	t_cmd	*aux;
+
+	while (*data->cmds)
+	{
+		aux = *data->cmds;
+		*data->cmds = aux->next;
+		free(aux->cmd);
+		ft_bzero(aux->cmd_and_its_flags, ft_strlen(aux->cmd_and_its_flags));
+		free(aux->cmd_and_its_flags);
+		free_files(*aux->stdins);
+		free(aux->stdins);
+		aux->stdins = 0;
+		free_files(*aux->stdouts);
+		free(aux->stdouts);
+		aux->stdouts = 0;
+		free_files(*aux->stderrs);
+		free(aux->stderrs);
+		aux->stderrs = 0;
+		free_files(*aux->heredocs);
+		free(aux->heredocs);
+		aux->heredocs = 0;
+		aux->next = 0;
+		free(aux);
+		free_double_string(aux->cmd_complete);
+	}
+}
+
 void	free_files(t_files *first)
 {
-	t_files *aux;
+	t_files	*aux;
 
 	while (first)
 	{

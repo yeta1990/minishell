@@ -139,6 +139,7 @@ int main(int argc, char **argv)
 			free(str);
 			str = 0;
 			free_data(&data);
+			reset_data(&data);
 		}
 		str = 0;
 	}
