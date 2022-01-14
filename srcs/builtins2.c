@@ -6,12 +6,13 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 10:31:03 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 11:20:58 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+/*
 char	*echo_flag(char *str)
 {
 	char	*init;
@@ -40,6 +41,30 @@ char	*echo_flag(char *str)
 	}
 	return (0);
 }
+*/
+
+int	echo_flag(char *str)
+{
+	int		flag;
+
+	flag = 0;
+	if (str)
+	{
+		while (*str)
+		{
+			while (*str == ' ')
+				str++;
+			if (*str++ != '-')
+				break ;
+			while (*str == 'n')
+				str++;
+			if ((*str != '\0') && (*str != ' '))
+				break ;
+			flag = 1;
+		}
+	}
+	return (flag);
+}
 
 void	echo_builtin(t_cmd *cmd)
 {
@@ -52,13 +77,15 @@ void	echo_builtin(t_cmd *cmd)
 		aux = cmd->cmd_complete[i];
 	while (aux)
 	{
-		aux = echo_flag(aux);
+	//	aux = echo_flag(aux);
 		ft_putstr_fd(aux, 1);
 		free(aux);
 		i++;
 		aux = cmd->cmd_complete[i];
 	}
-}	
+	if (i > 1 && echo_flag(aux) == 0)
+		write(1, "\n", 1);
+}
 
 void	update_env(t_data *data, int index_exp, int i)
 {
