@@ -6,84 +6,64 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 11:20:58 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 11:59:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-/*
-char	*echo_flag(char *str)
+int	echo_flag(char **cmd_complete)
 {
-	char	*init;
-	int		flag;
+	int		flags;
+	char	*aux;
 
-	flag = 0;
-	if (str)
+	flags = 0;
+	aux = cmd_complete[flags];
+	while (aux)
 	{
-		while (*str)
-		{
-			while (*str == ' ')
-				str++;
-			init = str;
-			if (*str++ != '-')
-				break ;
-			while (*str == 'n')
-				str++;
-			if ((*str != '\0') && (*str != ' '))
-				break ;
-			flag = 1;
-		}
-		if (flag)
-			return (ft_strdup(init));
+		if (*aux && *aux != '-')
+			return (flags);
+		aux++;
+		if (*aux && *aux == 'n')
+			aux++;
 		else
-			return (ft_strjoin(init, "\n"));
+			return (flags);
+		while (*aux && *aux == 'n')
+			aux++;
+		if (*aux)
+			return (flags);
+		flags++;
+		aux = cmd_complete[flags];
 	}
-	return (0);
-}
-*/
-
-int	echo_flag(char *str)
-{
-	int		flag;
-
-	flag = 0;
-	if (str)
-	{
-		while (*str)
-		{
-			while (*str == ' ')
-				str++;
-			if (*str++ != '-')
-				break ;
-			while (*str == 'n')
-				str++;
-			if ((*str != '\0') && (*str != ' '))
-				break ;
-			flag = 1;
-		}
-	}
-	return (flag);
+	return (flags);
 }
 
 void	echo_builtin(t_cmd *cmd)
 {
 	char	*aux;
 	int		i;
+	int		new_line;
 
-	i = 1;
+	i = 0;
 	aux = 0;
+	new_line = 1;
 	if (cmd->cmd_complete && cmd->cmd_complete[0])
+	{
+		i = echo_flag(&(cmd->cmd_complete[1])) + 1;
+		if (i > 1)
+			new_line = 0;
 		aux = cmd->cmd_complete[i];
+	}
 	while (aux)
 	{
-	//	aux = echo_flag(aux);
 		ft_putstr_fd(aux, 1);
 		free(aux);
 		i++;
 		aux = cmd->cmd_complete[i];
+		if (aux)
+			write(1, " ", 1);
 	}
-	if (i > 1 && echo_flag(aux) == 0)
+	if (i > 1 && new_line)
 		write(1, "\n", 1);
 }
 
