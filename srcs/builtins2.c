@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:47:39 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/14 10:31:03 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,15 +41,24 @@ char	*echo_flag(char *str)
 	return (0);
 }
 
-void	echo_builtin(t_data *data)
+void	echo_builtin(t_cmd *cmd)
 {
 	char	*aux;
+	int		i;
 
-	aux = data->cmds[0]->cmd_and_its_flags + 4;
-	aux = echo_flag(aux);
-	ft_putstr_fd(aux, 1);
-	free(aux);
-}
+	i = 1;
+	aux = 0;
+	if (cmd->cmd_complete && cmd->cmd_complete[0])
+		aux = cmd->cmd_complete[i];
+	while (aux)
+	{
+		aux = echo_flag(aux);
+		ft_putstr_fd(aux, 1);
+		free(aux);
+		i++;
+		aux = cmd->cmd_complete[i];
+	}
+}	
 
 void	update_env(t_data *data, int index_exp, int i)
 {
