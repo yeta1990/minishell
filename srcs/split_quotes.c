@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/14 11:21:17 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 18:05:24 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	get_nwords(char const *str, char c)
 		}
 	}
 	nwords++;
-//	printf("words: %i\n", nwords);
+	printf("words: %i\n", nwords);
 	return (nwords);
 }
 
@@ -60,44 +60,31 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 	i = 0;
 	len = 0;
 	c += 0;
+
 	if ((nwords > 0) && *str)
 	{
 		aux = str;
 		while (*aux)
 		{
-			while (*aux == '|')
-					aux++;
-			if (has_closed_quotes(aux) == 0) 
+			if (has_closed_quotes(aux + len) == 1)
+				len = get_char_pos_final_quotes('\'', aux + len) - 1;
+			else if (has_closed_quotes(aux + len) == 2)
+				len += get_char_pos_final_quotes('\"', aux + len) - 1;
+			if (has_closed_quotes(aux + len) == 0) 
 			{
+			//	printf("aux: %s, len %i\n", aux + len, len);
 				while (aux && aux[len] && aux[len] != '|')
 					len++;
 			//	printf("aux: %s, len %i\n", aux, len);
 				ptr[i++] = ft_substr(aux, 0, len);
-			//	printf("ptr: %s\n", ptr[0]);
+			//	printf("ptr: %s\n", ptr[i - 1]);
+				if (aux && aux[len] && aux[len] == '|')
+					len++;
+				while (aux && aux[len] && aux[len] == ' ')
+					aux++;
 				aux +=len;
 				len = 0;
 			}
-			else if (has_closed_quotes(aux) == 1)
-			{
-				len = get_char_pos_final_quotes('\'', aux);
-				while (aux && aux[len] && aux[len] != '|')
-					len++;
-			//	printf("2aux: %s, len %i\n", aux, len);
-				ptr[i++] = ft_substr(aux, 0, len);
-				aux += len - 1;
-				len = 0;
-			}
-			else if (has_closed_quotes(aux) == 2)
-			{
-				len = get_char_pos_final_quotes('\"', aux);
-				while (aux && aux[len] && aux[len] != '|')
-					len++;
-			//	printf("3aux: %s, len %i\n", aux, len);
-				ptr[i++] = ft_substr(aux, 0, len);
-				aux += len - 1;
-				len = 0;
-			}
-		aux++;
 		}
 	ptr[nwords] = 0;
 	}
@@ -114,8 +101,10 @@ int	get_char_pos_final_quotes(char q, char *str)
 	{
 		while (str[i] != q)
 			i++;
-		i += 2;
+		i += 1;
 		while (str[i] != q)
+			i++;
+		if (str[i] && str[i] == q)
 			i++;
 		return (i + 1);
 	}
