@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 11:52:56 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 18:19:31 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ typedef struct s_data
 
 //cmd_arrange.c
 int		is_cmd(char *file, char **cmd_ok);
-char	**create_args(char *raw_cmd, char **cmd);
+char	**create_args(char *raw_cmd, char **cmd, t_data *data);
 void	cmd_not_raw(char **args);
 
 // list_utils.c
@@ -118,6 +118,7 @@ void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_itoa(int n);
 
 //freezers
 void	free_double_string(char **str);

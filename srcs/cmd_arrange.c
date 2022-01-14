@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 18:22:23 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/14 18:20:02 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	is_cmd(char *file, char **cmd_ok)
 	return (0);
 }
 
-char	**create_args(char *raw_cmd, char **cmd)
+char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 {
 	char	**args;
 	char	*aux;
@@ -81,7 +81,18 @@ char	**create_args(char *raw_cmd, char **cmd)
 			aux = args[i];
 			aux = ft_strtrim(args[i], "\"");
 			free(args[i]);
-			args[i] = ft_strdup(aux);
+			if (ft_strlen(aux) > 1 && aux[0] == '$')
+			{
+				if (aux[1] == '?')
+					args[i] = ft_itoa(data->last_code);
+				else
+				{
+					args[i] = ft_strdup(getenv(++aux));
+					aux--;
+				}
+			}
+			else
+				args[i] = ft_strdup(aux);
 			if (aux)
 				free(aux);
 			i++;
