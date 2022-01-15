@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 18:19:31 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/15 01:56:31 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,7 @@ typedef struct s_data
 int		is_cmd(char *file, char **cmd_ok);
 char	**create_args(char *raw_cmd, char **cmd, t_data *data);
 void	cmd_not_raw(char **args);
+char	*expansor(char **arg, t_data *data);
 
 // list_utils.c
 void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new);

@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:46:00 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 12:58:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/15 02:40:16 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,8 @@ char	*ft_strdup(const char *s1)
 {
 	char	*s;
 
+	if (!s1)
+		return (0);
 	s = malloc(ft_strlen(s1) + 1);
 	if (!s)
 		return (0);

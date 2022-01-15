@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/14 18:05:24 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/15 02:44:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	get_nwords(char const *str, char c)
 		}
 	}
 	nwords++;
-	printf("words: %i\n", nwords);
+//	printf("words: %i\n", nwords);
 	return (nwords);
 }
 

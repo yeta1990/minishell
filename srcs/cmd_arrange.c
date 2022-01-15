@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 18:20:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/15 02:46:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,18 +81,7 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 			aux = args[i];
 			aux = ft_strtrim(args[i], "\"");
 			free(args[i]);
-			if (ft_strlen(aux) > 1 && aux[0] == '$')
-			{
-				if (aux[1] == '?')
-					args[i] = ft_itoa(data->last_code);
-				else
-				{
-					args[i] = ft_strdup(getenv(++aux));
-					aux--;
-				}
-			}
-			else
-				args[i] = ft_strdup(aux);
+			args[i] = expansor(&aux, data);
 			if (aux)
 				free(aux);
 			i++;
@@ -101,4 +90,63 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	if (!(is_raw_cmd(args[0], cmd)))
 		is_cmd(args[0], cmd);
 	return (args);
+}
+
+char	*expansor(char **arg, t_data *data)
+{
+	char	*a;
+	char	*exp;
+	char	*aux_exp;
+	char	*aux_exp2;
+	char	*aux_exp3;
+	int		i;
+	int		j;
+
+	data = data + 0;
+	j = 0;
+	i = 0;
+	exp = 0;
+	aux_exp = 0;
+	aux_exp2 = 0;
+	aux_exp3 = 0;
+	a = *arg;
+	while (a && a[i] && a[i] != '$')
+		i++;
+	if (i != 0)
+		exp = ft_substr(a, 0, i);
+	i++;
+	while (a && a[i])
+	{
+		while (a[i] == '$')
+			i++;
+		if (a[i] && a[i] == '?')
+		{
+			aux_exp3 = ft_itoa(data->last_code);
+			j++;
+		}
+		else
+		{
+			while (a[i + j] && a[i + j] != '$')
+				j++;
+			aux_exp = ft_substr(a, i, j);
+			aux_exp3 = ft_strdup(getenv(aux_exp));
+			if (aux_exp)
+				free(aux_exp);
+		}
+		if (exp)
+			aux_exp2 = ft_strjoin(exp, aux_exp3);
+		else if (aux_exp3)
+			aux_exp2 = ft_strdup(aux_exp3);
+		free(aux_exp3);
+		if (aux_exp2)
+		{
+			if (exp)
+				free(exp);
+			exp = ft_strdup(aux_exp2);
+			free(aux_exp2);
+		}
+		i += j;
+		j = 0;
+	}
+	return (exp);
 }
