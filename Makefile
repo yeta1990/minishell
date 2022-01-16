@@ -6,7 +6,8 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c srcs/builtins1.c \
 		  srcs/builtins2.c srcs/builtins3.c srcs/envp.c \
 		  srcs/executor.c srcs/ft_files.c srcs/ft_strncmp.c \
-		  srcs/error_handlers.c srcs/list_utils_2.c srcs/ft_itoa.c
+		  srcs/error_handlers.c srcs/list_utils_2.c srcs/ft_itoa.c \
+		  srcs/ft_atoi.c
 
 INCS	= inc
 

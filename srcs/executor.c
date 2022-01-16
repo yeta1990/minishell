@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/16 17:21:50 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/16 19:13:34 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,7 @@ void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
 		if (cmd->cmd && check_builtins(data, cmd) == 1)
-			exit(0);
+			exit(data->last_code);
 		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
@@ -133,7 +133,7 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
 		if (cmd->cmd && check_builtins(data, cmd) == 1)
-			exit(0);
+			exit(data->last_code);
 		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
