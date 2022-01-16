@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/16 19:13:34 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/16 20:07:30 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,6 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 	}
 	else
 		close(fds[0]);
-	waitpid(child, &child_status, WNOHANG);
+//	waitpid(child, &child_status, WNOHANG);
 	return (WEXITSTATUS(child_status));
 }
