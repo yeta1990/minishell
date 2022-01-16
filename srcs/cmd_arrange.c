@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/15 02:46:01 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:42:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,10 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	{
 		while (args && args[i])
 		{
-			aux = args[i];
+		//	aux = args[i];
 			aux = ft_strtrim(args[i], "\"");
+			if (ft_strlen(aux) == 0)
+				aux = ft_strdup(" ");
 			free(args[i]);
 			args[i] = expansor(&aux, data);
 			if (aux)
