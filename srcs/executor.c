@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/14 00:00:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:21:50 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 
 	if (pipe(fds2) < 0)
 		std_error(errno);
-	exit_builtin(data, cmd);
 	child = fork();
 	if (child == 0)
 	{
@@ -121,7 +120,6 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 	int		child_status;
 	pid_t	child;
 
-	exit_builtin(data, cmd);
 	child = fork();
 	if (child == -1)
 		std_error(errno);
