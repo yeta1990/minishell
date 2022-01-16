@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/16 20:07:30 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/16 23:51:34 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,16 +45,21 @@ void	middle_exec_handler(t_data *data, t_cmd **cmd, int fds[2])
 {
 	int		fds2[2];
 	int		i;
+	int		last_status;
 
 	i = 1;
+	last_status = 0;
 	while (i < data->num_cmds - 1)
 	{
 		exec_middle(data, *cmd, fds, fds2);
+		while (wait(&last_status) != -1)
+			;
 		*cmd = (*cmd)->next;
 		close(fds[0]);
 		close(fds2[1]);
 		fds[0] = fds2[0];
 		fds[1] = fds2[1];
+
 		i++;
 	}
 }
@@ -70,6 +75,8 @@ int	execute_commands(t_data *data)
 	if (pipe(fds) < 0)
 		std_error(errno);
 	ft_exec_first(data, node, fds);
+	while (wait(&last_status) != -1)
+		;
 	node = node->next;
 	middle_exec_handler(data, &node, fds);
 	if (data->num_cmds > 1)
