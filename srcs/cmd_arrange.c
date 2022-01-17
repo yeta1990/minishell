@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/16 17:42:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/17 16:56:46 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,17 +73,21 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	int		i;
 
 	i = 0;
+//	printf("raw cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd);
 	if (args)
 	{
 		while (args && args[i])
 		{
+		//	printf("a\n");
 		//	aux = args[i];
 			aux = ft_strtrim(args[i], "\"");
-			if (ft_strlen(aux) == 0)
-				aux = ft_strdup(" ");
+			//free(aux);
+		//	if (ft_strlen(aux) == 0)
+		//		aux = ft_strdup(" ");// <- leaks
 			free(args[i]);
 			args[i] = expansor(&aux, data);
+		//	printf("%s\n", args[i]);
 			if (aux)
 				free(aux);
 			i++;
