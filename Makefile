@@ -14,7 +14,7 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-#CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -Wall -Wextra -Werror -lreadline -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 
 NAME	= minishell
 
@@ -24,7 +24,7 @@ RM		= rm -f
 			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS)
 
 $(NAME):	$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -L/usr/include
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -L/usr/include -lreadline -L /Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include
 all:		$(NAME)
 
 clean:

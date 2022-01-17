@@ -6,13 +6,14 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 17:13:47 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/17 14:53:29 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 #include <sys/wait.h>
+
 void	parse_instruction(char *s, t_cmd *parsed_instruction)
 {
 	char *str;
@@ -84,6 +85,9 @@ void	check_leaks(void)
 void	handler_c(int sig)
 {
 	printf("HOLA CARACOLA\n");
+	rl_on_new_line();
+	rl_replace_line("p", 0);
+	rl_redisplay();
 }
 
 int	main(int argc, char **argv, char **envp)
