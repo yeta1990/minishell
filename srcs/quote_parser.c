@@ -3,21 +3,29 @@
 
 #include "minishell.h"
 
+
 int main()
 {
 	//char *str = "echo 'uno '\"dos\"'tres'   ";
-	//char *str = "echo 'uno 'dos'tres'   ";
+//	char *str = "echo'''' uno 'dos'tres ''   ";
+	int	i;
 
-	char *str = " echo uno doos ";
-//	printf("%s\n", str);
+	i = 0;
+	char *str = " echo hola";// uno doos ";
+	printf("%s\n", str);
 	char **s;
 
+
 	s = split_quote_sensitive(str);
-	while (s && *s)
+	while (s && s[i])
 	{
-		printf("->%s\n", *s);
-		s++;
+		printf("->%s\n", s[i]);
+		free(s[i]);
+		i++;
 	}
+//	free(s);
+//	free(str);
+
 //	system("leaks a.out");
 }
 
@@ -34,7 +42,9 @@ char	**split_quote_sensitive(char *str)
 	char	*second_half;
 	char	*third_half;
 	char	*result;
+	char	*r;
 
+	r = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 	first_half = 0;
 	second_half = 0;
 	third_half = 0;
@@ -44,7 +54,7 @@ char	**split_quote_sensitive(char *str)
 	full_strings[0] = 0;
 	aux = str;
 	start = str;
-	result = 0;
+	result = r;
 	while (aux && *aux)
 	{
 		if (*aux == '\'')
@@ -60,74 +70,143 @@ char	**split_quote_sensitive(char *str)
 				aux++;
 				start++;
 			}
-			while (aux && *aux && *aux != ' ' && *aux != '\'')
+			start = result;
+			while (aux && *aux && *aux != ' ')
+			{
+				printf("f");
+
+				printf("aux %s\n", aux);
+				ft_memcpy(result, aux, 1);
+				result++;
+				size++;
+				aux++;
+			}
+			result = start;
+			printf("%s\n", result);
+			if (aux && *aux && *aux == ' ')
+			{
+				printf(".%s\n", result);
+				ft_memcpy(result + size, aux, ft_strlen(aux));
+				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
+				ft_bzero(result, ft_strlen(result));
+				//	free(result);
+			//	result = 0;
+				while (aux && *aux && *aux == ' ')
+					aux++;
+			}
+			size = 0;
+			if (ft_strlen(aux) == 0)
+				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
+			printf("%s\n", result);
+			printf("aux 1%s\n", aux);
+			start = aux;
+		}
+	/*	else if (flag == 1)
+		{
+			printf("result->%s\n", result);
+			size++;
+			aux++;
+			while (aux && *aux && *aux != '\'')
+			{
+				size++;
+				aux++;
+			}
+			if (aux && *aux && *aux == '\'')
 			{
 				size++;
 				aux++;
 			}
 			if (aux && *aux && *aux == ' ')
 			{
-				first_half = ft_strdup(result);
+			//	free(first_half);
+			//	free(second_half);
+				first_half = result;
 				second_half = ft_substr(start, 0, size);
 				if (result)
-					free(result);
+				{
+			//		free(result);
+					result = 0;
+				}
 				if (first_half && second_half)
 					result = ft_strjoin(first_half, second_half);
 				else if (first_half)
 				{
-					result = ft_strdup(first_half);
-					free(first_half);
-					first_half = 0;
-					printf("result 1: %s\n", result);
+				//	result = ft_strdup(first_half);
+				//	free(first_half);
+				//	first_half = 0;
+				//	printf("result 9: %s\n", result);
 				}
 				else if (second_half)
 				{
 					result = ft_strdup(second_half);
 					free(second_half);
 					second_half = 0;
-					printf("result 2: %s\n", result);
+					printf("result 99: %s\n", result);
 				}
-				printf("result: %s\n", result);
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
+				printf("result 999: %s\n", result);
+				ft_lstadd_back_files(full_strings, ft_lstnew(result));
 				free(result);
 				result = 0;
 				while (aux && *aux && *aux == ' ')
 					aux++;
-				printf("aux %s\n", aux);
+				printf("aux 9 %s\n", aux);
 			}
 			else
 			{
-				printf("aux 2%s\n", aux);
+				printf("result->%s\n", result);
+				printf("aux 88%s\n", aux);
+
+				printf("first: %s, second: %s\n", first_half, second_half);
+				free(first_half);
+				first_half = result;
 				second_half = ft_substr(start, 0, size);
-				first_half = ft_strjoin(result, second_half);
-				free(second_half);
+
+				printf("first: %s, second: %s\n", first_half, second_half);
+
+				printf("result->%s\n", result);
+			//	first_half = ft_strjoin(ft_strdup(result), second_half);
+
+				printf("first: %s, second: %s\n", first_half, second_half);
+			//	free(second_half);
+			//	second_half = 0;
+				if (result)
+				{
+					free(result);
+					result = 0;
+				}
 				if (first_half && second_half)
+				{
+					printf("1.first: %s, second: %s\n", first_half, second_half);
 					result = ft_strjoin(first_half, second_half);
+					free(first_half);
+					free(second_half);
+				}
 				else if (first_half)
 				{
-					result = ft_strdup(first_half);
-					free(first_half);
-					first_half = 0;
-					printf("result 4: %s\n", result);
+				//	result = ft_strdup(first_half);
+				//	free(first_half);
+				//	first_half = 0;
+					printf("result 8: %s\n", result);
 				}
 				else if (second_half)
 				{
 					result = ft_strdup(second_half);
 					free(second_half);
 					second_half = 0;
-					printf("result 5: %s\n", result);
+					printf("result 88: %s\n", result);
 				}
-				printf("result 3: %s\n", result);
-				free(first_half);
+				printf("result 888: %s\n", result);
+			//	free(first_half);
 				start = aux;
 			}
 			size = 0;
 			if (ft_strlen(aux) == 0)
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-			printf("aux 1%s\n", aux);
+				ft_lstadd_back_files(full_strings, ft_lstnew(result));
+			printf("aux 88%s\n", aux);
 			start = aux;
-		}
-		else if (flag == 1)
+
+		}*/
+	/*	else if (flag == 1)
 		{
 			start = aux;
 			printf("aux1 %s\n", aux);
@@ -188,7 +267,7 @@ char	**split_quote_sensitive(char *str)
 			size = 0;
 			start = aux;
 			flag = 0;
-		}
+		}*/
 
 
 	//	aux++;
