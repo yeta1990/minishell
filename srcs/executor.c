@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:32:41 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/18 11:56:28 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ extern char	**environ;
 void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 {
 	int		child;
-
+	
 	if (pipe(fds2) < 0)
 		std_error(errno);
 	child = fork();
@@ -37,6 +37,8 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 		else
 			exit(0);
 	}
+	else
+		signal(SIGINT, SIG_IGN);
 }
 
 void	middle_exec_handler(t_cmd **cmd, int fds[2], int num_cmds)
@@ -107,7 +109,10 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 			exit(0);
 	}
 	else
+	{
+		signal(SIGINT, SIG_IGN);
 		close(fds[1]);
+	}
 }
 
 int	ft_exec_last(t_cmd *cmd, int fds[2])
@@ -133,7 +138,10 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 			exit(0);
 	}
 	else
+	{
+		signal(SIGINT, SIG_IGN);
 		close(fds[0]);
+	}
 	waitpid(child, &child_status, WNOHANG);
 	return (WEXITSTATUS(child_status));
 }

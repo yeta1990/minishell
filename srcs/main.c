@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/17 14:53:29 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/18 14:57:30 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,11 +82,17 @@ void	check_leaks(void)
 	system("leaks minishell");
 }
 
-void	handler_c(int sig)
+void	handler_4(int a)
 {
-	printf("HOLA CARACOLA\n");
+	a = 0;
+}
+
+void	handler_c(int a)
+{
+	a = 0;
 	rl_on_new_line();
-	rl_replace_line("p", 0);
+	rl_replace_line("", 0);
+	write(1, "\n", 1);
 	rl_redisplay();
 }
 
@@ -100,7 +106,6 @@ int	main(int argc, char **argv, char **envp)
 
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
-	sigaction(SIGINT, &ctrl_c, NULL);
 	if (argc == 1)
 		help_usage();
 	if (argc == 2 && argv[1][0] == 51)
@@ -111,11 +116,11 @@ int	main(int argc, char **argv, char **envp)
 	data.exp = create_exp(envp);
 	while (argv[i])
 		i++;
-
 	i = 0;
 	data.last_code = 0;
 	while (1)
 	{
+		sigaction(SIGINT, &ctrl_c, NULL);
 		str = readline("minishell $ ");
 		if (str && ft_strlen(str) > 0)
  		{

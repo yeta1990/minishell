@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 16:34:52 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/18 10:57:09 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,14 +16,15 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
-# include <readline/readline.h>
-# include <readline/history.h>
+# include "readline/readline.h"
+# include "readline/history.h"
 # include <sys/param.h>
 # include <sys/wait.h>
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
 # include <signal.h>
+# include <termios.h>
 
 typedef struct s_files
 {
@@ -64,6 +65,8 @@ typedef struct s_data
 	char		**env;
 	char		**exp;
 }	t_data;
+
+void	handler_c(int a);
 
 //cmd_arrange.c
 int		is_cmd(char *file, char **cmd_ok);
