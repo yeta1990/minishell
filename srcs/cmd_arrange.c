@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/17 16:56:46 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/18 15:36:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,6 +116,7 @@ char	*expansor(char **arg, t_data *data)
 	aux_exp2 = 0;
 	aux_exp3 = 0;
 	a = *arg;
+	printf("to expand->%s\n", a);
 	while (a && a[i] && a[i] != '$')
 		i++;
 	if (i != 0)
