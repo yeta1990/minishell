@@ -6,15 +6,15 @@
 
 int main()
 {
-	char *str = "echo 'uno '\"'dos'\"'tres'   ";
+	char *str = "echo'uno ' \"'dos'\" 'tres'   ";
 //	char *str = "echo'''' uno 'dos'tres '' ";
 	int	i;
 
 	i = 0;
 //	char *str = " echo hola ";// uno doos ";
+//	char	*str = "echo'ho la'";
 	printf("%s\n", str);
 	char **s;
-
 
 	s = split_quote_sensitive(str);
 	while (s && s[i])
@@ -49,13 +49,13 @@ char	**split_quote_sensitive(char *str)
 	char	*start;
 	t_files	**full_strings;
 	int		flag;
-	int		size;
 	char	*result;
 	char	*r;
+	char	*trimmed;
 
+	trimmed = 0;
 	r = ft_calloc(ft_strlen(str) + 1, sizeof(char));
 //simple = 1, double = 2
-	size = 0;
 	full_strings = malloc(sizeof(t_files *));
 	full_strings[0] = 0;
 	aux = str;
@@ -71,83 +71,81 @@ char	**split_quote_sensitive(char *str)
 			flag = 2;
 		else
 			flag = 0;
-
-		printf("first aux: %s\n", aux);
+	//	printf("first aux: %s\n", aux);
+	//	printf("initial result: %s\n", result - 1);
 		if (flag == 0)
 		{
 			while (aux && *aux && *aux == ' ')
 				aux++;
 			forward = get_next_separator(aux, ' ');
-			printf("next cut: %i", forward);
+			if (get_next_separator(aux, '\'') < forward) 
+			{
+				forward = get_next_separator(aux, '\'');
+				ft_memcpy(result, aux, forward - 1);
+				result += forward - 1;
+				aux += forward - 1;
+	//			printf(".%s\n", result);
+				continue ;
+			}
+		//	printf("next cut: %i", forward);
 			ft_memcpy(result, aux, forward - 1);
 			aux += forward - 1;
-			printf("\naux-> %s\n", aux);
-			if (aux && *aux && *aux == ' ')
+		//	printf("\naux-> %s\n", aux);
+ 			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
 			{
-				printf(".%s\n", result);
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
+		//		printf(".%s\n", result);
 				result = r;
+				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
-				//	free(result);
-			//	result = 0;
-
 			}
 			else if (aux && ft_strlen(aux) > 0)
 			{
-				printf("hhh\n");
-
-				printf(".%s\n", result);
+		//		printf(".%s\n", result);
 				result += forward;
 				forward = get_next_separator(aux, ' ');
-				printf("next cut: %i\n", forward);
+		//		printf("next cut: %i\n", forward);
 				ft_memcpy(result, aux, forward - 1);
 				aux += forward;
 				result = r;
-
-				printf("RES%s\n", result);
+		//		printf("RES%s\n", result);
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				result = r;
 				ft_bzero(result, ft_strlen(result));
 
-			}
-			else if (ft_strlen(aux) == 0)
-			{
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				result = r;
-				ft_bzero(result, ft_strlen(result));
 			}
 			aux++;
-		//	printf("aux 1%s\n", aux);
 		}
-		else if (flag == 1)
+		else if (flag != 0)
 		{
-			forward = get_next_separator(aux + 1, '\'');
-			printf("next cut: %i\n", forward + 1);
+			if (flag == 1)
+				forward = get_next_separator(aux + 1, '\'');
+			else if (flag == 2)
+				forward = get_next_separator(aux + 1, '\"');
+		//	printf("next cut: %i\n", forward + 1);
 			ft_memcpy(result, aux, forward + 1);
 			aux += forward + 1;
-			printf("res->%s\n", result);
-			printf("len aux: %zu\n", ft_strlen(aux));
- 			if (aux && ((*aux && *aux == ' ') || (int)ft_strlen(aux) == 0))
+		//	printf("res->%s\n", result);
+		//	printf("len aux: %zu\n", ft_strlen(aux));
+ 			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
 			{
-				printf("aux11: %s\n", aux);
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
+		//		printf("aux11: %s\n", aux);
 				result = r;
+				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
 			}
 			else if (aux && ft_strlen(aux) > 0)
 			{
-				printf(".%s\n", result);
+		//		printf(".%s\n", result);
 				result += forward + 1;
-				printf(".%s\n", result);
-				printf("aux22: %s\n", aux);
+		//		printf(".%s\n", result);
+		//		printf("aux22: %s\n", aux);
 				forward = get_next_separator(aux, ' ');
-				printf("next cut: %i\n\n", forward);
+		//		printf("next cut: %i\n\n", forward);
 				ft_memcpy(result, aux, forward - 1);
-				printf("!! %s\n", result);
+		//		printf("!! %s\n", result);
 				aux += forward;
 				result = r;
-				printf("!! %s\n", result);
-				printf("aux22: %s\n", aux);
+		//		printf("!! %s\n", result);
+		//		printf("aux22: %s\n", aux);
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				result = r;
 				ft_bzero(result, ft_strlen(result));
