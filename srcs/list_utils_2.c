@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 13:09:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/17 23:56:41 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/18 12:46:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ char **from_list_to_double_char(t_files **full_strings)
 		size++;
 	}
 	s[size] = 0;
-//	free_files(*full_strings);
+	free_files(*full_strings);
 	free(full_strings);
 	return (s);
 }
