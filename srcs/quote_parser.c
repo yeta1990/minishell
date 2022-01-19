@@ -6,7 +6,7 @@ int	ft_ft_isalnum(int c);
 int	ft_isalpha(int c);
 int	ft_isdigit(int c);
 
-char	*expansor2(char **arg)
+char	*expansor(char **arg, int type, t_data *data)
 {
 	char	*a;
 	char	*exp;
@@ -18,7 +18,6 @@ char	*expansor2(char **arg)
 	int		j;
 	int		z;
 
-
 	j = 0;
 	i = 0;
 	z = 0;
@@ -28,17 +27,16 @@ char	*expansor2(char **arg)
 	aux_exp3 = 0;
 	tail = 0;
 	a = *arg;
-//	printf("to expand-> %s\n", a);
 	while (a && a[i] && a[i] != '$')
 		i++;
 //	printf("%i\n", i);
 	if (i != 0)
 		exp = ft_substr(a, 0, i);
-//	printf("exp: %s\n", exp);
 	i++;
-	if (i == (int) ft_strlen(*arg))
+	if (i == (int) ft_strlen(*arg) && type == 2)
 		exp = ft_strdup(*arg);
-//	printf("exp: %s\n", exp);
+//	else if (i == 1 && ft_strlen(*arg) == 1 && **arg == '$')
+//		exp = ft_strdup(*arg);
 	while (a && a[i])
 	{
 	//	printf("i: %i\n", i);
@@ -46,14 +44,11 @@ char	*expansor2(char **arg)
 			i++;
 		while (a[i] == '$')
 			i++;
-//		if (i == (int) ft_strlen(*arg))
-//		{
-//			exp = ft_strdup(*arg);
-//			break ;
-//		}
+		if (i == (int) ft_strlen(a) && type == 2)
+			return (ft_strdup(""));
 		if (a[i] && a[i] == '?')
 		{
-		//	aux_exp3 = ft_itoa(data->last_code);
+			aux_exp3 = ft_itoa(data->last_code);
 			j++;
 		}
 		else
@@ -162,7 +157,9 @@ int	what_flag(char c)
 		flag = 2;
 	return (flag);
 }
-int main()
+
+/*
+ * int main()
 {
 //	char *str = "echo";
 //	char *str = "echo $PATH";
@@ -174,17 +171,17 @@ int main()
 //	char	*str = "echo $HOME$HOME$HOME$HOME";
 //	char	*str = "echo \"$HO\"ME";
 //	char	*str = "echo $HOME\"$HOME\"$HOME";
-//	char	*str = "echo $$";
+//	char	*str = "echo \"$\"HOME $$$$$\"\"HOME";
 //	char	*str = "echo \"$USER $USER.$USER\"";
 //	char	*str = "echo \"'$USER\"";
 //	char	*str = "echo \"'$PWD'\"";//qwere\"qwqwer$P$P$PWD\"'";//$PWD'\"";
 //	char	*str = "echo \"''$PWD'''qwere\"qwqwer$P$P$PWD\"'$PWD'\"";
-//	char	*str = "echo a""HOLA";
+//	char	*str = "echo a""$HOLA";
 //	char	*str = "echo $P$P$P$PWD";
 //	char	*str = "echo a\"\"b$HOME";
-//	char	*str = "echo $\"\"HOME";
-	char	*str = "echo $$";
-//	char	*str = "echo \"$\"HOME";
+//	char	*str = "echo aa\"$\"HOME";
+//	char	*str = "echo \"$$$$$\"";
+	char	*str = "echo \"\"$HOME\"\"a\"$USER\"";
 	int	i;
 
 	i = 0;
@@ -203,10 +200,10 @@ int main()
 	free(s);
 //	free(str);
 
-//	system("leaks a.out");
+	system("leaks a.out");
 }
-
-char	**split_quote_sensitive(char *str)
+*/
+char	**split_quote_sensitive(char *str, t_data *data)
 {
 	char	*aux;
 	t_files	**full_strings;
@@ -227,7 +224,6 @@ char	**split_quote_sensitive(char *str)
 	aux = str;
 	result = r;
 	forward = 0;
-
 	//	write(2, "aux\n", 4);
 	while (aux && *aux)
 	{
@@ -240,7 +236,7 @@ char	**split_quote_sensitive(char *str)
 				aux++;
 			forward = get_first_coming_separator(aux);
 			subs = ft_substr(aux, 0, forward - 1);
-			expanded = expansor2(&subs);
+			expanded = expansor(&subs, 0, data);
 			ft_memcpy(result, expanded, ft_strlen(expanded));
 			aux += forward - 1;
 			result += ft_strlen(expanded);
@@ -266,7 +262,7 @@ char	**split_quote_sensitive(char *str)
 			if (flag == 1)
 				expanded = ft_strdup(trimmed);
 			else if (flag == 2)
-				expanded = expansor2(&trimmed);
+				expanded = expansor(&trimmed, 2, data);
 			ft_memcpy(result, expanded, ft_strlen(expanded));
 			result += ft_strlen(expanded);
 			free(expanded);
