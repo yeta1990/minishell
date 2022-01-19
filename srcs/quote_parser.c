@@ -13,28 +13,44 @@ char	*expansor2(char **arg)
 	char	*aux_exp;
 	char	*aux_exp2;
 	char	*aux_exp3;
+	char	*tail;
 	int		i;
 	int		j;
+	int		z;
+
 
 	j = 0;
 	i = 0;
+	z = 0;
 	exp = 0;
 	aux_exp = 0;
 	aux_exp2 = 0;
 	aux_exp3 = 0;
+	tail = 0;
 	a = *arg;
-	printf("to expand-> %s\n", a);
+//	printf("to expand-> %s\n", a);
 	while (a && a[i] && a[i] != '$')
 		i++;
+//	printf("%i\n", i);
 	if (i != 0)
 		exp = ft_substr(a, 0, i);
+//	printf("exp: %s\n", exp);
 	i++;
+	if (i == (int) ft_strlen(*arg))
+		exp = ft_strdup(*arg);
+//	printf("exp: %s\n", exp);
 	while (a && a[i])
 	{
+	//	printf("i: %i\n", i);
 		while (a[i] == ' ')
 			i++;
 		while (a[i] == '$')
 			i++;
+//		if (i == (int) ft_strlen(*arg))
+//		{
+//			exp = ft_strdup(*arg);
+//			break ;
+//		}
 		if (a[i] && a[i] == '?')
 		{
 		//	aux_exp3 = ft_itoa(data->last_code);
@@ -61,45 +77,28 @@ char	*expansor2(char **arg)
 		{
 			if (exp)
 				free(exp);
-			exp = ft_strdup(aux_exp2);
+			while (a && a[i + j + z] && a[i + j + z] != '$')
+				z++;
+			if (z == 0)
+				exp = ft_strdup(aux_exp2);
+			else
+			{
+				tail = ft_substr(a, i + j, z);
+				exp = ft_strjoin(aux_exp2, tail);
+			//	printf("tail: %s\n", tail);
+				free(tail);
+				tail = 0;
+			}
 			free(aux_exp2);
 		}
 		i += j;
+		i += z;
 		j = 0;
+		z = 0;
 	//	printf("expanded-> %s\n", exp);
 	}
 	return (exp);
 }
-
-int main()
-{
-	char *str = "echo";
-//	char *str = "echo $PATH";
-//	char *str = "echo\"uno $USER \" a a\"$USER $USER\"holi $USER  'tres'   ";
-//	char *str = "echo'''' uno 'dos'tres '' ";
-//	char	*str = "echo \"111\"\"ikf\"$PATH\"$USER\"a ";
-//	char	*str = "echo '''a ";
-	int	i;
-
-	i = 0;
-//	char *str = " echo '' hola ";// uno doos ";
-//	char	*str = "echo'ho la'";
-	printf("%s\n", str);
-	char **s;
-
-	s = split_quote_sensitive(str);
-	while (s && s[i])
-	{
-		printf("->%s\n", s[i]);
-		free(s[i]);
-		i++;
-	}
-	free(s);
-//	free(str);
-
-//	system("leaks a.out");
-}
-
 int	get_next_separator(char *str, char sep)
 {
 	int	i;
@@ -114,6 +113,97 @@ int	get_next_separator(char *str, char sep)
 	if (i > 0)
 		return (i + 1);
 	return (i);
+}
+
+int	get_first_coming_separator(char *str)
+{
+	int	smple;
+	int	dble;
+	int	min;
+
+	min = get_next_separator(str, ' ');
+	if (min == 0)
+		return (0);
+	smple = get_next_separator(str, '\'');
+	dble = get_next_separator(str, '\"');
+	if (smple < min)
+		min = smple;
+	if (dble < min)
+		min = dble;
+	return (min);
+}
+
+char	what_quotes(int type)
+{
+	if (type == 1)
+		return ('\'');
+	else if (type == 2)
+		return ('\"');
+	return (' ');
+}
+
+char	*what_quotes_str(int type)
+{
+	if (type == 1)
+		return ("\'");
+	else if (type == 2)
+		return ("\"");
+	return (" ");
+}
+
+int	what_flag(char c)
+{
+	int flag;
+
+	flag = 0;
+	if (c == '\'')
+		flag = 1;
+	else if (c == '\"')
+		flag = 2;
+	return (flag);
+}
+int main()
+{
+//	char *str = "echo";
+//	char *str = "echo $PATH";
+//	char *str = "echo\"uno $USER \" a a\"$USER $USER\"holi $USER  'tres'   ";
+//	char *str = "echo'''' uno 'dos'tres '' ";
+//	char	*str = "echo \"111\"\"ikf\"$PATH\"$USER\"a ";
+	//char	*str = "echo '''a'";
+//	char	*str = "echo $PATH $USER";
+//	char	*str = "echo $HOME$HOME$HOME$HOME";
+//	char	*str = "echo \"$HO\"ME";
+//	char	*str = "echo $HOME\"$HOME\"$HOME";
+//	char	*str = "echo $$";
+//	char	*str = "echo \"$USER $USER.$USER\"";
+//	char	*str = "echo \"'$USER\"";
+//	char	*str = "echo \"'$PWD'\"";//qwere\"qwqwer$P$P$PWD\"'";//$PWD'\"";
+//	char	*str = "echo \"''$PWD'''qwere\"qwqwer$P$P$PWD\"'$PWD'\"";
+//	char	*str = "echo a""HOLA";
+//	char	*str = "echo $P$P$P$PWD";
+//	char	*str = "echo a\"\"b$HOME";
+//	char	*str = "echo $\"\"HOME";
+	char	*str = "echo $$";
+//	char	*str = "echo \"$\"HOME";
+	int	i;
+
+	i = 0;
+//	char *str = " echo '' hola ";// uno doos ";
+//	char	*str = "echo'ho la'";
+//	printf("%s\n", str);
+	char **s;
+
+	s = split_quote_sensitive(str);
+	while (s && s[i])
+	{
+		printf("->%s\n", s[i]);
+		free(s[i]);
+		i++;
+	}
+	free(s);
+//	free(str);
+
+//	system("leaks a.out");
 }
 
 char	**split_quote_sensitive(char *str)
@@ -137,108 +227,57 @@ char	**split_quote_sensitive(char *str)
 	aux = str;
 	result = r;
 	forward = 0;
+
+	//	write(2, "aux\n", 4);
 	while (aux && *aux)
 	{
-		if (*aux == '\'')
-			flag = 1;
-		else if (*aux == '\"')
-			flag = 2;
-		else
-			flag = 0;
+
+	//	write(2, "aux\n", 4);
+		flag = what_flag(*aux);
 		if (flag == 0)
 		{
 			while (aux && *aux && *aux == ' ')
 				aux++;
-			forward = get_next_separator(aux, ' ');
-			if (get_next_separator(aux, '\'') < forward) 
-			{
-				forward = get_next_separator(aux, '\'');
-				subs = ft_substr(aux, 0, forward - 1);
-				expanded = expansor2(&subs);
-				ft_memcpy(result, expanded, ft_strlen(expanded));
-
-			//		ft_memcpy(result, aux, forward - 1);
-				result += ft_strlen(expanded);
-				free(subs);
-				free(expanded);
-			//	result += forward - 1;
-				aux += forward - 1;
-				continue ;
-			}
-			else if (get_next_separator(aux, '\"') < forward) 
-			{
-				forward = get_next_separator(aux, '\"');
-				subs = ft_substr(aux, 0, forward - 1);
-				expanded = expansor2(&subs);
-				ft_memcpy(result, expanded, ft_strlen(expanded));
-		//		free(subs);
-		//		free(expanded);
-		//		ft_memcpy(result, aux, forward - 1);
-		//		result += forward - 1;
-				result += ft_strlen(expanded);
-				free(subs);
-				free(expanded);
-				aux += forward - 1;
-				continue ;
-			}
+			forward = get_first_coming_separator(aux);
 			subs = ft_substr(aux, 0, forward - 1);
 			expanded = expansor2(&subs);
 			ft_memcpy(result, expanded, ft_strlen(expanded));
 			aux += forward - 1;
+			result += ft_strlen(expanded);
+			free(subs);
+			free(expanded);
  			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
 			{
 				result = r;
-				free(subs);
-				free(expanded);
-				printf("result: %s\n", result);
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
 			}
-			else if (aux && ft_strlen(aux) > 0)
-			{
-				printf("result: %s\n", result);
-			//	result += forward;
-
-				result += ft_strlen(expanded);
-				free(subs);
-				free(expanded);
-
-				forward = get_next_separator(aux, ' ');
-				printf("forward %d\n", forward);
-				ft_memcpy(result, aux, forward - 1);
-				aux += forward;
-				result = r;
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				ft_bzero(result, ft_strlen(result));
-			}
-		//	if (ft_strlen(aux) > 0)
-		//		aux++;
 		}
 		else if (flag != 0)
 		{
+	//		write(2, "au.", 3);
+	//		printf("aux: %s\n", aux);
+			forward = get_next_separator(aux + 1, what_quotes(flag));
+	//		printf("%i\n", forward);
+			subs = ft_substr(aux, 0, forward + 1);
+	//		printf("subs %s\n", subs);
+			trimmed = ft_strtrim(subs, what_quotes_str(flag));
+	//		printf("trimmed %s\n", trimmed);
 			if (flag == 1)
-			{
-				forward = get_next_separator(aux + 1, '\'');
-				subs = ft_substr(aux, 0, forward + 1);
-				trimmed = ft_strtrim(subs, "\'");
-				ft_memcpy(result, trimmed, ft_strlen(trimmed));
-				result += ft_strlen(trimmed);//forward + 1;
-				free(subs);
-				free(trimmed);
-			}
+				expanded = ft_strdup(trimmed);
 			else if (flag == 2)
-			{
-				forward = get_next_separator(aux + 1, '\"');
-				subs = ft_substr(aux, 0, forward + 1);
-				trimmed = ft_strtrim(subs, "\"");
 				expanded = expansor2(&trimmed);
-				ft_memcpy(result, expanded, ft_strlen(expanded));
-				result += ft_strlen(expanded);
-				free(subs);
-				free(trimmed);
-				free(expanded);
-			}
-			aux += forward + 1;
+			ft_memcpy(result, expanded, ft_strlen(expanded));
+			result += ft_strlen(expanded);
+			free(expanded);
+			free(subs);
+			free(trimmed);
+			
+	//		write(2, "au2", 3);
+			if (get_next_separator(aux + 1, what_quotes(flag)) == (int) ft_strlen(aux + 1) + 1)
+				aux += forward;
+			else
+				aux += forward + 1;
  			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
 			{
 				result = r;
@@ -246,32 +285,7 @@ char	**split_quote_sensitive(char *str)
 				ft_bzero(result, ft_strlen(result));
 			}
 
-		/*	else if (aux && ft_strlen(aux) > 0)
-			{
-				forward = get_next_separator(aux, ' ');
-				if (flag == 1)
-				{
-					subs = ft_substr(aux, 0, forward - 1);
-					trimmed = ft_strtrim(subs, "\'");
-					ft_memcpy(result, trimmed, ft_strlen(trimmed));
-					free(subs);
-					free(trimmed);
-				}
-				else if (flag == 2)
-				{
-					subs = ft_substr(aux, 0, forward - 1);
-					trimmed = ft_strtrim(subs, "\"");
-					expanded = expansor2(&trimmed);
-					ft_memcpy(result, expanded, ft_strlen(expanded));
-					free(subs);
-					free(trimmed);
-					free(expanded);
-				}
-				aux += forward;
-				result = r;
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				ft_bzero(result, ft_strlen(result));
-			}*/
+
 		}
 		while (aux && *aux && *aux == ' ')
 			aux++;
