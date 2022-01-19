@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/18 10:57:09 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:45:30 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@
 # include <fcntl.h>
 # include <errno.h>
 # include <signal.h>
-# include <termios.h>
 
 typedef struct s_files
 {
@@ -58,12 +57,12 @@ typedef struct s_cmd
 
 typedef struct s_data
 {
-	int			num_cmds;
-	int			num_pipes;
-	int			last_code;
-	t_cmd		**cmds;
-	char		**env;
-	char		**exp;
+	int					num_cmds;
+	int					num_pipes;
+	int					last_code;
+	t_cmd				**cmds;
+	char				**env;
+	char				**exp;
 }	t_data;
 
 void	handler_c(int a);

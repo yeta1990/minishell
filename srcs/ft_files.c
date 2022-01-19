@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/18 13:34:48 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/19 15:45:59 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	run_heredoc(t_files **f)
 	int		fd;
 	char	*str;
 
+	signal(SIGINT, SIG_DFL);
 	fd = open("/tmp/minishell", O_TRUNC, 0644);
 	close(fd);
 	fd = open("/tmp/minishell", O_WRONLY | O_CREAT | O_APPEND, 0644);
