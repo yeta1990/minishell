@@ -1,8 +1,10 @@
 
-//gccw quote_parser.c utils.c utils_2.c ft_strjoin.c ft_memmove.c utils_3.c -I ../inc list_utils*.c free_utils.c && ./a.out
+//gccw quote_parser.c utils.c utils_2.c ft_strjoin.c ft_memmove.c utils_3.c -I ../inc list_utils*.c free_utils.c ft_is*.c && ./a.out
 
 #include "minishell.h"
-
+int	ft_ft_isalnum(int c);
+int	ft_isalpha(int c);
+int	ft_isdigit(int c);
 
 char	*expansor2(char **arg)
 {
@@ -40,7 +42,7 @@ char	*expansor2(char **arg)
 		}
 		else
 		{
-			while (a[i + j] && isalnum(a[i + j]) != 0 && a[i + j] != '$')
+			while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
 			//while (a[i + j] && a[i + j] != '$')
 				j++;
 			aux_exp = ft_substr(a, i, j);
@@ -71,9 +73,12 @@ char	*expansor2(char **arg)
 
 int main()
 {
+	char *str = "echo";
 //	char *str = "echo $PATH";
-	char *str = "echo\"uno $USER \" a a\"$USER $USER\"holi$USER 'tres'   ";
+//	char *str = "echo\"uno $USER \" a a\"$USER $USER\"holi $USER  'tres'   ";
 //	char *str = "echo'''' uno 'dos'tres '' ";
+//	char	*str = "echo \"111\"\"ikf\"$PATH\"$USER\"a ";
+//	char	*str = "echo '''a ";
 	int	i;
 
 	i = 0;
@@ -145,17 +150,18 @@ char	**split_quote_sensitive(char *str)
 			while (aux && *aux && *aux == ' ')
 				aux++;
 			forward = get_next_separator(aux, ' ');
-
 			if (get_next_separator(aux, '\'') < forward) 
 			{
 				forward = get_next_separator(aux, '\'');
 				subs = ft_substr(aux, 0, forward - 1);
 				expanded = expansor2(&subs);
 				ft_memcpy(result, expanded, ft_strlen(expanded));
+
+			//		ft_memcpy(result, aux, forward - 1);
+				result += ft_strlen(expanded);
 				free(subs);
 				free(expanded);
-			//		ft_memcpy(result, aux, forward - 1);
-				result += forward - 1;
+			//	result += forward - 1;
 				aux += forward - 1;
 				continue ;
 			}
@@ -165,23 +171,25 @@ char	**split_quote_sensitive(char *str)
 				subs = ft_substr(aux, 0, forward - 1);
 				expanded = expansor2(&subs);
 				ft_memcpy(result, expanded, ft_strlen(expanded));
+		//		free(subs);
+		//		free(expanded);
+		//		ft_memcpy(result, aux, forward - 1);
+		//		result += forward - 1;
+				result += ft_strlen(expanded);
 				free(subs);
 				free(expanded);
-		//		ft_memcpy(result, aux, forward - 1);
-				result += forward - 1;
 				aux += forward - 1;
 				continue ;
 			}
 			subs = ft_substr(aux, 0, forward - 1);
 			expanded = expansor2(&subs);
 			ft_memcpy(result, expanded, ft_strlen(expanded));
-			free(subs);
-			free(expanded);
-		//	ft_memcpy(result, aux, forward - 1);
 			aux += forward - 1;
  			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
 			{
 				result = r;
+				free(subs);
+				free(expanded);
 				printf("result: %s\n", result);
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
@@ -189,7 +197,12 @@ char	**split_quote_sensitive(char *str)
 			else if (aux && ft_strlen(aux) > 0)
 			{
 				printf("result: %s\n", result);
-				result += forward;
+			//	result += forward;
+
+				result += ft_strlen(expanded);
+				free(subs);
+				free(expanded);
+
 				forward = get_next_separator(aux, ' ');
 				printf("forward %d\n", forward);
 				ft_memcpy(result, aux, forward - 1);
@@ -209,6 +222,7 @@ char	**split_quote_sensitive(char *str)
 				subs = ft_substr(aux, 0, forward + 1);
 				trimmed = ft_strtrim(subs, "\'");
 				ft_memcpy(result, trimmed, ft_strlen(trimmed));
+				result += ft_strlen(trimmed);//forward + 1;
 				free(subs);
 				free(trimmed);
 			}
@@ -219,6 +233,7 @@ char	**split_quote_sensitive(char *str)
 				trimmed = ft_strtrim(subs, "\"");
 				expanded = expansor2(&trimmed);
 				ft_memcpy(result, expanded, ft_strlen(expanded));
+				result += ft_strlen(expanded);
 				free(subs);
 				free(trimmed);
 				free(expanded);
@@ -230,9 +245,9 @@ char	**split_quote_sensitive(char *str)
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
 			}
-			else if (aux && ft_strlen(aux) > 0)
+
+		/*	else if (aux && ft_strlen(aux) > 0)
 			{
-				result += forward + 1;
 				forward = get_next_separator(aux, ' ');
 				if (flag == 1)
 				{
@@ -241,7 +256,6 @@ char	**split_quote_sensitive(char *str)
 					ft_memcpy(result, trimmed, ft_strlen(trimmed));
 					free(subs);
 					free(trimmed);
-					free(expanded);
 				}
 				else if (flag == 2)
 				{
@@ -253,12 +267,11 @@ char	**split_quote_sensitive(char *str)
 					free(trimmed);
 					free(expanded);
 				}
-
 				aux += forward;
 				result = r;
 				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
 				ft_bzero(result, ft_strlen(result));
-			}
+			}*/
 		}
 		while (aux && *aux && *aux == ' ')
 			aux++;
