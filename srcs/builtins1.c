@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:14:23 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/16 19:35:52 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,35 +64,45 @@ void	env_builtin(t_data *data)
 	}
 }
 
-void	exit_builtin(t_data *data, char *str, char **instructions)
+void	exit_builtin(t_data *data, t_cmd *cmd)
 {
-	free_double_string(instructions);
-	ft_bzero(str, ft_strlen(str));
-	free(str);
-	free_data(data);
-	exit(0);
+	int	code;
+
+	code = 0;
+	if (cmd->cmd_complete[1])
+		code = ft_atoi(cmd->cmd_complete[1]);
+	data->last_code = code;
+	if (cmd->cmd && ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
+	{
+		if (data->num_cmds == 1)
+		{
+			ft_putstr_fd("exit\n", 1);
+			free_data(data);
+			exit(code);
+		}
+	}
 }
 
-int	check_builtins(t_data *data, char *str, char **instructions)
+int	check_builtins(t_data *data, t_cmd *cmd)
 {
 	int	is_builting;
 
 	is_builting = 1;
-	if (ft_strcmp("pwd", data->cmds[0]->cmd_complete[0]) == 0)
+	if (ft_strcmp("pwd", cmd->cmd_complete[0]) == 0)
 		pwd_builtin();
-	else if (ft_strcmp("cd", data->cmds[0]->cmd_complete[0]) == 0)
+	else if (ft_strcmp("cd", cmd->cmd_complete[0]) == 0)
 		cd_bultin(data);
-	else if ((ft_strcmp("env", data->cmds[0]->cmd_complete[0]) == 0)
-		&& (!data->cmds[0]->cmd_complete[1]))
+	else if ((ft_strcmp("env", cmd->cmd_complete[0]) == 0)
+		&& (!cmd->cmd_complete[1]))
 		env_builtin(data);
-	else if (ft_strcmp("export", data->cmds[0]->cmd_complete[0]) == 0)
+	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0)
 		export_builtin(data);
-	else if (ft_strcmp("unset", data->cmds[0]->cmd_complete[0]) == 0)
+	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)
 		unset_builtin(data);
-	else if (ft_strcmp("echo", data->cmds[0]->cmd_complete[0]) == 0)
-		echo_builtin(data);
-	else if (ft_strcmp("exit", data->cmds[0]->cmd_complete[0]) == 0)
-		exit_builtin(data, str, instructions);
+	else if (ft_strcmp("echo", cmd->cmd_complete[0]) == 0)
+		echo_builtin(cmd);
+	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
+		exit_builtin(data, cmd);
 	else
 		is_builting = 0;
 	return (is_builting);

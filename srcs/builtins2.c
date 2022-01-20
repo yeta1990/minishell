@@ -6,49 +6,70 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:47:39 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/16 17:54:20 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	*echo_flag(char *str)
+int	echo_flag(char **cmd_complete)
 {
-	char	*init;
-	int		flag;
-
-	flag = 0;
-	if (str)
-	{
-		while (*str)
-		{
-			while (*str == ' ')
-				str++;
-			init = str;
-			if (*str++ != '-')
-				break ;
-			while (*str == 'n')
-				str++;
-			if ((*str != '\0') && (*str != ' '))
-				break ;
-			flag = 1;
-		}
-		if (flag)
-			return (ft_strdup(init));
-		else
-			return (ft_strjoin(init, "\n"));
-	}
-	return (0);
-}
-
-void	echo_builtin(t_data *data)
-{
+	int		flags;
 	char	*aux;
 
-	aux = data->cmds[0]->cmd_and_its_flags + 4;
-	aux = echo_flag(aux);
-	ft_putstr_fd(aux, 1);
-	free(aux);
+	flags = 0;
+	aux = cmd_complete[flags];
+	while (aux)
+	{
+		if (*aux && *aux != '-')
+			return (flags);
+		aux++;
+		if (*aux && *aux == 'n')
+			aux++;
+		else
+			return (flags);
+		while (*aux && *aux == 'n')
+			aux++;
+		if (*aux)
+			return (flags);
+		flags++;
+		aux = cmd_complete[flags];
+	}
+	return (flags);
+}
+
+void	echo_builtin(t_cmd *cmd)
+{
+	char	*aux;
+	int		i;
+	int		new_line;
+
+	i = 0;
+	aux = 0;
+	new_line = 1;
+	if (cmd->cmd_complete && cmd->cmd_complete[0])
+	{
+		i = echo_flag(&(cmd->cmd_complete[1])) + 1;
+		if (i > 1)
+			new_line = 0;
+		aux = cmd->cmd_complete[i];
+	}
+	while (aux)
+	{
+		ft_putstr_fd(aux, 1);
+		free(aux);
+		i++;
+		aux = cmd->cmd_complete[i];
+		if (aux && ft_strlen(aux) == 1)
+		{
+			if (*aux != ' ')
+				write(1, " ", 1);
+		}
+		else
+			write(1, " ", 1);
+	}
+	if (i > 1 && new_line)
+		write(1, "\n", 1);
 }
 
 void	update_env(t_data *data, int index_exp, int i)

@@ -6,15 +6,14 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:18:00 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:23:45 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 #include <sys/wait.h>
-
-void	parse_instruction(char *s, t_cmd *parsed_instruction)
+void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 {
 	char *str;
 
@@ -50,10 +49,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction)
 		while (*str && *str == ' ')
 			str++;
     }
-	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd));
+	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd), data);
 }
 
-t_cmd	*split_and_parse_instruction(char *str)
+t_cmd	*split_and_parse_instruction(char *str, t_data *data)
 {
 	int		i;
 	t_cmd	*parsed_instruction;
@@ -73,7 +72,7 @@ t_cmd	*split_and_parse_instruction(char *str)
 	parsed_instruction->cmd_complete = 0;
 	parsed_instruction->cmd_and_its_flags = 0;
 	parsed_instruction->next = 0;
-	parse_instruction(str, parsed_instruction);
+	parse_instruction(str, parsed_instruction, data);
 	return (parsed_instruction);
 }
 
@@ -128,23 +127,13 @@ int	main(int argc, char **argv, char **envp)
 			instructions = ft_split_w_quotes(str, '|');
 			while (instructions && instructions[i])
 			{
-				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i]));
+				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
 				data.num_cmds++;
 				i++;
 			}
-			check_builtins(&data, str, instructions);
-			//print_t_cmd(data.cmds);
-			if (data.num_cmds > 0 && data.cmds[0]->cmd_complete[0] != 0)
-			{
-				if (ft_strncmp("exit", data.cmds[0]->cmd_complete[0], 4) == 0)
-				{
-					free_double_string(instructions);
-					ft_bzero(str, ft_strlen(str));
-					free(str);
-					free_data(&data);
-					exit(0);
-				}
-			}
+			free_double_string(instructions);
+			free(str);
+			str = 0;
 			if (argc == 2 && argv[1][0] == 49)
 			{
 				printf("test mode 1\n");
@@ -166,10 +155,6 @@ int	main(int argc, char **argv, char **envp)
 			}
 			else
 				data.last_code = execute_commands(&data);
-			free_double_string(instructions);
-			//ft_bzero(str, ft_strlen(str));
-			free(str);
-			str = 0;
 			free_data(&data);
 			reset_data(&data);
 		}

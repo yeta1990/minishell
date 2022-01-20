@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 15:45:59 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:24:34 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,10 +40,10 @@ void	run_heredoc(t_files **f)
 	}
 	if (str)
 		free(str);
-	str = 0;
-	close(fd);
 	free((*f)->name);
 	(*f)->name = ft_strdup("/tmp/minishell");
+	str = 0;
+	close(fd);
 }
 
 void	ft_dup_infile(t_files **stdins)
@@ -56,7 +56,7 @@ void	ft_dup_infile(t_files **stdins)
 	{
 		if (f->append == 1)
 			run_heredoc(&f);
-		fd = open(f->name, O_RDONLY | O_NONBLOCK);
+		fd = open(f->name, O_RDONLY);
 		if (fd < 0)
 			file_error(f->name, errno);
 		if (f->append == 1)
@@ -66,6 +66,7 @@ void	ft_dup_infile(t_files **stdins)
 			dup2(fd, 0);
 			close(fd);
 		}
+		close(fd);
 		f = f->next;
 	}
 }

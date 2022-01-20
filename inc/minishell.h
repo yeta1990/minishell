@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 15:45:30 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:25:13 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,8 +69,9 @@ void	handler_c(int a);
 
 //cmd_arrange.c
 int		is_cmd(char *file, char **cmd_ok);
-char	**create_args(char *raw_cmd, char **cmd);
+char	**create_args(char *raw_cmd, char **cmd, t_data *data);
 void	cmd_not_raw(char **args);
+char	*expansor(char **arg, int type, t_data *data);
 
 // list_utils.c
 void	ft_lstadd_back_cmd(t_cmd **lst, t_cmd *new);
@@ -95,7 +96,7 @@ int		ft_memcmp(const void *s1, const void *s2, size_t n);
 // get_char_pos.c
 int		has_closed_quotes(char *str);
 int		get_char_pos(char *str, char c);
-char	**split_quote_sensitive(char *str);
+char	**split_quote_sensitive(char *str, t_data *data);
 
 //split_quotes.c
 int		get_char_pos_final_quotes(char q, char *str);
@@ -121,6 +122,11 @@ void	ft_putstr_fd(char *s, int fd);
 char	**ft_split_w_quotes(char const *str, char c);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
+char	*ft_itoa(int n);
+int		ft_atoi(const char *str);
+int		ft_isalnum(int c);
+int		ft_isalpha(int c);
+int		ft_isdigit(int c);
 
 //freezers
 void	free_double_string(char **str);
@@ -134,8 +140,8 @@ void	help_usage(void);
 
 //executor.c
 int		execute_commands(t_data *data);
-void	ft_exec_first(t_cmd *data, int fds[2]);
-int		ft_exec_last(t_cmd *data, int fds[2]);
+void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2]);
+int		ft_exec_last(t_data *data, t_cmd *cmd, int fds[2]);
 
 //ft_files.c
 void	ft_dup_infile(t_files **stdins);
@@ -159,12 +165,12 @@ char	*export_join(char *str);
 void	pwd_builtin(void);
 void	cd_bultin(t_data *data);
 void	env_builtin(t_data *data);
-void	exit_builtin(t_data *data, char *str, char **instructions);
-int		check_builtins(t_data *data, char *str, char **instructions);
+void	exit_builtin(t_data *data, t_cmd *cmd);
+int		check_builtins(t_data *data, t_cmd *cmd);
 
 //builtins2.c
-char	*echo_flag(char *str);
-void	echo_builtin(t_data *data);
+int		echo_flag(char **cmd_complete);
+void	echo_builtin(t_cmd *cmd);
 void	update_env(t_data *data, int index_exp, int i);
 void	export_builtin(t_data *data);
 void	unset_builtin(t_data *data);

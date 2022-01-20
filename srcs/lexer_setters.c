@@ -34,48 +34,7 @@ int	add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int t
     	ft_lstadd_back_files(parsed_instruction->stdouts, file);
 	return (size);
 }
-/*
-int	add_outfile(char *raw_outfile, t_cmd *parsed_instruction, int append)
-{
-	t_files	*file;
-	int		size;
 
-	size = 1;
-	file = malloc(sizeof(t_files));
-	while (raw_outfile && *raw_outfile && *raw_outfile == ' ')
-	{
-		size++;
-		raw_outfile++;
-	}
-	file->name = ft_strdup_space(raw_outfile, &size);
-	file->next = 0;
-	if (append == 0)
-		file->append = 0;
-	else
-		file->append = 1;
-	ft_lstadd_back_files(parsed_instruction->stdouts, file);
-	return (size);
-}
-
-int	add_heredoc(char *raw_keyword, t_cmd *parsed_instruction)
-{
-	t_files	*keyword;
-	int		size;
-
-	size = 1;
-	keyword = malloc(sizeof(t_files));
-	while (raw_keyword && *raw_keyword && *raw_keyword == ' ')
-	{
-		raw_keyword++;
-		size++;
-	}
-	keyword->name = ft_strdup_space(raw_keyword, &size);
-	keyword->next = 0;
-	ft_lstadd_back_files(parsed_instruction->heredocs, keyword);
-//	printf("size heredoc %i\n", size);
-	return (size);
-}
-*/
 int	add_cmd(char *raw_cmd, t_cmd *parsed_instruction)
 {
 	int		size;

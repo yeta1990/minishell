@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/03 13:55:09 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:14:24 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/19 17:09:23 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ int	has_closed_quotes(char *str)
 
 	smpl = get_char_pos(str, '\'');
 	dble = get_char_pos(str, '\"');
+//	printf("jeje");
+	if (get_char_pos(str, '|') < smpl && get_char_pos(str, '|') < dble)
+		return (0);
 	if ((smpl > 0 && dble > 0 && smpl < dble) || (smpl > 0 && dble <= 0))
 	{
 		aux = str + smpl;
@@ -90,7 +93,7 @@ void	cut_end_quotes(char *aux, t_files **full_strings)
 			aux++;
 	}
 }
-
+/*
 char	**split_quote_sensitive(char *str)
 {
 	int		quotes_type;
@@ -131,4 +134,4 @@ char	**split_quote_sensitive(char *str)
 	}
 	cut_end_quotes(aux, full_strings);
 	return (from_list_to_double_char(full_strings));
-}
+}*/

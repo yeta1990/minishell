@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 16:28:43 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/20 10:25:36 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 extern char	**environ;
 
-void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
+void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 {
 	int		child;
 	
@@ -32,7 +32,9 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 		close(fds2[1]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+		if (cmd->cmd && check_builtins(data, cmd) == 1)
+			exit(0);
+		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
 			exit(0);
@@ -41,20 +43,25 @@ void	exec_middle(t_cmd *cmd, int fds[2], int fds2[2])
 		signal(SIGINT, SIG_IGN);
 }
 
-void	middle_exec_handler(t_cmd **cmd, int fds[2], int num_cmds)
+void	middle_exec_handler(t_data *data, t_cmd **cmd, int fds[2])
 {
 	int		fds2[2];
 	int		i;
+	int		last_status;
 
 	i = 1;
-	while (i < num_cmds - 1)
+	last_status = 0;
+	while (i < data->num_cmds - 1)
 	{
-		exec_middle(*cmd, fds, fds2);
+		exec_middle(data, *cmd, fds, fds2);
+		while (wait(&last_status) != -1)
+			;
 		*cmd = (*cmd)->next;
 		close(fds[0]);
 		close(fds2[1]);
 		fds[0] = fds2[0];
 		fds[1] = fds2[1];
+
 		i++;
 	}
 }
@@ -69,11 +76,13 @@ int	execute_commands(t_data *data)
 	node = *data->cmds;
 	if (pipe(fds) < 0)
 		std_error(errno);
-	ft_exec_first(node, fds);
+	ft_exec_first(data, node, fds);
+	while (wait(&last_status) != -1)
+		;
 	node = node->next;
-	middle_exec_handler(&node, fds, data->num_cmds);
+	middle_exec_handler(data, &node, fds);
 	if (data->num_cmds > 1)
-		last_status = ft_exec_last(node, fds);
+		last_status = ft_exec_last(data, node, fds);
 	while (wait(&last_status) != -1)
 		;
 	if (WIFEXITED(last_status))
@@ -84,10 +93,11 @@ int	execute_commands(t_data *data)
 	return (0);
 }
 
-void	ft_exec_first(t_cmd *cmd, int fds[2])
+void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
 {
 	pid_t	child;
 
+	exit_builtin(data, cmd);
 	child = fork();
 	if (child == -1)
 		std_error(errno);
@@ -103,7 +113,9 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 		}
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+		if (cmd->cmd && check_builtins(data, cmd) == 1)
+			exit(data->last_code);
+		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
 			exit(0);
@@ -115,7 +127,7 @@ void	ft_exec_first(t_cmd *cmd, int fds[2])
 	}
 }
 
-int	ft_exec_last(t_cmd *cmd, int fds[2])
+int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 {
 	int		child_status;
 	pid_t	child;
@@ -132,7 +144,9 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 		close(fds[0]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
+		if (cmd->cmd && check_builtins(data, cmd) == 1)
+			exit(data->last_code);
+		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
 		else
 			exit(0);
@@ -142,6 +156,6 @@ int	ft_exec_last(t_cmd *cmd, int fds[2])
 		signal(SIGINT, SIG_IGN);
 		close(fds[0]);
 	}
-	waitpid(child, &child_status, WNOHANG);
+//	waitpid(child, &child_status, WNOHANG);
 	return (WEXITSTATUS(child_status));
 }
