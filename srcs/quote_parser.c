@@ -27,6 +27,8 @@ char	*expansor(char **arg, int type, t_data *data)
 	aux_exp3 = 0;
 	tail = 0;
 	a = *arg;
+	if (ft_strchr(a, '$') == 0 || type == 1)
+		return (ft_strdup(*arg));
 	while (a && a[i] && a[i] != '$')
 		i++;
 //	printf("%i\n", i);
