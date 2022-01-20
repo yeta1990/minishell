@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/20 22:36:13 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/20 23:54:54 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	get_nwords(char const *str, char c)
 	f_dquote = 0;
 	f_quote = 0;
 	nwords = 0;
-	printf("->%s\n", str);
+//	printf("->%s\n", str);
 	if (!*s)
 		return (0);
 	while (s && *s)
@@ -48,26 +48,26 @@ static int	get_nwords(char const *str, char c)
 		}
 	}
 	nwords++;
-//	printf("words: %i\n", nwords);
+	printf("words: %i\n", nwords);
 	return (nwords);
 }
 
-static void	save_words(char **ptr, char *str, char c, int nwords)
+static void	save_words(char **ptr, char *str, int nwords, t_data *data)
 {
 	int		i;
+	int		j;
 	char	*aux;
 	int		len;
 
 	i = 0;
+	j = 0;
 	len = 0;
-	c += 0;
-
-
 	if ((nwords > 0) && str && *str)
 	{
 		aux = str;
-		while (aux && *aux)
+		while (aux && *aux && data->syntax_error == 0)
 		{
+			j = 0;
 			if (has_closed_quotes(aux + len) == 1)
 				len = get_char_pos_final_quotes('\'', aux + len) - 1;
 			else if (has_closed_quotes(aux + len) == 2)
@@ -75,17 +75,28 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 			if (has_closed_quotes(aux + len) == 0) 
 			{
 			//	write(2, "eooo", 5);
-				printf("aux: %s, len %i\n", aux + len, len);
+			//	printf("aux: %s, len %i\n", aux + len, len);
 				while (aux && aux[len] && aux[len] != '|')
 					len++;
 			//	printf("aux: %s, len %i\n", aux, len);
 				ptr[i++] = ft_substr(aux, 0, len);
-				printf("ptr: %s\n", ptr[i - 1]);
+			 //	printf("ptr: %s\n", ptr[i - 1]);
 				if (aux && aux[len] && aux[len] == '|')
 					len++;
-				while (aux && aux[len] && aux[len] == ' ')
-					aux++;
-				aux +=len;
+				if (aux && aux[len] && aux[len] == '|')
+					syntax_error((aux + len), data);
+				while (aux && aux[j + len] && aux[j + len] == ' ')
+					j++;
+			//	printf("aux: %s, len %i, j:%i\n", aux + len, len, j);
+				if (data->syntax_error == 1)
+					break ;
+				if ((int)ft_strlen(aux + len) == j && j > 0)
+					printf("pedir comando\n");
+				else if (j == 0 && len > 1 && *(aux + len - 1) == '|')
+					printf("pedir comando\n");
+				else if (j == 0 && len == 1)
+					syntax_error((aux + len), data);
+				aux +=(len + j);
 				len = 0;
 			}
 		}
@@ -114,14 +125,14 @@ int	get_char_pos_final_quotes(char q, char *str)
 	return (i);
 }
 
-char	**ft_split_w_quotes(char const *s, char c)
+char	**ft_split_pipes(char const *s, t_data *data)
 {
 	int		nwords;
 	char	**ptr;
 	char	*str;
 	char	d[2];
 
-	d[0] = c;
+	d[0] = '|';
 	d[1] = '\0';
 	if (s)
 	{
@@ -133,7 +144,7 @@ char	**ft_split_w_quotes(char const *s, char c)
 		printf("%s\n", str);
 		if (str)
 		{
-			nwords = get_nwords(str, c);
+			nwords = get_nwords(str, '|');
 			ptr = ft_calloc((nwords + 1), sizeof(char *));
 			if (ptr && nwords == 1)
 			{
@@ -141,7 +152,7 @@ char	**ft_split_w_quotes(char const *s, char c)
 				ptr[1] = 0;
 			}
 			else if (ptr)
-				save_words(ptr, str, c, nwords);
+				save_words(ptr, str, nwords, data);
 			free(str);
 			return (ptr);
 		}

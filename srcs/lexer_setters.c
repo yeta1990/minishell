@@ -25,15 +25,15 @@ int	add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int t
 	file->name = ft_strdup_space(raw_file, &size, 0);
 	if (ft_strlen(file->name) == 0)
 	{
-		syntax_error(file->name);
-		data->syntax_error = 1;
-		data->last_code = 258;
+		syntax_error(file->name, data);
+	//	data->syntax_error = 1;
+	//	data->last_code = 258;
 	}
 	else if (is_valid_infile(file->name) == 0)
 	{
-		syntax_error(file->name);
-		data->syntax_error = 1;
-		data->last_code = 258;
+		syntax_error(file->name, data);
+	//	data->syntax_error = 1;
+	//	data->last_code = 258;
 	}
 	file->next = 0;
 	if (append == 0)

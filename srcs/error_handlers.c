@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 19:16:07 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/20 23:34:45 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,7 @@ int	is_valid_infile(char *str)
 }
 
 
-void	syntax_error(char *wrong_portion)
+void	syntax_error(char *wrong_portion, t_data *data)
 {
 	char	*msg;
 
@@ -107,4 +107,7 @@ void	syntax_error(char *wrong_portion)
 	else
 		ft_putstr_fd("newline", 2);
 	ft_putstr_fd("'\n", 2);
+	data->syntax_error = 1;
+	data->last_code = 258;
+	free(msg);
 }

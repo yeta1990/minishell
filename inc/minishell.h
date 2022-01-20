@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 19:43:19 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/20 23:23:49 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ char	**ft_split_mod(char const *str, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
-char	**ft_split_w_quotes(char const *str, char c);
+char	**ft_split_pipes(char const *str, t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_itoa(int n);
@@ -157,7 +157,7 @@ void	file_error(char *filename, int errn);
 void	std_error(int errn);
 int		isalnum_string(char *str);
 int		is_valid_infile(char *str);
-void	syntax_error(char *wrong_portion);
+void	syntax_error(char *wrong_portion, t_data *data);
 //envp.c
 int		get_env_size(char **envp);
 char	**create_env(char **envp);
