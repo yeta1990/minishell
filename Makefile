@@ -39,6 +39,6 @@ fclean:		clean
 re:			fclean all
 
 san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -g0 -O -fsanitize=address 
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline -o $(NAME) -g0 -O -fsanitize=address 
 
 .PHONY:		all clean fclean re

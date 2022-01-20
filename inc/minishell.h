@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:25:13 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/20 19:43:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,7 @@ typedef struct s_data
 	t_cmd				**cmds;
 	char				**env;
 	char				**exp;
+	int					syntax_error;
 }	t_data;
 
 void	handler_c(int a);
@@ -84,7 +85,7 @@ t_files	*ft_lstnew(void *content);
 char	**from_list_to_double_char(t_files **full_strings);
 
 // lexer_setters.c
-int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
+int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type, t_data *data);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -103,8 +104,9 @@ int		get_char_pos_final_quotes(char q, char *str);
 
 //utils
 char	**ft_split(char const *s, char c);
-char	*ft_strdup_space(const char *s1, int *size);
+char	*ft_strdup_space(const char *s1, int *size, int cmd);
 int		std_space_get_cut_position(char *s1);
+int		std_space_get_cut_space(char *s1);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -153,7 +155,9 @@ char	*ft_strtrim(char const *s1, char const *set);
 int		transform_error_code(char *cmd, int err);
 void	file_error(char *filename, int errn);
 void	std_error(int errn);
-
+int		isalnum_string(char *str);
+int		is_valid_infile(char *str);
+void	syntax_error(char *wrong_portion);
 //envp.c
 int		get_env_size(char **envp);
 char	**create_env(char **envp);

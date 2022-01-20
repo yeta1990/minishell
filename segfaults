@@ -1,1 +1,24 @@
+
+
+|
+||
 |||
+debería salir esto, con exit(258)
+bash: syntax error near unexpected token `|'
+el error tiene que saltar sin que procese el resto de procesos
+provocado por exit_builtin
+
+echo '|'
+provocado por get_nwords. es curioso porque echo "|" no provoca ese fallo. 
+
+
+/
+//
+./srcs/
+aparece un mensaje de "permission denied" pero luego salta un error de double
+free en free_double_string
+
+debería revisar en todas las rutas si es un directorio. si detecta, a la hora
+de ejecutar un comando, que es un directorio, debería saltar el error
+bash: ./srcs/: is a directory
+con código 126, pero seguir ejecutando el resto de pipes y comandos
