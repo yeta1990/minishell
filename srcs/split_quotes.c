@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/17 11:01:45 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:36:13 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,10 @@ static int	get_nwords(char const *str, char c)
 	f_dquote = 0;
 	f_quote = 0;
 	nwords = 0;
+	printf("->%s\n", str);
 	if (!*s)
 		return (0);
-	while (*s)
+	while (s && *s)
 	{
 		if ((*s == '"') && f_dquote == 0 && f_quote == 0)
 			f_dquote = 1;
@@ -61,10 +62,11 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 	len = 0;
 	c += 0;
 
-	if ((nwords > 0) && *str)
+
+	if ((nwords > 0) && str && *str)
 	{
 		aux = str;
-		while (*aux)
+		while (aux && *aux)
 		{
 			if (has_closed_quotes(aux + len) == 1)
 				len = get_char_pos_final_quotes('\'', aux + len) - 1;
@@ -72,12 +74,13 @@ static void	save_words(char **ptr, char *str, char c, int nwords)
 				len += get_char_pos_final_quotes('\"', aux + len) - 1;
 			if (has_closed_quotes(aux + len) == 0) 
 			{
-			//	printf("aux: %s, len %i\n", aux + len, len);
+			//	write(2, "eooo", 5);
+				printf("aux: %s, len %i\n", aux + len, len);
 				while (aux && aux[len] && aux[len] != '|')
 					len++;
 			//	printf("aux: %s, len %i\n", aux, len);
 				ptr[i++] = ft_substr(aux, 0, len);
-			//	printf("ptr: %s\n", ptr[i - 1]);
+				printf("ptr: %s\n", ptr[i - 1]);
 				if (aux && aux[len] && aux[len] == '|')
 					len++;
 				while (aux && aux[len] && aux[len] == ' ')
@@ -122,7 +125,12 @@ char	**ft_split_w_quotes(char const *s, char c)
 	d[1] = '\0';
 	if (s)
 	{
-		str = ft_strtrim(s, d);
+
+//	write(2, "oa", 5);
+	//	str = ft_strtrim(s, d);
+
+		str = ft_strdup(s);
+		printf("%s\n", str);
 		if (str)
 		{
 			nwords = get_nwords(str, c);

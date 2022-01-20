@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 19:39:08 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/20 22:36:44 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	main(int argc, char **argv, char **envp)
 				printf("exit status code: %i\n", data.last_code);
 			}
 			else if (data.syntax_error == 0)
-				data.last_code = execute_commands(&data);
+			 	data.last_code = execute_commands(&data);
 			free_data(&data);
 			reset_data(&data);
 		}
