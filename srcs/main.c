@@ -6,13 +6,14 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:23:45 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:36:34 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 #include <sys/wait.h>
+
 void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 {
 	char *str;
@@ -158,8 +159,11 @@ int	main(int argc, char **argv, char **envp)
 			free_data(&data);
 			reset_data(&data);
 		}
-		else
+		else if (!str)
+		{
+			write(1, "exit\n", 5);
 			exit(0);
+		}
 	}
 	return (0);
 }

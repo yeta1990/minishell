@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:24:34 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:48:19 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	run_heredoc(t_files **f)
 	str = readline("> ");
 	while (ft_strlen(str) == 0 || check_eof(str, (*f)->name) == 0)
 	{
+		if (!str)
+			break ;
 		write(fd, str, ft_strlen(str));
 		write(fd, "\n", 1);
 		free(str);

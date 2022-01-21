@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/16 17:54:20 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:35:17 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ void	export_builtin(t_data *data)
 {
 	int		i;
 	int		index_exp;
-
+	
 	i = 0;
 	if (!data->cmds[0]->cmd_complete[1])
 	{
@@ -142,7 +142,8 @@ void	unset_builtin(t_data *data)
 		if (index_exp)
 			data->exp = del_entry(data->exp, index_exp);
 		if (index_env)
-			data->env = del_entry(data->env, index_exp);
+			data->env = del_entry(data->env, index_env);
 		i++;
 	}
+	i = 0;
 }

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:25:36 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:01:57 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,9 @@ extern char	**environ;
 void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 {
 	int		child;
+	int		builtin;
 	
+	builtin = check_builtins(data, cmd);
 	if (pipe(fds2) < 0)
 		std_error(errno);
 	child = fork();
@@ -32,7 +34,7 @@ void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 		close(fds2[1]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
+		if (cmd->cmd && builtin == 1)
 			exit(0);
 		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
@@ -96,8 +98,10 @@ int	execute_commands(t_data *data)
 void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
 {
 	pid_t	child;
+	int		builtin;
 
 	exit_builtin(data, cmd);
+	builtin = check_builtins(data, cmd);
 	child = fork();
 	if (child == -1)
 		std_error(errno);
@@ -113,7 +117,7 @@ void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
 		}
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
+		if (cmd->cmd && builtin == 1)
 			exit(data->last_code);
 		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));
@@ -131,7 +135,9 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 {
 	int		child_status;
 	pid_t	child;
+	int		builtin;
 
+	builtin = check_builtins(data, cmd);
 	child = fork();
 	if (child == -1)
 		std_error(errno);
@@ -144,7 +150,7 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 		close(fds[0]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
+		if (cmd->cmd && builtin == 1)
 			exit(data->last_code);
 		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
 			exit(transform_error_code(cmd->cmd, (int) errno));

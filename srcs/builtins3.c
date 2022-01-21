@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/13 13:19:30 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/21 17:36:21 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,16 +81,18 @@ char	**add_entry(char **old_arr, char *new_str)
 char	**del_entry(char **old_arr, int index)
 {
 	int		i;
+	int		j;
 	int		size;
 	char	**arr;
 
 	i = 0;
-	size = get_env_size(old_arr) - 1;
-	arr = ft_calloc(size + 1, sizeof(char *));
+	j = 0;
+	size = get_env_size(old_arr);
+	arr = ft_calloc(size, sizeof(char *));
 	while (old_arr[i])
 	{
 		if (i != index)
-			arr[i] = old_arr[i];
+			arr[j++] = old_arr[i];
 		i++;
 	}
 	free(old_arr);
