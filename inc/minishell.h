@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 23:23:49 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/21 13:20:11 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,8 @@ int		ft_exec_last(t_data *data, t_cmd *cmd, int fds[2]);
 //ft_files.c
 void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
-
 char	*ft_strtrim(char const *s1, char const *set);
+char	*get_cmd_from_user(void);
 
 //error_handlers.c
 int		transform_error_code(char *cmd, int err);

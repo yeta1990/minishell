@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/20 23:58:12 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/21 13:16:49 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,8 +74,6 @@ static void	save_words(char **ptr, char *str, int nwords, t_data *data)
 				len += get_char_pos_final_quotes('\"', aux + len) - 1;
 			if (has_closed_quotes(aux + len) == 0) 
 			{
-			//	write(2, "eooo", 5);
-			//	printf("aux: %s, len %i\n", aux + len, len);
 				while (aux && aux[len] && aux[len] != '|')
 					len++;
 			//	printf("aux: %s, len %i\n", aux, len);
@@ -91,11 +89,13 @@ static void	save_words(char **ptr, char *str, int nwords, t_data *data)
 				if (data->syntax_error == 1)
 					break ;
 				if ((int)ft_strlen(aux + len) == j && j > 0)
-					printf("pedir comando\n");
+					ptr[i++] = get_cmd_from_user();
+					//printf("pedir comando\n");
 				else if (j == 0 && len > 1 && *(aux + len - 1) == '|')
-					printf("pedir comando\n");
-				else if (j == 0 && len == 1)
-					syntax_error((aux + len), data);
+					ptr[i++] = get_cmd_from_user();
+					//printf("pedir comando\n");
+				else if (j == 0 && len == 1 && aux && *aux == '|')
+					syntax_error((aux), data);
 				aux +=(len + j);
 				len = 0;
 			}

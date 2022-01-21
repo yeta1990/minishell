@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:24:34 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/21 13:19:44 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,49 @@ void	run_heredoc(t_files **f)
 	(*f)->name = ft_strdup("/tmp/minishell");
 	str = 0;
 	close(fd);
+}
+
+char	*get_cmd_from_user(void)
+{
+	char	*input;
+	char	*str;
+	int		i;
+	int		j;
+	char	*aux;
+
+	i = 0;
+	j = 0;
+	input = 0;
+	aux = 0;
+	signal(SIGINT, SIG_DFL);
+	str = readline("> ");
+	while (str)
+	{
+		if (input == 0)
+			input = ft_substr(str, 0, ft_strlen(str));
+		else
+		{
+			free(input);
+			input = ft_substr(str, 0, ft_strlen(str));
+		}
+		while (str && str[i])
+		{
+			if (str[i] == ' ')
+				j++;
+			i++;
+		}
+		if (i != j + 1 && ft_strlen(str) > 0)
+			break ;
+		free(str);
+		str = 0;
+		str = readline("> ");
+		i = 0;
+		j = 0;
+	}
+	if (str)
+		free(str);
+	str = 0;
+	return (input);
 }
 
 void	ft_dup_infile(t_files **stdins)
