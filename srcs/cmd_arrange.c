@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 17:12:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/21 10:21:55 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,23 @@
 int	is_raw_cmd(char *file, char **cmd_ok)
 {
 	int		pos;
-	char	*aux;
+//	char	*aux;
 
 	pos = ft_strlen(file) - 1;
 	if (access(file, X_OK) != -1)
 	{
 		if (cmd_ok)
 			*cmd_ok = ft_strdup(file);
-		while (pos >= 0)
+	/*	while (pos >= 0)
 		{
-			if (file[pos] == '/')
+			if (file[pos] == '/' && ft_strlen(file) > 1)// && ft_isalnum(*(file + pos)) != 0)
 			{
 				aux = ft_substr(file, pos, ft_strlen(file) - pos + 1);
 				free(file);
 				file = aux;
 			}
 			pos--;
-		}
+		}*/
 		return (1);
 	}
 	return (0);
