@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 23:34:45 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/21 10:49:48 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	transform_error_code(char *cmd, int err)
 	{
 		write(2, "minishell: ", 11);
 		write(2, cmd, ft_strlen(cmd));
-		if (ft_strchr(cmd, '/') == 0)
+		if (ft_strchr(cmd, '/') == 0 || err == 13)
 			write(2, ": command not found\n", 20);
 		else
 			write(2, ": No such file or directory\n", 28);
