@@ -85,5 +85,18 @@ actualmente, en caso de no haber ningún comando, el campo "cmd" se queda con es
 
 
 #19
+echo $PATH
 
+ahora está haciendo cosas raras, el "echo" no lo parsea.
+en otros casos sí que lo está trabajando bien, pero con $PATH no
 
+#20
+$!
+$$
+
+creo que entra en un bucle infinito el expander
+
+#21
+$$$$$PATH
+
+doble free! no sé si tendrá relación con elm #19
