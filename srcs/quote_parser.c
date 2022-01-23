@@ -41,7 +41,6 @@ char	*expansor(char **arg, int type, t_data *data)
 //		exp = ft_strdup(*arg);
 	while (a && a[i])
 	{
-		printf("i: %i\n", i);
 		while (a[i] == ' ')
 			i++;
 		while (a[i] == '$')

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 18:52:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/23 23:39:55 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,15 @@ void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
 	child = fork();
 	if (child == 0)
 	{
-		if (ft_lstlast_files(*(cmd->stdins)))
+		if (ft_lstlast_files(*(cmd->stdins))->append == 1)
+		{
+			close(fds[0]);
 			ft_dup_infile(cmd->stdins);
+		}
 		close(fds2[0]);
 		dup2(fds[0], 0);
+		if (ft_lstlast_files(*(cmd->stdins))->append == 0)
+			ft_dup_infile(cmd->stdins);
 		close(fds[0]);
 		dup2(fds2[1], 1);
 		close(fds2[1]);
@@ -54,14 +59,14 @@ void	middle_exec_handler(t_data *data, t_cmd **cmd, int fds[2])
 	while (i < data->num_cmds - 1)
 	{
 		exec_middle(data, *cmd, fds, fds2);
-		while (wait(&last_status) != -1)
-			;
-		*cmd = (*cmd)->next;
 		close(fds[0]);
+		close(fds[1]);
+		close(fds2[0]);
 		close(fds2[1]);
+		wait(&last_status);
+		*cmd = (*cmd)->next;
 		fds[0] = fds2[0];
 		fds[1] = fds2[1];
-
 		i++;
 	}
 }
@@ -77,14 +82,14 @@ int	execute_commands(t_data *data)
 	if (pipe(fds) < 0)
 		std_error(errno);
 	ft_exec_first(data, node, fds);
-	while (wait(&last_status) != -1)
-		;
+	wait(&last_status);
 	node = node->next;
 	middle_exec_handler(data, &node, fds);
-	if (data->num_cmds > 1)
-		last_status = ft_exec_last(data, node, fds);
 	while (wait(&last_status) != -1)
 		;
+	if (data->num_cmds > 1)
+		last_status = ft_exec_last(data, node, fds);
+	wait(&last_status);
 	if (WIFEXITED(last_status))
 		return (WEXITSTATUS(last_status));
 	else if (WIFSIGNALED(last_status))
@@ -123,6 +128,8 @@ void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
 	else
 	{
 		signal(SIGINT, SIG_IGN);
+	//	if (!(cmd->next))
+			close(fds[0]);
 		close(fds[1]);
 	}
 }
@@ -137,10 +144,11 @@ int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
 		std_error(errno);
 	if (child == 0)
 	{
+
 		if (ft_lstlast_files(*(cmd->stdins)))
 			ft_dup_infile(cmd->stdins);
-		else
-			dup2(fds[0], 0);
+	//	else
+		dup2(fds[0], 0);
 		close(fds[0]);
 		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);

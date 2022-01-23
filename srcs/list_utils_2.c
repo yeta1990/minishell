@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 13:09:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/23 18:17:31 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/23 21:47:46 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,6 @@ char **from_list_to_double_char(t_files **full_strings)
 	size = 0;
 	while (aux)
 	{
-		printf("aux name: %s\n", aux->name);
 		s[size] = ft_strdup(aux->name);
 		aux = aux->next;
 		size++;

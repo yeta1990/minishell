@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/23 18:15:58 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/23 21:46:42 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,6 @@ int	is_raw_cmd(char *file, char **cmd_ok)
 //	char	*aux;
 
 	pos = ft_strlen(file) - 1;
-	printf("file in is_raw_cmd %s\n", file);
 	if (access(file, X_OK) != -1)
 	{
 		if (cmd_ok)
@@ -49,8 +48,6 @@ int	is_cmd(char *file, char **cmd_ok)
 	while (paths[j])
 	{
 		cmd_try = ft_strjoin(paths[j], file);
-		printf("file: %s\n", file);
-		printf("cmd try %s\n", cmd_try);
 		if (access(cmd_try, X_OK) != -1)
 		{
 			if ((cmd_ok) && ft_strlen(cmd_try) > ft_strlen(paths[j]))
@@ -76,9 +73,7 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	int		i;
 
 	i = 0;
-	printf("raw cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd, data);
-	printf("args: %s\n", args[0]);
 	/*if (args)
 	{
 		while (args && args[i])
