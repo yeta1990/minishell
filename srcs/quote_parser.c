@@ -41,7 +41,7 @@ char	*expansor(char **arg, int type, t_data *data)
 //		exp = ft_strdup(*arg);
 	while (a && a[i])
 	{
-	//	printf("i: %i\n", i);
+		printf("i: %i\n", i);
 		while (a[i] == ' ')
 			i++;
 		while (a[i] == '$')
@@ -55,7 +55,8 @@ char	*expansor(char **arg, int type, t_data *data)
 		}
 		else
 		{
-			while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
+			while (a[i + j] && a[i + j] != '$')
+			//while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
 			//while (a[i + j] && a[i + j] != '$')
 				j++;
 			aux_exp = ft_substr(a, i, j);
@@ -220,7 +221,7 @@ char	**split_quote_sensitive(char *str, t_data *data)
 	subs = 0;
 	trimmed = 0;
 	expanded = 0;
-	r = ft_calloc((ft_strlen(str)  * 10)+ 1, sizeof(char));
+	r = ft_calloc((ft_strlen(str)  * 50)+ 1, sizeof(char));
 	full_strings = malloc(sizeof(t_files *));
 	full_strings[0] = 0;
 	aux = str;
