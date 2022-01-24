@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/21 13:20:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/24 15:24:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct s_cmd
 	t_files			**stdouts;
 	t_files			**stderrs;
 	t_files			**heredocs;
+	int				fd[2];
+	int				*prev_fd;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -150,6 +152,7 @@ void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*get_cmd_from_user(void);
+void	run_heredoc_2(t_files **f, t_cmd *cmd, int i);
 
 //error_handlers.c
 int		transform_error_code(char *cmd, int err);

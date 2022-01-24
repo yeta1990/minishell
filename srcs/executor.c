@@ -3,159 +3,117 @@
 /*                                                        :::      ::::::::   */
 /*   executor.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
+/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 18:52:02 by albgarci         ###   ########.fr       */
+/*   Created: 2022/01/24 16:00:14 by albgarci          #+#    #+#             */
+/*   Updated: 2022/01/24 16:19:43 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
 extern char	**environ;
 
-void	exec_middle(t_data *data, t_cmd *cmd, int fds[2], int fds2[2])
+#include "minishell.h"
+
+void	create_pipes(t_cmd **cmds)
 {
-	int		child;
-	
-	if (pipe(fds2) < 0)
-		std_error(errno);
-	child = fork();
-	if (child == 0)
+	t_cmd	*node;
+
+	node = *cmds;
+	node->prev_fd = 0;
+	while (node->next)
 	{
-		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(cmd->stdins);
-		close(fds2[0]);
-		dup2(fds[0], 0);
-		close(fds[0]);
-		dup2(fds2[1], 1);
-		close(fds2[1]);
-		if (ft_lstlast_files(*(cmd->stdouts)))
-			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
-			exit(0);
-		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
-			exit(transform_error_code(cmd->cmd, (int) errno));
-		else
-			exit(0);
+		pipe(node->fd);
+		node->next->prev_fd = node->fd;
+		node = node->next;
 	}
-	else
-		signal(SIGINT, SIG_IGN);
 }
 
-void	middle_exec_handler(t_data *data, t_cmd **cmd, int fds[2])
+void	close_pipes(t_cmd **cmds)
 {
-	int		fds2[2];
-	int		i;
-	int		last_status;
+	t_cmd	*node;
 
-	i = 1;
-	last_status = 0;
-	while (i < data->num_cmds - 1)
+	node = *cmds;
+	while (node->next)
 	{
-		exec_middle(data, *cmd, fds, fds2);
-		while (wait(&last_status) != -1)
-			;
-		*cmd = (*cmd)->next;
-		close(fds[0]);
-		close(fds2[1]);
-		fds[0] = fds2[0];
-		fds[1] = fds2[1];
+		close(node->fd[0]);
+		close(node->fd[1]);
+		node->next->prev_fd = node->fd;
+		node = node->next;
+	}
+}
 
-		i++;
+void	check_heredocs(t_data *data)
+{
+	t_cmd	*cmd;
+	t_files	*f;
+	int		i;
+
+	i = 0;
+	cmd = *(data->cmds);
+	while (cmd)
+	{
+		f = *(cmd->stdins);
+		while (f)
+		{
+			if (f->append == 1)
+			{
+				run_heredoc_2(&f, cmd, i);
+				i++;
+			}
+			f = f->next;
+		}
+		cmd = cmd->next;
 	}
 }
 
 int	execute_commands(t_data *data)
-{
-	t_cmd	*node;
-	int		fds[2];
-	int		last_status;
-
-	last_status = 0;
-	node = *data->cmds;
-	if (pipe(fds) < 0)
-		std_error(errno);
-	ft_exec_first(data, node, fds);
-	while (wait(&last_status) != -1)
-		;
-	node = node->next;
-	middle_exec_handler(data, &node, fds);
-	if (data->num_cmds > 1)
-		last_status = ft_exec_last(data, node, fds);
-	while (wait(&last_status) != -1)
-		;
-	if (WIFEXITED(last_status))
-		return (WEXITSTATUS(last_status));
-	else if (WIFSIGNALED(last_status))
-		if (WTERMSIG(last_status) == SIGSEGV)
-			return (transform_error_code(0, 11));
-	return (0);
-}
-
-void	ft_exec_first(t_data *data, t_cmd *cmd, int fds[2])
-{
-	pid_t	child;
-
-	exit_builtin(data, cmd);
-	child = fork();
-	if (child == -1)
-		std_error(errno);
-	else if (child == 0)
-	{
-		if (ft_lstlast_files(*(cmd->stdins)))
-			ft_dup_infile(cmd->stdins);
-		close(fds[0]);
-		if (cmd->next)
-		{
-			dup2(fds[1], 1);
-			close(fds[1]);
-		}
-		if (ft_lstlast_files(*(cmd->stdouts)))
-			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
-			exit(data->last_code);
-		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
-			exit(transform_error_code(cmd->cmd, (int) errno));
-		else
-			exit(0);
-	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		close(fds[1]);
-	}
-}
-
-int	ft_exec_last(t_data *data, t_cmd *cmd, int fds[2])
-{
+{	
+	int		i;
+	pid_t	pid;
+	t_cmd	*cmd;
 	int		child_status;
-	pid_t	child;
 
-	child = fork();
-	if (child == -1)
-		std_error(errno);
-	if (child == 0)
+	cmd = *(data->cmds);
+	i = 0;
+	create_pipes(data->cmds);
+	check_heredocs(data);
+	while (cmd)
 	{
-		if (ft_lstlast_files(*(cmd->stdins)))
+		if (i == 0)
+			exit_builtin(data, cmd);
+		pid = fork();
+		if (pid == 0)
+		{
+			if (i < data->num_cmds - 1)
+			{
+				dup2(cmd->fd[1], 1);
+				close(cmd->fd[1]);
+			}
+			if (i != 0)
+			{
+				dup2((cmd->prev_fd)[0], 0);
+				close((cmd->prev_fd)[0]);
+			}
 			ft_dup_infile(cmd->stdins);
-		else
-			dup2(fds[0], 0);
-		close(fds[0]);
-		if (ft_lstlast_files(*(cmd->stdouts)))
 			ft_dup_output(cmd->stdouts);
-		if (cmd->cmd && check_builtins(data, cmd) == 1)
-			exit(data->last_code);
-		else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), environ) < 0)
-			exit(transform_error_code(cmd->cmd, (int) errno));
-		else
-			exit(0);
+			close_pipes(data->cmds);
+			if (cmd->cmd && check_builtins(data, cmd) == 1)
+				exit(data->last_code);
+			else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), 0) < 0)
+				exit(transform_error_code(cmd->cmd, (int) errno));
+			else
+				exit(0);
+		}
+		cmd = cmd->next;
+		i++;
 	}
-	else
-	{
-		signal(SIGINT, SIG_IGN);
-		close(fds[0]);
-	}
-//	waitpid(child, &child_status, WNOHANG);
-	return (WEXITSTATUS(child_status));
+	close_pipes(data->cmds);
+	while (wait(&child_status) != -1)
+		;
+	if (WIFEXITED(child_status))
+		return (WEXITSTATUS(child_status));
+	else if (WIFSIGNALED(child_status))
+		if (WTERMSIG(child_status) == SIGSEGV)
+			return (transform_error_code(0, 11));
+	return (child_status);
 }

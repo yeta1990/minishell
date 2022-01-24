@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/21 11:57:03 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/24 13:27:08 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	main(int argc, char **argv, char **envp)
 	char				**instructions;
 	int					i;
 	struct sigaction	ctrl_c;
-	
+
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	signal(SIGQUIT, SIG_IGN);
