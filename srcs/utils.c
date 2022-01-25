@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/20 19:44:49 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 16:04:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,8 +106,7 @@ char	*ft_strdup_space(const char *s1, int *size, int cmd)
 	}
 	return (0);
 }
-// I thought bash handled <1<2 as different infiles, but not, so I've commented theese
-// two lines to come back to previous state
+
 int	std_space_get_cut_position(char	*s1)
 {
 	size_t	l;
@@ -120,32 +119,11 @@ int	std_space_get_cut_position(char	*s1)
 		if (ft_strchr(aux, '"') && *(ft_strchr(aux, '"') + 1) == ' ')
 			l = (ft_strchr(aux, '"') - aux) + 2;
 		else
-			while (s1 && s1[l] && s1[l] != ' ')// && s1[l] != '<' && s1[l] != '>')
+			while (s1 && s1[l] && s1[l] != ' ')
 				l++;
 	}
 	else
-		while (s1 && s1[l] && s1[l] != ' ')// && s1[l] != '<' && s1[l] != '>')
-			l++;
-	return (l);
-}
-
-int	std_space_get_cut_space(char *s1)
-{
-	size_t	l;
-	char	*aux;
-
-	l = 0;
-	if (s1 && *s1 == '"')
-	{
-		aux = s1 + 1;
-		if (ft_strchr(aux, '"') && *(ft_strchr(aux, '"') + 1) == ' ')
-			l = (ft_strchr(aux, '"') - aux) + 2;
-		else
-			while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
-				l++;
-	}
-	else
-		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
+		while (s1 && s1[l] && s1[l] != ' ')
 			l++;
 	return (l);
 }

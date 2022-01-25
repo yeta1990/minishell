@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:45:52 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 15:15:47 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 16:02:54 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,26 +72,4 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 			return (ft_strdup(""));
 	}
 	return (0);
-}
-
-int	ft_strcmp(char *s1, char *s2)
-{
-	int	a;
-
-	a = 0;
-	while ((*s1 != '\0') || (*s2 != '\0'))
-	{
-		if (*s1 != *s2)
-		{
-			a = *s1 - *s2;
-			break ;
-		}
-		else
-		{
-			a = 0;
-		}
-		s1 ++;
-		s2 ++;
-	}
-	return (a);
 }
