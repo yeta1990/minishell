@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/21 10:49:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 11:23:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,4 +110,18 @@ void	syntax_error(char *wrong_portion, t_data *data)
 	data->syntax_error = 1;
 	data->last_code = 258;
 	free(msg);
+}
+
+int	parse_check(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (!str || ft_strlen(str) == 0)
+		return (0);
+	while (str && str[i] && str[i] == ' ')
+		str++;
+	if (i < (int) ft_strlen(str))
+		return (1);
+	return (0);
 }

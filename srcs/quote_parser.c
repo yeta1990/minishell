@@ -41,7 +41,6 @@ char	*expansor(char **arg, int type, t_data *data)
 //		exp = ft_strdup(*arg);
 	while (a && a[i])
 	{
-		printf("i: %i\n", i);
 		while (a[i] == ' ')
 			i++;
 		while (a[i] == '$')
@@ -161,51 +160,6 @@ int	what_flag(char c)
 	return (flag);
 }
 
-/*
- * int main()
-{
-//	char *str = "echo";
-//	char *str = "echo $PATH";
-//	char *str = "echo\"uno $USER \" a a\"$USER $USER\"holi $USER  'tres'   ";
-//	char *str = "echo'''' uno 'dos'tres '' ";
-//	char	*str = "echo \"111\"\"ikf\"$PATH\"$USER\"a ";
-	//char	*str = "echo '''a'";
-//	char	*str = "echo $PATH $USER";
-//	char	*str = "echo $HOME$HOME$HOME$HOME";
-//	char	*str = "echo \"$HO\"ME";
-//	char	*str = "echo $HOME\"$HOME\"$HOME";
-//	char	*str = "echo \"$\"HOME $$$$$\"\"HOME";
-//	char	*str = "echo \"$USER $USER.$USER\"";
-//	char	*str = "echo \"'$USER\"";
-//	char	*str = "echo \"'$PWD'\"";//qwere\"qwqwer$P$P$PWD\"'";//$PWD'\"";
-//	char	*str = "echo \"''$PWD'''qwere\"qwqwer$P$P$PWD\"'$PWD'\"";
-//	char	*str = "echo a""$HOLA";
-//	char	*str = "echo $P$P$P$PWD";
-//	char	*str = "echo a\"\"b$HOME";
-//	char	*str = "echo aa\"$\"HOME";
-//	char	*str = "echo \"$$$$$\"";
-	char	*str = "echo \"\"$HOME\"\"a\"$USER\"";
-	int	i;
-
-	i = 0;
-//	char *str = " echo '' hola ";// uno doos ";
-//	char	*str = "echo'ho la'";
-//	printf("%s\n", str);
-	char **s;
-
-	s = split_quote_sensitive(str);
-	while (s && s[i])
-	{
-		printf("->%s\n", s[i]);
-		free(s[i]);
-		i++;
-	}
-	free(s);
-//	free(str);
-
-	system("leaks a.out");
-}
-*/
 char	**split_quote_sensitive(char *str, t_data *data)
 {
 	char	*aux;
@@ -230,7 +184,6 @@ char	**split_quote_sensitive(char *str, t_data *data)
 	//	write(2, "aux\n", 4);
 	while (aux && *aux)
 	{
-
 	//	write(2, "aux\n", 4);
 		flag = what_flag(*aux);
 		if (flag == 0)

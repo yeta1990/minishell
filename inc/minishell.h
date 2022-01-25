@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:10:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 11:24:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,6 +161,8 @@ void	std_error(int errn);
 int		isalnum_string(char *str);
 int		is_valid_infile(char *str);
 void	syntax_error(char *wrong_portion, t_data *data);
+int		parse_check(char *str);
+
 //envp.c
 int		get_env_size(char **envp);
 char	**create_env(char **envp);

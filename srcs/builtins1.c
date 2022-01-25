@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:10:14 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 10:59:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,8 @@ int	check_outside_builtins(t_data *data, t_cmd *cmd)
 	int	is_builting;
 
 	is_builting = 1;
+	if (!cmd->cmd_complete[0])
+		return (1);
 	if (ft_strcmp("cd", cmd->cmd_complete[0]) == 0)
 		cd_bultin(data);
 	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0 && cmd->cmd_complete[1])

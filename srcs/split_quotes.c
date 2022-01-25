@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/21 13:16:49 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 11:25:43 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,6 +79,8 @@ static void	save_words(char **ptr, char *str, int nwords, t_data *data)
 			//	printf("aux: %s, len %i\n", aux, len);
 				ptr[i++] = ft_substr(aux, 0, len);
 			 //	printf("ptr: %s\n", ptr[i - 1]);
+				if (parse_check(ptr[i - 1]) == 0)
+					syntax_error((aux + len), data);
 				if (aux && aux[len] && aux[len] == '|')
 					len++;
 				if (aux && aux[len] && aux[len] == '|')
