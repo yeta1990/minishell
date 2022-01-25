@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/21 17:36:34 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 09:48:21 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 	char *str;
 
 	str = s;
-    while (str && *str)
+    while (str && *str && data->syntax_error == 0)
     {
 		while (*str && *str == ' ')
 			str++;
@@ -29,10 +29,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '<')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 0);
+				str += add_redirection(str, parsed_instruction, 1, 0, data);
 			}
-			else if (str && *str && *str != '<')
-				str += add_redirection(str, parsed_instruction, 0, 0);
+			else// if (str && *str && *str != '<')
+				str += add_redirection(str, parsed_instruction, 0, 0, data);
         }
 		else if (*str == '>')
 		{
@@ -40,10 +40,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '>')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 1);
+				str += add_redirection(str, parsed_instruction, 1, 1, data);
 			}
-			else if (str && *str && *str != '>')
-				str += add_redirection(str, parsed_instruction, 0, 1);
+			else// if (str && *str && *str != '>')
+				str += add_redirection(str, parsed_instruction, 0, 1, data);
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
@@ -98,7 +98,7 @@ int	main(int argc, char **argv, char **envp)
 	char				**instructions;
 	int					i;
 	struct sigaction	ctrl_c;
-	
+
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	signal(SIGQUIT, SIG_IGN);
@@ -124,8 +124,9 @@ int	main(int argc, char **argv, char **envp)
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
+			data.syntax_error = 0;
 			add_history(str);
-			instructions = ft_split_w_quotes(str, '|');
+			instructions = ft_split_pipes(str, &data);
 			while (instructions && instructions[i])
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
@@ -154,8 +155,8 @@ int	main(int argc, char **argv, char **envp)
 				data.last_code = execute_commands(&data);
 				printf("exit status code: %i\n", data.last_code);
 			}
-			else
-				data.last_code = execute_commands(&data);
+			else if (data.syntax_error == 0)
+			 	data.last_code = execute_commands(&data);
 			free_data(&data);
 			reset_data(&data);
 		}

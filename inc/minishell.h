@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/20 10:25:13 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/24 15:24:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ typedef struct s_cmd
 	t_files			**stdouts;
 	t_files			**stderrs;
 	t_files			**heredocs;
+	int				fd[2];
+	int				*prev_fd;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -63,6 +65,7 @@ typedef struct s_data
 	t_cmd				**cmds;
 	char				**env;
 	char				**exp;
+	int					syntax_error;
 }	t_data;
 
 void	handler_c(int a);
@@ -84,7 +87,7 @@ t_files	*ft_lstnew(void *content);
 char	**from_list_to_double_char(t_files **full_strings);
 
 // lexer_setters.c
-int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type);
+int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type, t_data *data);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -103,8 +106,9 @@ int		get_char_pos_final_quotes(char q, char *str);
 
 //utils
 char	**ft_split(char const *s, char c);
-char	*ft_strdup_space(const char *s1, int *size);
+char	*ft_strdup_space(const char *s1, int *size, int cmd);
 int		std_space_get_cut_position(char *s1);
+int		std_space_get_cut_space(char *s1);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
@@ -119,7 +123,7 @@ char	**ft_split_mod(char const *str, char c);
 char	*ft_strjoin(char const *s1, char const *s2);
 void	*ft_memmove(void *dst, const void *src, size_t len);
 void	ft_putstr_fd(char *s, int fd);
-char	**ft_split_w_quotes(char const *str, char c);
+char	**ft_split_pipes(char const *str, t_data *data);
 int		ft_strcmp(char *s1, char *s2);
 int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_itoa(int n);
@@ -146,14 +150,17 @@ int		ft_exec_last(t_data *data, t_cmd *cmd, int fds[2]);
 //ft_files.c
 void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
-
 char	*ft_strtrim(char const *s1, char const *set);
+char	*get_cmd_from_user(void);
+void	run_heredoc_2(t_files **f, t_cmd *cmd, int i);
 
 //error_handlers.c
 int		transform_error_code(char *cmd, int err);
 void	file_error(char *filename, int errn);
 void	std_error(int errn);
-
+int		isalnum_string(char *str);
+int		is_valid_infile(char *str);
+void	syntax_error(char *wrong_portion, t_data *data);
 //envp.c
 int		get_env_size(char **envp);
 char	**create_env(char **envp);

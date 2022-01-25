@@ -8,7 +8,7 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/executor.c srcs/ft_files.c srcs/ft_strncmp.c \
 		  srcs/error_handlers.c srcs/list_utils_2.c srcs/ft_itoa.c \
 		  srcs/ft_atoi.c srcs/quote_parser.c srcs/ft_isalnum.c \
-		  srcs/ft_isalpha.c srcs/ft_isdigit.c
+		  srcs/ft_isalpha.c srcs/ft_isdigit.c 
 
 INCS	= inc/ 
 
@@ -39,6 +39,6 @@ fclean:		clean
 re:			fclean all
 
 san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -lreadline -o $(NAME) -g0 -O -fsanitize=address 
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline -o $(NAME) -g0 -O -fsanitize=address 
 
 .PHONY:		all clean fclean re

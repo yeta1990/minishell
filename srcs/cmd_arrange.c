@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 17:12:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/24 11:03:58 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,23 @@
 int	is_raw_cmd(char *file, char **cmd_ok)
 {
 	int		pos;
-	char	*aux;
+//	char	*aux;
 
 	pos = ft_strlen(file) - 1;
 	if (access(file, X_OK) != -1)
 	{
 		if (cmd_ok)
 			*cmd_ok = ft_strdup(file);
-		while (pos >= 0)
+	/*	while (pos >= 0)
 		{
-			if (file[pos] == '/')
+			if (file[pos] == '/' && ft_strlen(file) > 1)// && ft_isalnum(*(file + pos)) != 0)
 			{
 				aux = ft_substr(file, pos, ft_strlen(file) - pos + 1);
 				free(file);
 				file = aux;
 			}
 			pos--;
-		}
+		}*/
 		return (1);
 	}
 	return (0);
@@ -50,7 +50,7 @@ int	is_cmd(char *file, char **cmd_ok)
 		cmd_try = ft_strjoin(paths[j], file);
 		if (access(cmd_try, X_OK) != -1)
 		{
-			if (cmd_ok)
+			if ((cmd_ok) && ft_strlen(cmd_try) > ft_strlen(paths[j]))
 				*cmd_ok = ft_strdup(cmd_try);
 			free(cmd_try);
 			free_paths(paths);
@@ -59,6 +59,7 @@ int	is_cmd(char *file, char **cmd_ok)
 		free(cmd_try);
 		j++;
 	}
+
 	free_paths(paths);
 	*cmd_ok = 0;
 	if (file)
@@ -72,7 +73,6 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	int		i;
 
 	i = 0;
-//	printf("raw cmd: %s\n", raw_cmd);
 	args = split_quote_sensitive(raw_cmd, data);
 	/*if (args)
 	{

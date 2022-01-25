@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/21 17:35:17 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 09:48:33 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ void	echo_builtin(t_cmd *cmd)
 	char	*aux;
 	int		i;
 	int		new_line;
+	int		first_space;
 
+	first_space = 0;
 	i = 0;
 	aux = 0;
 	new_line = 1;
@@ -52,22 +54,21 @@ void	echo_builtin(t_cmd *cmd)
 		i = echo_flag(&(cmd->cmd_complete[1])) + 1;
 		if (i > 1)
 			new_line = 0;
-		aux = cmd->cmd_complete[i];
+		aux = ft_strdup(cmd->cmd_complete[i]);
 	}
+	else
+		aux = ft_strdup("");
+	first_space = i;
 	while (aux)
 	{
+		if ((i >= first_space + 1 && new_line == 1) || i > first_space)
+			write(1, " ", 1);
 		ft_putstr_fd(aux, 1);
 		free(aux);
 		i++;
-		aux = cmd->cmd_complete[i];
-		if (aux && ft_strlen(aux) == 1)
-		{
-			if (*aux != ' ')
-				write(1, " ", 1);
-		}
-		else
-			write(1, " ", 1);
+		aux = ft_strdup(cmd->cmd_complete[i]);
 	}
+	free(aux);
 	if (i > 1 && new_line)
 		write(1, "\n", 1);
 }
