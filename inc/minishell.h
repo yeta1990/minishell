@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 15:48:22 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 18:02:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,14 @@ typedef struct s_data
 	int					cmd_by_stdin;
 }	t_data;
 
+typedef struct s_words_number
+{
+	int	nwords;
+	int	f_dquote;
+	int	f_quote;
+}	t_words_number;
+
+
 void	handler_c(int a);
 
 //cmd_arrange.c
@@ -104,7 +112,9 @@ int		get_char_pos(char *str, char c);
 char	**split_quote_sensitive(char *str, t_data *data);
 
 //split_quotes.c
-int		get_char_pos_final_quotes(char q, char *str);
+int		get_char_pos_final_quotes(char *str);
+int		search_after_pipe(int len, int j, char *aux, t_data *data);
+char	*search_next_pipe(int *len, char *aux, t_data *data);
 
 //utils
 char	**ft_split(char const *s, char c);
