@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:14:37 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 19:17:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ void	check_heredocs(t_data *data)
 		{
 			if (f->append == 1)
 			{
-				run_heredoc_2(&f, cmd, i);
+				run_heredoc_2(&f, i);
 				i++;
 			}
 			f = f->next;
