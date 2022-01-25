@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 09:48:21 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 12:39:11 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,9 @@ int	main(int argc, char **argv, char **envp)
 			data.syntax_error = 0;
 			add_history(str);
 			instructions = ft_split_pipes(str, &data);
-			while (instructions && instructions[i])
+			if (parse_check(instructions[0]) == 0)
+				data.syntax_error = 2;
+			while (data.syntax_error != 2 && instructions && instructions[i])
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
 				data.num_cmds++;

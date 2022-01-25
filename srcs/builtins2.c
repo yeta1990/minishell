@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 09:48:33 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 11:46:47 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	echo_builtin(t_cmd *cmd)
 		aux = ft_strdup(cmd->cmd_complete[i]);
 	}
 	free(aux);
-	if (i > 1 && new_line)
+	if (new_line)
 		write(1, "\n", 1);
 }
 
