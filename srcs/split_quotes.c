@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/25 15:47:59 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 16:08:04 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,18 +132,10 @@ char	**ft_split_pipes(char const *s, t_data *data)
 	int		nwords;
 	char	**ptr;
 	char	*str;
-	char	d[2];
 
-	d[0] = '|';
-	d[1] = '\0';
 	if (s)
 	{
-
-//	write(2, "oa", 5);
-	//	str = ft_strtrim(s, d);
-
 		str = ft_strdup(s);
-	//	printf("%s\n", str);
 		if (str)
 		{
 			nwords = get_nwords(str, '|');
