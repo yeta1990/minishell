@@ -6,13 +6,13 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 13:09:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/24 11:03:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 19:29:40 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char **from_list_to_double_char(t_files **full_strings)
+char	**from_list_to_double_char(t_files **full_strings)
 {
 	char	**s;
 	t_files	*aux;
