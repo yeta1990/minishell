@@ -41,6 +41,8 @@ char	*expansor(char **arg, int type, t_data *data)
 //		exp = ft_strdup(*arg);
 	while (a && a[i])
 	{
+		if (ft_strchr(a + i - 1, '$') == 0)
+			return (ft_strdup(*arg));
 		while (a[i] == ' ')
 			i++;
 		while (a[i] == '$')
@@ -54,14 +56,12 @@ char	*expansor(char **arg, int type, t_data *data)
 		}
 		else
 		{
-			while (a[i + j] && a[i + j] != '$')
-			//while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
-			//while (a[i + j] && a[i + j] != '$')
+			while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
 				j++;
 			aux_exp = ft_substr(a, i, j);
 			aux_exp3 = ft_strdup(getenv(aux_exp));
-	//		printf("aux_exp: %s\n", aux_exp);
-	//		printf("aux_exp3: %s\n", aux_exp3);
+			printf("aux_exp: %s\n", aux_exp);
+			printf("aux_exp3: %s\n", aux_exp3);
 			if (aux_exp)
 				free(aux_exp);
 		}
@@ -82,7 +82,6 @@ char	*expansor(char **arg, int type, t_data *data)
 			{
 				tail = ft_substr(a, i + j, z);
 				exp = ft_strjoin(aux_exp2, tail);
-			//	printf("tail: %s\n", tail);
 				free(tail);
 				tail = 0;
 			}
@@ -90,6 +89,8 @@ char	*expansor(char **arg, int type, t_data *data)
 		}
 		i += j;
 		i += z;
+		while (a[i] && ft_isalnum(a[i]) == 0 && a[i] != '$')
+			i++;
 		j = 0;
 		z = 0;
 	//	printf("expanded-> %s\n", exp);
