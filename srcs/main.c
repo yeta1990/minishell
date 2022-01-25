@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 15:47:16 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 18:30:41 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '<')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 0, data);
+				str += add_redirection(str, parsed_instruction, 1, data);
 			}
 			else// if (str && *str && *str != '<')
-				str += add_redirection(str, parsed_instruction, 0, 0, data);
+				str += add_redirection(str, parsed_instruction, 0, data);
         }
 		else if (*str == '>')
 		{
@@ -40,10 +40,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '>')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 1, data);
+				str += add_redirection(str, parsed_instruction, 3, data);
 			}
 			else// if (str && *str && *str != '>')
-				str += add_redirection(str, parsed_instruction, 0, 1, data);
+				str += add_redirection(str, parsed_instruction, 2, data);
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
