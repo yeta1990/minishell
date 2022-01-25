@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 11:24:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 14:01:47 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,6 +95,7 @@ char	**get_paths(char *path);
 char	**path_surgery(char **path_to_cut, int path_emergency);
 void	free_paths(char **paths);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
+char	*our_getenv(t_data *data, char *to_find);
 
 // get_char_pos.c
 int		has_closed_quotes(char *str);

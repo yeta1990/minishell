@@ -59,9 +59,10 @@ char	*expansor(char **arg, int type, t_data *data)
 			while (a[i + j] && ft_isalnum(a[i + j]) != 0 && a[i + j] != '$')
 				j++;
 			aux_exp = ft_substr(a, i, j);
-			aux_exp3 = ft_strdup(getenv(aux_exp));
-			printf("aux_exp: %s\n", aux_exp);
-			printf("aux_exp3: %s\n", aux_exp3);
+			aux_exp3 = our_getenv(data, aux_exp);
+	//		aux_exp3 = ft_strdup(getenv(aux_exp));
+		//	printf("aux_exp: %s\n", aux_exp);
+		//	printf("aux_exp3: %s\n", aux_exp3);
 			if (aux_exp)
 				free(aux_exp);
 		}
