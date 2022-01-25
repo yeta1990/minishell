@@ -6,12 +6,12 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:12:15 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 14:01:55 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:31:15 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 char	**get_paths(char *path)
 {
 	char	**raw_path;
@@ -49,7 +49,7 @@ char	**path_surgery(char **path_to_cut, int path_emergency)
 	}
 	return (env);
 }
-
+*/
 void	free_paths(char **paths)
 {
 	int	i;

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 14:01:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:16:11 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ typedef struct s_data
 void	handler_c(int a);
 
 //cmd_arrange.c
-int		is_cmd(char *file, char **cmd_ok);
+int		is_cmd(char *file, char **cmd_ok, t_data *data);
 char	**create_args(char *raw_cmd, char **cmd, t_data *data);
 void	cmd_not_raw(char **args);
 char	*expansor(char **arg, int type, t_data *data);

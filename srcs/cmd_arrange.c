@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/24 11:03:58 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:31:00 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,36 +15,30 @@
 int	is_raw_cmd(char *file, char **cmd_ok)
 {
 	int		pos;
-//	char	*aux;
 
 	pos = ft_strlen(file) - 1;
 	if (access(file, X_OK) != -1)
 	{
 		if (cmd_ok)
 			*cmd_ok = ft_strdup(file);
-	/*	while (pos >= 0)
-		{
-			if (file[pos] == '/' && ft_strlen(file) > 1)// && ft_isalnum(*(file + pos)) != 0)
-			{
-				aux = ft_substr(file, pos, ft_strlen(file) - pos + 1);
-				free(file);
-				file = aux;
-			}
-			pos--;
-		}*/
 		return (1);
 	}
 	return (0);
 }
 
-int	is_cmd(char *file, char **cmd_ok)
+int	is_cmd(char *file, char **cmd_ok, t_data *data)
 {
 	int		j;
 	char	*cmd_try;
 	char	**paths;
+	char	*raw_path;
 
 	j = 0;
-	paths = get_paths(getenv("PATH"));
+	raw_path = our_getenv(data, "PATH");
+	paths = ft_split_mod(raw_path, ':');
+//	paths = get_paths(raw_path);
+	free(raw_path);
+//	paths = get_paths(getenv("PATH"));
 	while (paths[j])
 	{
 		cmd_try = ft_strjoin(paths[j], file);
@@ -59,7 +53,6 @@ int	is_cmd(char *file, char **cmd_ok)
 		free(cmd_try);
 		j++;
 	}
-
 	free_paths(paths);
 	*cmd_ok = 0;
 	if (file)
@@ -74,85 +67,7 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 
 	i = 0;
 	args = split_quote_sensitive(raw_cmd, data);
-	/*if (args)
-	{
-		while (args && args[i])
-		{
-		//	printf("a\n");
-		//	aux = args[i];
-			aux = ft_strtrim(args[i], "\"");
-			//free(aux);
-		//	if (ft_strlen(aux) == 0)
-		//		aux = ft_strdup(" ");// <- leaks
-			free(args[i]);
-			args[i] = expansor(&aux, data);
-		//	printf("%s\n", args[i]);
-			if (aux)
-				free(aux);
-			i++;
-		}
-	}*/
 	if (!(is_raw_cmd(args[0], cmd)))
-		is_cmd(args[0], cmd);
+		is_cmd(args[0], cmd, data);
 	return (args);
 }
-/*
-char	*expansor(char **arg, t_data *data)
-{
-	char	*a;
-	char	*exp;
-	char	*aux_exp;
-	char	*aux_exp2;
-	char	*aux_exp3;
-	int		i;
-	int		j;
-
-	data = data + 0;
-	j = 0;
-	i = 0;
-	exp = 0;
-	aux_exp = 0;
-	aux_exp2 = 0;
-	aux_exp3 = 0;
-	a = *arg;
-	printf("to expand->%s\n", a);
-	while (a && a[i] && a[i] != '$')
-		i++;
-	if (i != 0)
-		exp = ft_substr(a, 0, i);
-	i++;
-	while (a && a[i])
-	{
-		while (a[i] == '$')
-			i++;
-		if (a[i] && a[i] == '?')
-		{
-			aux_exp3 = ft_itoa(data->last_code);
-			j++;
-		}
-		else
-		{
-			while (a[i + j] && a[i + j] != '$')
-				j++;
-			aux_exp = ft_substr(a, i, j);
-			aux_exp3 = ft_strdup(getenv(aux_exp));
-			if (aux_exp)
-				free(aux_exp);
-		}
-		if (exp)
-			aux_exp2 = ft_strjoin(exp, aux_exp3);
-		else if (aux_exp3)
-			aux_exp2 = ft_strdup(aux_exp3);
-		free(aux_exp3);
-		if (aux_exp2)
-		{
-			if (exp)
-				free(exp);
-			exp = ft_strdup(aux_exp2);
-			free(aux_exp2);
-		}
-		i += j;
-		j = 0;
-	}
-	return (exp);
-}*/
