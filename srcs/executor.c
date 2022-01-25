@@ -6,11 +6,9 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 09:48:19 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 10:14:37 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-extern char	**environ;
 
 #include "minishell.h"
 
@@ -81,31 +79,34 @@ int	execute_commands(t_data *data)
 	{
 		if (i == 0)
 			exit_builtin(data, cmd);
-		pid = fork();
-		if (pid == 0)
+		if (check_outside_builtins(data, cmd) == 0)
 		{
-			if (i < data->num_cmds - 1)
+			pid = fork();
+			if (pid == 0)
 			{
-				dup2(cmd->fd[1], 1);
-				close(cmd->fd[1]);
+				if (i < data->num_cmds - 1)
+				{
+					dup2(cmd->fd[1], 1);
+					close(cmd->fd[1]);
+				}
+				if (i != 0)
+				{
+					dup2((cmd->prev_fd)[0], 0);
+					close((cmd->prev_fd)[0]);
+				}
+				ft_dup_infile(cmd->stdins);
+				ft_dup_output(cmd->stdouts);
+				close_pipes(data->cmds);
+				if (cmd->cmd && check_builtins(data, cmd) == 1)
+					exit(data->last_code);
+				else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), data->env) < 0)
+					exit(transform_error_code(cmd->cmd, (int) errno));
+				else
+					exit(0);
 			}
-			if (i != 0)
-			{
-				dup2((cmd->prev_fd)[0], 0);
-				close((cmd->prev_fd)[0]);
-			}
-			ft_dup_infile(cmd->stdins);
-			ft_dup_output(cmd->stdouts);
-			close_pipes(data->cmds);
-			if (cmd->cmd && check_builtins(data, cmd) == 1)
-				exit(data->last_code);
-			else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), 0) < 0)
-				exit(transform_error_code(cmd->cmd, (int) errno));
 			else
-				exit(0);
+				signal(SIGINT, SIG_IGN);
 		}
-		else
-			signal(SIGINT, SIG_IGN);
 		cmd = cmd->next;
 		i++;
 	}
