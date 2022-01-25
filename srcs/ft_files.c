@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 09:48:20 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:50:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	run_heredoc(t_files **f)
 	close(fd);
 }
 
-char	*get_cmd_from_user(void)
+char	*get_cmd_from_user(t_data *data)
 {
 	char	*input;
 	char	*str;
@@ -123,6 +123,7 @@ char	*get_cmd_from_user(void)
 	}
 	if (str)
 		free(str);
+	data->cmd_by_stdin = 1;
 	str = 0;
 	return (input);
 }

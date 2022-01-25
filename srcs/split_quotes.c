@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/25 11:25:43 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:47:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,10 +91,10 @@ static void	save_words(char **ptr, char *str, int nwords, t_data *data)
 				if (data->syntax_error == 1)
 					break ;
 				if ((int)ft_strlen(aux + len) == j && j > 0)
-					ptr[i++] = get_cmd_from_user();
+					ptr[i++] = get_cmd_from_user(data);
 					//printf("pedir comando\n");
 				else if (j == 0 && len > 1 && *(aux + len - 1) == '|')
-					ptr[i++] = get_cmd_from_user();
+					ptr[i++] = get_cmd_from_user(data);
 					//printf("pedir comando\n");
 				else if (j == 0 && len == 1 && aux && *aux == '|')
 					syntax_error((aux), data);

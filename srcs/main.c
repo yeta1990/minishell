@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 12:39:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 15:47:16 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,9 @@ int	main(int argc, char **argv, char **envp)
 	char				**instructions;
 	int					i;
 	struct sigaction	ctrl_c;
+	char				*custom_str;
 
+	custom_str = 0;
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	signal(SIGQUIT, SIG_IGN);
@@ -125,7 +127,7 @@ int	main(int argc, char **argv, char **envp)
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
 			data.syntax_error = 0;
-			add_history(str);
+			data.cmd_by_stdin = 0;
 			instructions = ft_split_pipes(str, &data);
 			if (parse_check(instructions[0]) == 0)
 				data.syntax_error = 2;
@@ -134,6 +136,14 @@ int	main(int argc, char **argv, char **envp)
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
 				data.num_cmds++;
 				i++;
+			}
+			if (data.cmd_by_stdin == 0)
+				add_history(str);
+			else
+			{
+				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
+				add_history(custom_str);
+				free(custom_str);
 			}
 			free_double_string(instructions);
 			free(str);
