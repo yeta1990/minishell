@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/25 18:08:57 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 10:32:06 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ static void	set_quotes_flags(char c, int *f_dquote, int *f_quote)
 		*f_quote = 1;
 	else if ((c == '\'') && *f_quote == 1)
 		*f_quote = 0;
+
+		printf("hh\n");
 }
 
 static int	get_nwords(char const *str, char c)
@@ -67,6 +69,7 @@ static void	save_words(char **ptr, char *aux, int nwords, t_data *data)
 		if (has_closed_quotes(aux + len) == 0)
 		{
 			ptr[i++] = search_next_pipe(&len, aux, data);
+			printf("ptr: %s\n", ptr[i - 1]);
 			while (aux && aux[j + len] && aux[j + len] == ' ')
 				j++;
 			if (data->syntax_error == 1)
