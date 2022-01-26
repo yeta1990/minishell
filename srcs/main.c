@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 17:10:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 22:06:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,8 +142,13 @@ int	main(int argc, char **argv, char **envp)
 			else
 			{
 				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
-				add_history(custom_str);
-				free(custom_str);
+				if (custom_str)
+				{
+					add_history(custom_str);
+					free(custom_str);
+				}
+				else
+					add_history(str);
 			}
 			free_double_string(instructions);
 			free(str);
