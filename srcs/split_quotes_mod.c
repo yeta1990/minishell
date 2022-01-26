@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/26 13:24:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 14:16:55 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,43 +53,78 @@ static int	get_nwords(char const *str, char c)
 				s++;
 		}
 	}
-	printf("nwords: %i\n", w.nwords);
 	return (w.nwords);
 }
 
-static void	add_pipe_to_list(t_files **separated_pipes, char *s, int size)
+static int	check_pipes_syntax_error(char *str, t_data *data)
+{
+	int	i;
+
+	i = ft_strlen(str);
+	if (!str)
+	   return (1);
+	if (i == 0)
+		return (0);
+	if (i == 1)
+	{
+		if (*str == '|')
+		{
+			syntax_error(str, data);
+			return (1);
+		}
+	}
+	i--;
+	while (str && str[i] && str[i] == ' ')
+		i--;
+
+	if (str[i] == '|' && str[i - 1] == '|')
+	{
+		printf("%c, %c\n", *(str + i), str[i - 1]);
+		syntax_error(str + i, data);
+		return (1);
+	}
+	else
+		return (0);
+	return (0);
+}
+
+static void	add_pipe_to_list(t_files **sep_pipes, char *s, int size, int last, t_data *data)
 {
 	char			*trimmed;
 	char			*raw_pipe;
 
 	raw_pipe = 0;
 	trimmed = 0;
+	if (check_pipes_syntax_error(s, data) == 1)
+		return ;
 	raw_pipe = ft_substr(s, 0, size);
 	trimmed = ft_strtrim(raw_pipe, "| ");
-	ft_lstadd_back_files(separated_pipes, ft_lstnew(ft_strdup(trimmed)));
+	if (last == 0 && ft_strlen(trimmed) == 0)
+		syntax_error("|", data);
+	else if (last == 1 && ft_strlen(trimmed) == 0 && data->syntax_error == 0)
+	{
+		free(trimmed);
+		trimmed = get_cmd_from_user(data);
+	}
+	ft_lstadd_back_files(sep_pipes, ft_lstnew(ft_strdup(trimmed)));
 	free(raw_pipe);
 	free(trimmed);
 }
 
-static char **save_words(char **ptr, char *str, int nwords, t_data *data, char c)
+static char **save_words(char *str, t_data *data, char c)
 {
 	t_words_number	w;
 	char			*s;
 	int				i;
 	t_files			**separated_pipes;
-//	char			*trimmed;
-//	char			*raw_pipe;
 
 	i = 0;
-//	raw_pipe = 0;
-//	trimmed = 0;
 	s = (char *)str;
 	w.f_dquote = 0;
 	w.f_quote = 0;
-	w.nwords = 1;
 	separated_pipes = malloc(sizeof(t_files *));
 	separated_pipes[0] = 0;
-	while (s && s[i])
+	while (s && s[i] && data->syntax_error == 0)
 	{
 		set_quotes_flags(s[i], &w.f_dquote, &w.f_quote);
 		if (s[i] != c)
@@ -107,64 +142,15 @@ static char **save_words(char **ptr, char *str, int nwords, t_data *data, char c
 			w.nwords++;
 			while (s[i] == c)
 				i++;
-			add_pipe_to_list(separated_pipes, s, i);
-	/*		raw_pipe = ft_substr(s, 0, i);
-			trimmed = ft_strtrim(raw_pipe, "| ");
-			ft_lstadd_back_files(separated_pipes, ft_lstnew(ft_strdup(trimmed)));
-			free(raw_pipe);
-			free(trimmed);
-			raw_pipe = 0;
-			trimmed = 0;*/
-//			printf("piece to cut: %s\n", ft_strtrim(ft_substr(s, 0, i), "| "));
+			add_pipe_to_list(separated_pipes, s, i, 0, data);
 			s += i;
 			i = 0;
 		}
 	}
-	if (s && ft_strlen(s) > 0)
-	{
-		add_pipe_to_list(separated_pipes, s, ft_strlen(s));
-/*
-		raw_pipe = ft_substr(s, 0, ft_strlen(s));
-		trimmed = ft_strtrim(raw_pipe, "| ");
-		ft_lstadd_back_files(separated_pipes, ft_lstnew(ft_strdup(trimmed)));
-		free(raw_pipe);
-		free(trimmed);*/
-	//	printf("piece to cut: %s\n", ft_strtrim(ft_substr(s, 0, ft_strlen(s)), "| "));
-	}
-	ptr += 0;
-	nwords += 0;
-	data->last_code = 0;
+	if (s && data->syntax_error == 0)
+		add_pipe_to_list(separated_pipes, s, ft_strlen(s), 1, data);
 	return (from_list_to_double_char(separated_pipes));
 }
-
-
-/*static void	save_words(char **ptr, char *aux, int nwords, t_data *data)
-{
-	int		i;
-	int		j;
-	int		len;
-
-	i = 0;
-	while (aux && *aux && data->syntax_error == 0)
-	{
-		j = 0;
-		len = get_char_pos_final_quotes(aux + len);
-	//	printf("len: %d\n", len);
-		if (has_closed_quotes(aux + len) == 0)
-		{
-			ptr[i++] = search_next_pipe(&len, aux, data);
-			while (aux && aux[j + len] && aux[j + len] == ' ')
-				j++;
-			if (data->syntax_error == 1)
-				break ;
-			if (search_after_pipe(len, j, aux, data) == 1)
-				ptr[i++] = get_cmd_from_user(data);
-
-			aux += (len + j);
-		}
-	}
-	ptr[nwords] = 0;
-}*/
 
 int	get_char_pos_final_quotes(char *str)
 {
@@ -209,8 +195,14 @@ char	**ft_split_pipes(char const *s, t_data *data)
 		if (str)
 		{
 			nwords = get_nwords(str, '|');
-			if (nwords > 0 && str && *str)
-				ptr = save_words(ptr, aux, nwords, data, '|');
+			if (nwords > 1 && str && *str)
+				ptr = save_words(aux, data, '|');
+			else if (nwords == 1)
+			{
+				ptr = malloc(sizeof(char *) * 2);
+				ptr[0] = ft_strdup(str);
+				ptr[1] = 0;
+			}
 			free(str);
 			return (ptr);
 		}
@@ -223,8 +215,8 @@ int	main(void)
 	t_data	*data;
 	char	**result;
 	int		i;
-//	char	*str = "echo hola \"|\"";
-	char	*str = " echo|ls";
+	char	*str = " |";
+//	char	*str = " echo|ls|  ";
 //	char	*str = "\"|\" echo  | \"\" echo adios | echo tres";
 //	char	*str = "\"|\" echo  | \"\" echo adios | echo tres";
 	//char	*str = "echo  |\" \"\" echo adios | echo tres";
@@ -236,7 +228,6 @@ int	main(void)
 	data->num_cmds = 0;
 	data->syntax_error = 0;
 	data->cmd_by_stdin = 0;
-
 //	printf("original %s\n", str);
 	result = ft_split_pipes(str, data);
 	while (result && result[i])
