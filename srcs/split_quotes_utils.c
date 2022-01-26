@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/26 14:53:43 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 15:06:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:17:12 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,6 @@ int	check_pipes_syntax_error(char *str, t_data *data)
 		i--;
 	if (str[i] == '|' && str[i - 1] == '|')
 	{
-		printf("%c, %c\n", *(str + i), str[i - 1]);
 		syntax_error(str + i, data);
 		return (1);
 	}
