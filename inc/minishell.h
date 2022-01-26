@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 19:17:11 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:04:42 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,12 +69,15 @@ typedef struct s_data
 	int					cmd_by_stdin;
 }	t_data;
 
-typedef struct s_words_number
+typedef struct s_pipe_sep_vars
 {
-	int	nwords;
-	int	f_dquote;
-	int	f_quote;
-}	t_words_number;
+	int		nwords;
+	int		f_dquote;
+	int		f_quote;
+	int		i;
+	int		last;
+	t_files	**separated_pipes;
+}	t_pipe_sep_vars;
 
 
 void	handler_c(int a);
@@ -115,6 +118,13 @@ char	**split_quote_sensitive(char *str, t_data *data);
 int		get_char_pos_final_quotes(char *str);
 int		search_after_pipe(int len, int j, char *aux, t_data *data);
 char	*search_next_pipe(int *len, char *aux, t_data *data);
+
+//split_quotes_2.c
+void			set_quotes_flags(char c, int *f_dquote, int *f_quote);
+int				get_nwords(char *str, char c);
+int				check_pipes_syntax_error(char *str, t_data *data);
+void			add_pipe(t_files **sep_pipes, char *s, t_pipe_sep_vars *w, t_data *data);
+t_pipe_sep_vars	*initialise_save_words_vars(void);
 
 //utils
 char	**ft_split(char const *s, char c);

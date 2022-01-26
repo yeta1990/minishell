@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/26 14:16:55 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:11:39 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,142 +14,50 @@
 */
 #include "minishell.h"
 
-static void	set_quotes_flags(char c, int *f_dquote, int *f_quote)
+int	set_cut_sizes(t_pipe_sep_vars *w, char *s, char c)
 {
-	if ((c == '"') && *f_dquote == 0 && *f_quote == 0)
-		*f_dquote = 1;
-	else if ((c == '"') && *f_dquote == 1)
-		*f_dquote = 0;
-	if ((c == '\'') && *f_quote == 0 && *f_dquote == 0)
-		*f_quote = 1;
-	else if ((c == '\'') && *f_quote == 1)
-		*f_quote = 0;
-}
-
-static int	get_nwords(char const *str, char c)
-{
-	t_words_number	w;
-	char			*s;
-
-	s = (char *)str;
-	w.f_dquote = 0;
-	w.f_quote = 0;
-	w.nwords = 1;
-	if (!*s)
-		return (0);
-	while (s && *s)
-	{
-		set_quotes_flags(*s, &w.f_dquote, &w.f_quote);
-		if (*s != c)
-			s++;
-		else if ((*s == c) && w.f_dquote && ft_strchr(s, '\"'))
-			s += ft_strchr(s, '\"') - s;
-		else if ((*s == c) && w.f_quote && ft_strchr(s, '\''))
-			s += ft_strchr(s, '\'') - s;
-		else
-		{
-			w.nwords++;
-			while (*s == c)
-				s++;
-		}
-	}
-	return (w.nwords);
-}
-
-static int	check_pipes_syntax_error(char *str, t_data *data)
-{
-	int	i;
-
-	i = ft_strlen(str);
-	if (!str)
-	   return (1);
-	if (i == 0)
-		return (0);
-	if (i == 1)
-	{
-		if (*str == '|')
-		{
-			syntax_error(str, data);
-			return (1);
-		}
-	}
-	i--;
-	while (str && str[i] && str[i] == ' ')
-		i--;
-
-	if (str[i] == '|' && str[i - 1] == '|')
-	{
-		printf("%c, %c\n", *(str + i), str[i - 1]);
-		syntax_error(str + i, data);
-		return (1);
-	}
+	if (s[w->i] != c)
+		w->i++;
+	else if ((s[w->i] == c) && w->f_dquote && ft_strchr(s + w->i, '\"'))
+		w->i += ft_strchr(s + w->i, '\"') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && ft_strchr(s + w->i, '\''))
+		w->i += ft_strchr(s + w->i, '\'') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && !(ft_strchr(s + w->i, '\'')))
+		w->f_quote = 0;
+	else if ((s[w->i] == c) && w->f_dquote && !(ft_strchr(s + w->i, '\"')))
+		w->f_dquote = 0;
 	else
 		return (0);
-	return (0);
+	return (1);
 }
 
-static void	add_pipe_to_list(t_files **sep_pipes, char *s, int size, int last, t_data *data)
+static char	**save_words(char *str, t_data *data, char c)
 {
-	char			*trimmed;
-	char			*raw_pipe;
-
-	raw_pipe = 0;
-	trimmed = 0;
-	if (check_pipes_syntax_error(s, data) == 1)
-		return ;
-	raw_pipe = ft_substr(s, 0, size);
-	trimmed = ft_strtrim(raw_pipe, "| ");
-	if (last == 0 && ft_strlen(trimmed) == 0)
-		syntax_error("|", data);
-	else if (last == 1 && ft_strlen(trimmed) == 0 && data->syntax_error == 0)
-	{
-		free(trimmed);
-		trimmed = get_cmd_from_user(data);
-	}
-	ft_lstadd_back_files(sep_pipes, ft_lstnew(ft_strdup(trimmed)));
-	free(raw_pipe);
-	free(trimmed);
-}
-
-static char **save_words(char *str, t_data *data, char c)
-{
-	t_words_number	w;
+	t_pipe_sep_vars	*w;
 	char			*s;
-	int				i;
-	t_files			**separated_pipes;
 
-	i = 0;
 	s = (char *)str;
-	w.f_dquote = 0;
-	w.f_quote = 0;
-	separated_pipes = malloc(sizeof(t_files *));
-	separated_pipes[0] = 0;
-	while (s && s[i] && data->syntax_error == 0)
+	w = initialise_save_words_vars();
+	while (s && s[w->i] && data->syntax_error == 0)
 	{
-		set_quotes_flags(s[i], &w.f_dquote, &w.f_quote);
-		if (s[i] != c)
-			i++;
-		else if ((s[i] == c) && w.f_dquote && ft_strchr(s + i, '\"'))
-			i += ft_strchr(s + i, '\"') - (s + i);
-		else if ((s[i] == c) && w.f_quote && ft_strchr(s + i, '\''))
-			i += ft_strchr(s + i, '\'') - (s + i);
-		else if ((s[i] == c) && w.f_quote && !(ft_strchr(s + i, '\'')))
-			w.f_quote = 0;
-		else if ((s[i] == c) && w.f_dquote && !(ft_strchr(s + i, '\"')))
-			w.f_dquote = 0;
-		else
+		set_quotes_flags(s[w->i], &w->f_dquote, &w->f_quote);
+		if (set_cut_sizes(w, s, c) == 0)
 		{
-			w.nwords++;
-			while (s[i] == c)
-				i++;
-			add_pipe_to_list(separated_pipes, s, i, 0, data);
-			s += i;
-			i = 0;
+			while (s[w->i] == c)
+				w->i++;
+			add_pipe(w->separated_pipes, s, w, data);
+			s += w->i;
+			w->i = 0;
 		}
 	}
 	if (s && data->syntax_error == 0)
-		add_pipe_to_list(separated_pipes, s, ft_strlen(s), 1, data);
-	return (from_list_to_double_char(separated_pipes));
+	{	
+		w->last = 1;
+		w->i = ft_strlen(s);
+		add_pipe(w->separated_pipes, s, w, data);
+	}
+	free(w);
+	return (from_list_to_double_char(w->separated_pipes));
 }
 
 int	get_char_pos_final_quotes(char *str)
@@ -180,6 +88,16 @@ int	get_char_pos_final_quotes(char *str)
 	return (i);
 }
 
+static char	**copy_word_to_double_ptr(char *str)
+{
+	char	**ptr;
+
+	ptr = malloc(sizeof(char *) * 2);
+	ptr[0] = ft_strdup(str);
+	ptr[1] = 0;
+	return (ptr);
+}
+
 char	**ft_split_pipes(char const *s, t_data *data)
 {
 	int		nwords;
@@ -194,31 +112,28 @@ char	**ft_split_pipes(char const *s, t_data *data)
 		aux = str;
 		if (str)
 		{
-			nwords = get_nwords(str, '|');
+			nwords = get_nwords(aux, '|');
 			if (nwords > 1 && str && *str)
-				ptr = save_words(aux, data, '|');
+				ptr = save_words(str, data, '|');
 			else if (nwords == 1)
-			{
-				ptr = malloc(sizeof(char *) * 2);
-				ptr[0] = ft_strdup(str);
-				ptr[1] = 0;
-			}
+				ptr = copy_word_to_double_ptr(str);
 			free(str);
 			return (ptr);
 		}
 	}
 	return (0);
 }
-
+/*
 int	main(void)
 {
 	t_data	*data;
 	char	**result;
 	int		i;
-	char	*str = " |";
-//	char	*str = " echo|ls|  ";
+//	char	*str = "     | echo ";
+//	char	*str = "echo hola";
+	char	*str = " echo|ls|";
 //	char	*str = "\"|\" echo  | \"\" echo adios | echo tres";
-//	char	*str = "\"|\" echo  | \"\" echo adios | echo tres";
+//	char	*str = "\"| echo \' |\' \"\" echo adios | echo tres";
 	//char	*str = "echo  |\" \"\" echo adios | echo tres";
 
 	i = 0;
@@ -237,5 +152,5 @@ int	main(void)
 	}
 	free_data(data);
 	free_double_string(result);
-//	system("leaks a.out");
-}
+	system("leaks a.out");
+}*/
