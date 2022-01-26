@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 10:41:35 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 13:19:50 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	free_double_string(char **str)
 	int	i;
 
 	i = 0;
+	if (!str || !*str)
+		return ;
 	while (str[i])
 	{
 		ft_bzero(str[i], ft_strlen(str[i]));
