@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 19:17:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 18:19:15 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,15 +50,18 @@ void	check_heredocs(t_data *data)
 	cmd = *(data->cmds);
 	while (cmd)
 	{
-		f = *(cmd->stdins);
-		while (f)
+		if (cmd->stdins && *(cmd->stdins))
 		{
-			if (f->append == 1)
+			f = *(cmd->stdins);
+			while (f)
 			{
-				run_heredoc_2(&f, i);
-				i++;
+				if (f->append == 1)
+				{
+					run_heredoc_2(&f, i);
+					i++;
+				}
+				f = f->next;
 			}
-			f = f->next;
 		}
 		cmd = cmd->next;
 	}
@@ -79,7 +82,7 @@ int	execute_commands(t_data *data)
 	{
 		if (i == 0)
 			exit_builtin(data, cmd);
-		if (check_outside_builtins(data, cmd) == 0)
+		if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 1 && check_outside_builtins(data, cmd) == 0)
 		{
 			pid = fork();
 			if (pid == 0)

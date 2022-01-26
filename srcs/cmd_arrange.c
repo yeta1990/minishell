@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 19:06:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 18:17:45 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,5 +75,7 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 	args = split_quote_sensitive(raw_cmd, data);
 	if (!(is_raw_cmd(args[0], cmd)))
 		is_cmd(args[0], cmd, data);
+	if (!args)
+		printf("eoooooooooo");
 	return (args);
 }
