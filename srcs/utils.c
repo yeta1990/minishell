@@ -6,13 +6,13 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/25 16:04:28 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:29:00 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_nwords(char const *s, char c)
+static int	get_nwords_2(char const *s, char c)
 {
 	int	nwords;
 
@@ -69,7 +69,7 @@ char	**ft_split(char const *s, char c)
 		str = ft_strtrim(s, d);
 		if (str)
 		{
-			nwords = get_nwords(str, c);
+			nwords = get_nwords_2(str, c);
 			ptr = ft_calloc((nwords + 1), sizeof(char *));
 			if (ptr)
 				save_words(ptr, str, c, nwords);

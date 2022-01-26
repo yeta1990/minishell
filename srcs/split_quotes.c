@@ -6,77 +6,56 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/25 18:08:57 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:25:30 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static void	set_quotes_flags(char c, int *f_dquote, int *f_quote)
+int	set_cut_sizes(t_pipe_sep_vars *w, char *s, char c)
 {
-	if ((c == '"') && *f_dquote == 0 && *f_quote == 0)
-		*f_dquote = 1;
-	else if ((c == '"') && *f_dquote == 1)
-		*f_dquote = 0;
-	if ((c == '\'') && *f_quote == 0 && *f_dquote == 0)
-		*f_quote = 1;
-	else if ((c == '\'') && *f_quote == 1)
-		*f_quote = 0;
+	if (s[w->i] != c)
+		w->i++;
+	else if ((s[w->i] == c) && w->f_dquote && ft_strchr(s + w->i, '\"'))
+		w->i += ft_strchr(s + w->i, '\"') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && ft_strchr(s + w->i, '\''))
+		w->i += ft_strchr(s + w->i, '\'') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && !(ft_strchr(s + w->i, '\'')))
+		w->f_quote = 0;
+	else if ((s[w->i] == c) && w->f_dquote && !(ft_strchr(s + w->i, '\"')))
+		w->f_dquote = 0;
+	else
+		return (0);
+	return (1);
 }
 
-static int	get_nwords(char const *str, char c)
+static char	**save_words(char *str, t_data *data, char c)
 {
-	t_words_number	w;
+	t_pipe_sep_vars	*w;
 	char			*s;
 
 	s = (char *)str;
-	w.f_dquote = 0;
-	w.f_quote = 0;
-	w.nwords = 1;
-	if (!*s)
-		return (0);
-	while (s && *s)
+	w = initialise_save_words_vars();
+	while (s && s[w->i] && data->syntax_error == 0)
 	{
-		set_quotes_flags(*s, &w.f_dquote, &w.f_quote);
-		if (*s != c)
-			s++;
-		else if ((*s == c) && ((w.f_dquote && ft_strchr(s, '\"'))
-				|| (w.f_quote && ft_strchr(s, '\''))))
-			s += ft_strchr(s, '\"') - s;
-		else
+		set_quotes_flags(s[w->i], &w->f_dquote, &w->f_quote);
+		if (set_cut_sizes(w, s, c) == 0)
 		{
-			w.nwords++;
-			while (*s == c)
-				s++;
+			while (s[w->i] == c)
+				w->i++;
+			add_pipe(w->separated_pipes, s, w, data);
+			s += w->i;
+			w->i = 0;
 		}
 	}
-	return (w.nwords);
-}
-
-static void	save_words(char **ptr, char *aux, int nwords, t_data *data)
-{
-	int		i;
-	int		j;
-	int		len;
-
-	i = 0;
-	while (aux && *aux && data->syntax_error == 0)
+	if (s && data->syntax_error == 0)
 	{
-		j = 0;
-		len = get_char_pos_final_quotes(aux + len);
-		if (has_closed_quotes(aux + len) == 0)
-		{
-			ptr[i++] = search_next_pipe(&len, aux, data);
-			while (aux && aux[j + len] && aux[j + len] == ' ')
-				j++;
-			if (data->syntax_error == 1)
-				break ;
-			if (search_after_pipe(len, j, aux, data) == 1)
-				ptr[i++] = get_cmd_from_user(data);
-			aux += (len + j);
-		}
+		w->last = 1;
+		w->i = ft_strlen(s);
+		add_pipe(w->separated_pipes, s, w, data);
 	}
-	ptr[nwords] = 0;
+	free(w);
+	return (from_list_to_double_char(w->separated_pipes));
 }
 
 int	get_char_pos_final_quotes(char *str)
@@ -107,6 +86,16 @@ int	get_char_pos_final_quotes(char *str)
 	return (i);
 }
 
+static char	**copy_word_to_double_ptr(char *str)
+{
+	char	**ptr;
+
+	ptr = malloc(sizeof(char *) * 2);
+	ptr[0] = ft_strdup(str);
+	ptr[1] = 0;
+	return (ptr);
+}
+
 char	**ft_split_pipes(char const *s, t_data *data)
 {
 	int		nwords;
@@ -114,21 +103,18 @@ char	**ft_split_pipes(char const *s, t_data *data)
 	char	*str;
 	char	*aux;
 
+	ptr = 0;
 	if (s)
 	{
 		str = ft_strdup(s);
 		aux = str;
 		if (str)
 		{
-			nwords = get_nwords(str, '|');
-			ptr = ft_calloc((nwords + 1), sizeof(char *));
-			if (ptr && nwords == 1)
-			{
-				ptr[0] = ft_strdup(s);
-				ptr[1] = 0;
-			}
-			else if (ptr && nwords > 0 && str && *str)
-				save_words(ptr, aux, nwords, data);
+			nwords = get_nwords(aux, '|');
+			if (nwords > 1 && str && *str)
+				ptr = save_words(str, data, '|');
+			else if (nwords == 1)
+				ptr = copy_word_to_double_ptr(str);
 			free(str);
 			return (ptr);
 		}
