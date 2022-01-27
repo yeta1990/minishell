@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:22:08 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 12:54:21 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,18 @@ typedef struct s_split_cmds_vars
 	int		forward;
 }	t_split_cmds_vars;
 
+typedef struct s_expansor_vars
+{
+	char	*a;
+	char	*exp;
+	char	*aux_exp;
+	char	*aux_exp2;
+	char	*aux_exp3;
+	char	*tail;
+	int		i;
+	int		j;
+	int		z;		
+}	t_expansor_vars;
 
 void	handler_c(int a);
 
