@@ -78,7 +78,9 @@ void	split_ops_with_quotes(t_split_cmds_vars *v, t_data *data)
 char	**split_quote_sensitive(char *str, t_data *data)
 {
 	t_split_cmds_vars	*v;
+	t_files				*full_strings;
 
+	full_strings = 0;
 	v = initialise_split_cmds_vars(str);
 	while (v->aux && *v->aux)
 	{
@@ -91,6 +93,7 @@ char	**split_quote_sensitive(char *str, t_data *data)
 			v->aux++;
 	}
 	free(v->r);
+	full_strings = v->full_strings;
 	free(v);
-	return (from_list_to_double_char(v->full_strings));
+	return (from_list_to_double_char(full_strings));
 }
