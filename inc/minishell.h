@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 17:07:25 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:43:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,6 +210,7 @@ int		is_valid_infile(char *str);
 void	syntax_error(char *wrong_portion, t_data *data);
 int		parse_check(char *str);
 int		cd_error(char *filename, int errn, t_data *data);
+int		export_error(char *filename, t_data *data);
 
 //envp.c
 int		get_env_size(char **envp);
@@ -230,7 +231,7 @@ int		check_outside_builtins(t_data *data, t_cmd *cmd);
 int		echo_flag(char **cmd_complete);
 void	echo_builtin(t_cmd *cmd);
 void	update_env(t_data *data, int index_exp, int i);
-void	export_builtin(t_data *data);
+int		export_builtin(t_data *data, t_cmd *cmd);
 void	unset_builtin(t_data *data);
 
 //builtins3.c

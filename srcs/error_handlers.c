@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 17:15:59 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:44:20 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,6 +63,15 @@ int	cd_error(char *filename, int errn, t_data *data)
 		data->last_code = 126;
 		return (126);
 	}
+	data->last_code = 1;
+	return (1);
+}
+
+int	export_error(char *filename, t_data *data)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	write(2, filename, ft_strlen(filename));
+	ft_putstr_fd("': not a valid identifier\n", 2);
 	data->last_code = 1;
 	return (1);
 }

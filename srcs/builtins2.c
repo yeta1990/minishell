@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 11:46:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:47:25 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,13 +101,40 @@ void	update_env(t_data *data, int index_exp, int i)
 	}
 }
 
-void	export_builtin(t_data *data)
+//export errors
+//si empieza por no alpha, error
+//si contiene no alphanum, error
+//si contiene un '$' (es decir, que el expander haya dejado la '$' tal cual, también error
+
+int	export_error_checker(t_data *data, t_cmd *cmd)
+{
+	int	i;
+	int	j;
+
+	i = 1;
+	while (cmd->cmd_complete[i])
+	{
+		j = 0;
+		if (ft_strlen(cmd->cmd_complete[i]) > 0 && ft_isalpha(cmd->cmd_complete[i][0]) == 0)
+			return (export_error(cmd->cmd_complete[i], data));
+		while (cmd->cmd_complete[i][j])
+		{
+			if (ft_isalnum(cmd->cmd_complete[i][j]) == 0)
+				return (export_error(cmd->cmd_complete[i], data));
+			j++;
+		}
+		i++;
+	}
+	return (0);
+}
+
+int	export_builtin(t_data *data, t_cmd *cmd)
 {
 	int		i;
 	int		index_exp;
 	
 	i = 0;
-	if (!data->cmds[0]->cmd_complete[1])
+	if (!cmd->cmd_complete[1] || (cmd->cmd_complete[1] && ft_strlen(cmd->cmd_complete[1]) == 0))
 	{
 		while (data->exp[i])
 		{
@@ -115,18 +142,23 @@ void	export_builtin(t_data *data)
 			ft_putstr_fd(data->exp[i++], 1);
 			ft_putstr_fd("\n", 1);
 		}
-		return ;
+		data->last_code = 0;
+		return (0);
 	}
-	while (data->cmds[0]->cmd_complete[++i])
+	if (export_error_checker(data, cmd))
+		return (1);
+	while (cmd->cmd_complete[++i])
 	{
-		index_exp = search_word(data->exp, data->cmds[0]->cmd_complete[i]);
-		if (ft_strchr(data->cmds[0]->cmd_complete[i], '='))
+		index_exp = search_word(data->exp, cmd->cmd_complete[i]);
+		if (ft_strchr(cmd->cmd_complete[i], '='))
 			update_env(data, index_exp, i);
 		else
 			if (index_exp < 0)
 				data->exp = add_entry(data->exp,
-						ft_strdup(data->cmds[0]->cmd_complete[i]));
+						ft_strdup(cmd->cmd_complete[i]));
 	}
+	data->last_code = 0;
+	return (0);
 }
 
 void	unset_builtin(t_data *data)
