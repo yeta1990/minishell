@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:09:36 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:13:08 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 12:34:21 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,79 +98,79 @@ char	*expansor(char **arg, int type, t_data *data)
 	return (exp);
 }
 
+t_split_cmds_vars	*initialise_split_cmds_vars(char *str)
+{
+	t_split_cmds_vars	*v;
+
+	v = malloc(sizeof(t_split_cmds_vars));
+	v->subs = 0;
+	v->trimmed = 0;
+	v->expanded = 0;
+	v->r = ft_calloc((ft_strlen(str) * 50) + 1, sizeof(char));
+	v->full_strings = malloc(sizeof(t_files *));
+	v->full_strings[0] = 0;
+	v->aux = str;
+	v->result = v->r;
+	v->forward = 0;
+	return (v);
+}
+
 char	**split_quote_sensitive(char *str, t_data *data)
 {
-	char	*aux;
-	t_files	**full_strings;
-	int		flag;
-	char	*result;
-	char	*r;
-	char	*trimmed;
-	char	*subs;
-	char	*expanded;
-	int	forward;
+	t_split_cmds_vars	*v;
 
-	subs = 0;
-	trimmed = 0;
-	expanded = 0;
-	r = ft_calloc((ft_strlen(str)  * 50)+ 1, sizeof(char));
-	full_strings = malloc(sizeof(t_files *));
-	full_strings[0] = 0;
-	aux = str;
-	result = r;
-	forward = 0;
-	while (aux && *aux)
+	v = initialise_split_cmds_vars(str);
+	while (v->aux && *v->aux)
 	{
-		flag = what_flag(*aux);
-		if (flag == 0)
+		v->flag = what_flag(*v->aux);
+		if (v->flag == 0)
 		{
-			while (aux && *aux && *aux == ' ')
-				aux++;
-			forward = get_first_coming_separator(aux);
-			subs = ft_substr(aux, 0, forward - 1);
-			expanded = expansor(&subs, 0, data);
-			ft_memcpy(result, expanded, ft_strlen(expanded));
-			aux += forward - 1;
-			result += ft_strlen(expanded);
-			free(subs);
-			free(expanded);
- 			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
+			while (v->aux && *v->aux && *v->aux == ' ')
+				v->aux++;
+			v->forward = get_first_coming_separator(v->aux);
+			v->subs = ft_substr(v->aux, 0, v->forward - 1);
+			v->expanded = expansor(&v->subs, 0, data);
+			ft_memcpy(v->result, v->expanded, ft_strlen(v->expanded));
+			v->aux += v->forward - 1;
+			v->result += ft_strlen(v->expanded);
+			free(v->subs);
+			free(v->expanded);
+			if (v->aux && ((*v->aux && *v->aux == ' ') || ft_strlen(v->aux) == 0))
 			{
-				result = r;
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				ft_bzero(result, ft_strlen(result));
+				v->result = v->r;
+				ft_lstadd_back_files(v->full_strings, ft_lstnew(ft_strdup(v->result)));
+				ft_bzero(v->result, ft_strlen(v->result));
 			}
 		}
-		else if (flag != 0)
+		else if (v->flag != 0)
 		{
-			forward = get_next_separator(aux + 1, what_quotes(flag));
-			subs = ft_substr(aux, 0, forward + 1);
-			trimmed = ft_strtrim(subs, what_quotes_str(flag));
-			if (flag == 1)
-				expanded = ft_strdup(trimmed);
-			else if (flag == 2)
-				expanded = expansor(&trimmed, 2, data);
-			ft_memcpy(result, expanded, ft_strlen(expanded));
-			result += ft_strlen(expanded);
-			free(expanded);
-			free(subs);
-			free(trimmed);
-			if (get_next_separator(aux + 1, what_quotes(flag)) == (int) ft_strlen(aux + 1) + 1)
-				aux += forward;
+			v->forward = get_next_separator(v->aux + 1, what_quotes(v->flag));
+			v->subs = ft_substr(v->aux, 0, v->forward + 1);
+			v->trimmed = ft_strtrim(v->subs, what_quotes_str(v->flag));
+			if (v->flag == 1)
+				v->expanded = ft_strdup(v->trimmed);
+			else if (v->flag == 2)
+				v->expanded = expansor(&v->trimmed, 2, data);
+			ft_memcpy(v->result, v->expanded, ft_strlen(v->expanded));
+			v->result += ft_strlen(v->expanded);
+			free(v->expanded);
+			free(v->subs);
+			free(v->trimmed);
+			if (get_next_separator(v->aux + 1, what_quotes(v->flag)) == (int) ft_strlen(v->aux + 1) + 1)
+				v->aux += v->forward;
 			else
-				aux += forward + 1;
- 			if (aux && ((*aux && *aux == ' ') || ft_strlen(aux) == 0))
+				v->aux += v->forward + 1;
+			if (v->aux && ((*v->aux && *v->aux == ' ') || ft_strlen(v->aux) == 0))
 			{
-				result = r;
-				ft_lstadd_back_files(full_strings, ft_lstnew(ft_strdup(result)));
-				ft_bzero(result, ft_strlen(result));
+				v->result = v->r;
+				ft_lstadd_back_files(v->full_strings, ft_lstnew(ft_strdup(v->result)));
+				ft_bzero(v->result, ft_strlen(v->result));
 			}
-
-
 		}
-		while (aux && *aux && *aux == ' ')
-			aux++;
+		while (v->aux && *v->aux && *v->aux == ' ')
+			v->aux++;
 	}
-	free(r);
-	return (from_list_to_double_char(full_strings));
+	free(v->r);
+	free(v);
+	return (from_list_to_double_char(v->full_strings));
 }

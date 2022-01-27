@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:12:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 12:22:08 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,19 @@ typedef struct s_pipe_sep_vars
 	int		last;
 	t_files	**separated_pipes;
 }	t_pipe_sep_vars;
+
+typedef struct s_split_cmds_vars
+{
+	char	*aux;
+	t_files	**full_strings;
+	int		flag;
+	char	*result;
+	char	*r;
+	char	*trimmed;
+	char	*subs;
+	char	*expanded;
+	int		forward;
+}	t_split_cmds_vars;
 
 
 void	handler_c(int a);
