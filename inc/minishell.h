@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 18:43:28 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:54:14 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -232,7 +232,7 @@ int		echo_flag(char **cmd_complete);
 void	echo_builtin(t_cmd *cmd);
 void	update_env(t_data *data, int index_exp, int i);
 int		export_builtin(t_data *data, t_cmd *cmd);
-void	unset_builtin(t_data *data);
+int		unset_builtin(t_data *data, t_cmd *cmd);
 
 //builtins3.c
 int		search_word_del(char **arr, char *str);

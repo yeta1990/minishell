@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 18:22:44 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:55:05 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,6 +103,8 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 		env_builtin(data);
 	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0)
 		export_builtin(data, cmd);
+	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)
+		unset_builtin(data, cmd);
 	else if (ft_strcmp("echo", cmd->cmd_complete[0]) == 0)
 		echo_builtin(cmd);
 	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
@@ -123,8 +125,8 @@ int	check_outside_builtins(t_data *data, t_cmd *cmd)
 		return (cd_bultin(data, cmd));
 	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0 && data->num_cmds == 1)
 		return (export_builtin(data, cmd));
-	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)
-		unset_builtin(data);
+	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0 && data->num_cmds == 1)
+		return (unset_builtin(data, cmd));
 	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 		exit_builtin(data, cmd);
 	else

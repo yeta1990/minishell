@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 18:47:25 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 18:55:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,22 +161,24 @@ int	export_builtin(t_data *data, t_cmd *cmd)
 	return (0);
 }
 
-void	unset_builtin(t_data *data)
+int	unset_builtin(t_data *data, t_cmd *cmd)
 {
 	int		index_env;
 	int		index_exp;
 	int		i;
 
 	i = 1;
-	while (data->cmds[0]->cmd_complete[i])
+	if (export_error_checker(data, cmd))
+		return (1);
+	while (cmd->cmd_complete[i])
 	{
-		index_env = search_word_del(data->env, data->cmds[0]->cmd_complete[i]);
-		index_exp = search_word_del(data->exp, data->cmds[0]->cmd_complete[i]);
+		index_env = search_word_del(data->env, cmd->cmd_complete[i]);
+		index_exp = search_word_del(data->exp, cmd->cmd_complete[i]);
 		if (index_exp)
 			data->exp = del_entry(data->exp, index_exp);
 		if (index_env)
 			data->env = del_entry(data->env, index_env);
 		i++;
 	}
-	i = 0;
+	return (0);
 }
