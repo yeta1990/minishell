@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 18:30:20 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 17:40:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,8 +82,16 @@ int	execute_commands(t_data *data)
 	{
 		if (i == 0)
 			exit_builtin(data, cmd);
-		if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 0 && check_outside_builtins(data, cmd) == 0)
+		child_status = check_outside_builtins(data, cmd);
+		if (child_status != -100)
 		{
+			cmd = cmd->next;
+			i++;
+			continue ;
+		}
+		else if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 0)
+		{
+			printf("eo");
 			pid = fork();
 			if (pid == 0)
 			{
@@ -118,7 +126,7 @@ int	execute_commands(t_data *data)
 		;
 	if (WIFEXITED(child_status))
 		return (WEXITSTATUS(child_status));
-	else if (WIFSIGNALED(child_status))
+	if (WIFSIGNALED(child_status))
 		if (WTERMSIG(child_status) == SIGSEGV)
 			return (transform_error_code(0, 11));
 	return (child_status);

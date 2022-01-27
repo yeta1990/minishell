@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:59:59 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 17:39:38 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,26 +22,30 @@ void	pwd_builtin(void)
 	free(buf);
 }
 
-void	cd_bultin(t_data *data)
+int	cd_bultin(t_data *data, t_cmd *cmd)
 {
 	char	*old_pwd;
 	char	*buf;
 	int		i;
 
+
 	old_pwd = getcwd(NULL, MAXPATHLEN);
-	chdir(data->cmds[0]->cmd_complete[1]);
+	i = chdir(cmd->cmd_complete[1]);
+	if (i == -1)
+	{
+		free(old_pwd);
+		return (cd_error(cmd->cmd_complete[1], errno, data));
+	}
 	buf = getcwd(NULL, MAXPATHLEN);
-	ft_putstr_fd(buf, 1);
-	ft_putstr_fd("\n", 1);
 	i = -1;
 	while (data->env[++i])
 	{
-		if (data->env[i][0] == 'P' && data->env[i][1] == 'W' && data->env[i][2] == 'D' && data->env[i][3] == '=')
+		if (ft_strncmp("PWD=", data->env[i], 4) == 0)
 		{
 			free(data->env[i]);
 			data->env[i] = ft_strjoin("PWD=", buf);
 		}
-		else if (data->env[i][0] == 'O' && data->env[i][1] == 'L' && data->env[i][2] == 'D' && data->env[i][3] == 'P' && data->env[i][4] == 'W' && data->env[i][5] == 'D' && data->env[i][6] == '=')
+		else if (ft_strncmp("OLDPWD=", data->env[i], 7) == 0)
 		{
 			free(data->env[i]);
 			data->env[i] = ft_strjoin("OLDPWD=", old_pwd);
@@ -49,6 +53,7 @@ void	cd_bultin(t_data *data)
 	}
 	free(old_pwd);
 	free(buf);
+	return (0);
 }
 
 void	env_builtin(t_data *data)
@@ -64,7 +69,7 @@ void	env_builtin(t_data *data)
 	}
 }
 
-void	exit_builtin(t_data *data, t_cmd *cmd)
+int	exit_builtin(t_data *data, t_cmd *cmd)
 {
 	int	code;
 
@@ -81,6 +86,7 @@ void	exit_builtin(t_data *data, t_cmd *cmd)
 			exit(code);
 		}
 	}
+	return (code);
 }
 
 int	check_builtins(t_data *data, t_cmd *cmd)
@@ -88,7 +94,9 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 	int	is_builting;
 
 	is_builting = 1;
-	if (ft_strcmp("pwd", cmd->cmd_complete[0]) == 0)
+	if (ft_strcmp("cd", cmd->cmd_complete[0]) == 0)
+		cd_bultin(data, cmd);
+	else if (ft_strcmp("pwd", cmd->cmd_complete[0]) == 0)
 		pwd_builtin();
 	else if ((ft_strcmp("env", cmd->cmd_complete[0]) == 0)
 		&& (!cmd->cmd_complete[1]))
@@ -110,9 +118,9 @@ int	check_outside_builtins(t_data *data, t_cmd *cmd)
 
 	is_builting = 1;
 	if (!cmd->cmd_complete[0])
-		return (1);
-	if (ft_strcmp("cd", cmd->cmd_complete[0]) == 0)
-		cd_bultin(data);
+		return (0);
+	if (ft_strcmp("cd", cmd->cmd_complete[0]) == 0 && data->num_cmds == 1)
+		return (cd_bultin(data, cmd));
 	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0 && cmd->cmd_complete[1])
 		export_builtin(data);
 	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)
@@ -121,5 +129,5 @@ int	check_outside_builtins(t_data *data, t_cmd *cmd)
 		exit_builtin(data, cmd);
 	else
 		is_builting = 0;
-	return (is_builting);
+	return (-100);
 }

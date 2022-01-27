@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 14:14:27 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 17:07:25 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,6 +209,7 @@ int		isalnum_string(char *str);
 int		is_valid_infile(char *str);
 void	syntax_error(char *wrong_portion, t_data *data);
 int		parse_check(char *str);
+int		cd_error(char *filename, int errn, t_data *data);
 
 //envp.c
 int		get_env_size(char **envp);
@@ -219,9 +220,9 @@ char	*export_join(char *str);
 
 //builtins1.c
 void	pwd_builtin(void);
-void	cd_bultin(t_data *data);
+int		cd_bultin(t_data *data, t_cmd *cmd);
 void	env_builtin(t_data *data);
-void	exit_builtin(t_data *data, t_cmd *cmd);
+int		exit_builtin(t_data *data, t_cmd *cmd);
 int		check_builtins(t_data *data, t_cmd *cmd);
 int		check_outside_builtins(t_data *data, t_cmd *cmd);
 

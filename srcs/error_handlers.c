@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 11:23:07 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 17:15:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,27 @@ int	transform_error_code(char *cmd, int err)
 		perror("minishell");
 		return (1);
 	}
+}
+
+int	cd_error(char *filename, int errn, t_data *data)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	write(2, filename, ft_strlen(filename));
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errn), 2);
+	ft_putstr_fd("\n", 2);
+	if (errn == 2)
+	{
+		data->last_code = 127;
+		return (127);
+	}
+	if (errn == 13)
+	{
+		data->last_code = 126;
+		return (126);
+	}
+	data->last_code = 1;
+	return (1);
 }
 
 void	file_error(char *filename, int errn)
