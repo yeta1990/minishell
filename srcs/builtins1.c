@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 18:55:05 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 19:09:58 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,7 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)
 		unset_builtin(data, cmd);
 	else if (ft_strcmp("echo", cmd->cmd_complete[0]) == 0)
-		echo_builtin(cmd);
+		echo_builtin(cmd, data);
 	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 		exit_builtin(data, cmd);
 	else

@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:09:36 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:52:51 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 19:06:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	split_ops_with_quotes(t_split_cmds_vars *v, t_data *data)
 char	**split_quote_sensitive(char *str, t_data *data)
 {
 	t_split_cmds_vars	*v;
-	t_files				*full_strings;
+	t_files				**full_strings;
 
 	full_strings = 0;
 	v = initialise_split_cmds_vars(str);

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 18:54:14 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 19:09:37 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -229,7 +229,7 @@ int		check_outside_builtins(t_data *data, t_cmd *cmd);
 
 //builtins2.c
 int		echo_flag(char **cmd_complete);
-void	echo_builtin(t_cmd *cmd);
+void	echo_builtin(t_cmd *cmd, t_data *data);
 void	update_env(t_data *data, int index_exp, int i);
 int		export_builtin(t_data *data, t_cmd *cmd);
 int		unset_builtin(t_data *data, t_cmd *cmd);
