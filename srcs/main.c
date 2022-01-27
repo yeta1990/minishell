@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 22:06:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 11:56:59 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ int	main(int argc, char **argv, char **envp)
 				add_history(str);
 			else
 			{
+				printf("ey\n");
 				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
 				if (custom_str)
 				{
