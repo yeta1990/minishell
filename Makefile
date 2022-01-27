@@ -9,7 +9,8 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/error_handlers.c srcs/list_utils_2.c srcs/ft_itoa.c \
 		  srcs/ft_atoi.c srcs/quote_parser.c srcs/ft_isalnum.c \
 		  srcs/ft_isalpha.c srcs/ft_isdigit.c srcs/utils_4.c \
-		  srcs/split_quotes_utils.c srcs/get_cmd_from_user.c
+		  srcs/split_quotes_utils.c srcs/get_cmd_from_user.c \
+		  srcs/quote_parser_utils.c
 
 INCS	= inc/ 
 

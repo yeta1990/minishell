@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 15:28:27 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 12:12:53 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -212,5 +212,12 @@ int		search_word_del(char **arr, char *str);
 int		search_word(char **arr, char *str);
 char	**add_entry(char **old_arr, char *new_str);
 char	**del_entry(char **old_arr, int index);
+
+//quote_parser_utils.c
+int		get_next_separator(char *str, char sep);
+int		get_first_coming_separator(char *str);
+char	what_quotes(int type);
+char	*what_quotes_str(int type);
+int		what_flag(char c);
 
 #endif
