@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:54:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/27 14:14:27 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -244,5 +244,8 @@ int		get_first_coming_separator(char *str);
 char	what_quotes(int type);
 char	*what_quotes_str(int type);
 int		what_flag(char c);
+
+//expansor_2.c
+void	expansor_advance(t_expansor_vars *v);
 
 #endif
