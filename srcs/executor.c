@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:14:37 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/31 11:23:13 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,10 +67,16 @@ void	check_heredocs(t_data *data)
 int	execute_commands(t_data *data)
 {	
 	int		i;
-	pid_t	pid;
+	pid_t	pid[data->num_cmds];
 	t_cmd	*cmd;
 	int		child_status;
+	int		first_sgl;
+	int		last_sgl;
+	int		code;
 
+	code = 0;
+	first_sgl = 0;
+	last_sgl = 0;
 	cmd = *(data->cmds);
 	i = 0;
 	create_pipes(data->cmds);
@@ -79,10 +85,11 @@ int	execute_commands(t_data *data)
 	{
 		if (i == 0)
 			exit_builtin(data, cmd);
-		if (check_outside_builtins(data, cmd) == 0)
+		child_status = check_outside_builtins(data, cmd);
+		if (child_status == -1)
 		{
-			pid = fork();
-			if (pid == 0)
+			pid[i] = fork();
+			if (pid[i] == 0)
 			{
 				if (i < data->num_cmds - 1)
 				{
@@ -110,13 +117,28 @@ int	execute_commands(t_data *data)
 		cmd = cmd->next;
 		i++;
 	}
+	i = 0;
 	close_pipes(data->cmds);
 	while (wait(&child_status) != -1)
-		;
-	if (WIFEXITED(child_status))
+	{
+		if (i == 0)
+		{
+			if (WIFEXITED(child_status))
+				code = WEXITSTATUS(child_status);
+			else if (WIFSIGNALED(child_status) && (WTERMSIG(child_status) == SIGINT))
+				first_sgl = 1;
+		}
+		i++;
+	}
+	if ((WIFSIGNALED(child_status) && (WTERMSIG(child_status) == SIGINT)))
+		last_sgl = 1;
+	if (!first_sgl && last_sgl)
+		return (code);
+	else if (first_sgl)
+		return (130);
+	else if (WIFEXITED(child_status))
 		return (WEXITSTATUS(child_status));
-	else if (WIFSIGNALED(child_status))
-		if (WTERMSIG(child_status) == SIGSEGV)
-			return (transform_error_code(0, 11));
+	else if (WTERMSIG(child_status) == SIGSEGV)
+		return (transform_error_code(0, 11));
 	return (child_status);
 }

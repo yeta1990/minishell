@@ -6,13 +6,15 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 09:48:21 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/01/26 13:11:47 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 #include <sys/wait.h>
+
+t_data	data;
 
 void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 {
@@ -82,9 +84,10 @@ void	check_leaks(void)
 	system("leaks minishell");
 }
 
-void	handler_c(int a)
+void	handler_c(int signo)
 {
-	a = 0;
+	signo++;
+	data.last_code = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -94,13 +97,13 @@ void	handler_c(int a)
 int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
-	t_data				data;
 	char				**instructions;
 	int					i;
 	struct sigaction	ctrl_c;
 
-	ctrl_c.sa_handler = &handler_c;
+	ctrl_c.sa_handler = (void *)handler_c;
 	ctrl_c.sa_flags = 0;
+	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
 	if (argc == 1)
 		help_usage();

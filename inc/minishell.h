@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 10:10:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 10:42:29 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ typedef struct s_data
 	int					syntax_error;
 }	t_data;
 
-void	handler_c(int a);
+void	handler_c(int signo);
 
 //cmd_arrange.c
 int		is_cmd(char *file, char **cmd_ok);
@@ -169,19 +169,19 @@ void	free_env(char **env);
 char	*export_join(char *str);
 
 //builtins1.c
-void	pwd_builtin(void);
-void	cd_bultin(t_data *data);
+void	pwd_builtin(t_data *data);
+int		cd_bultin(t_data *data);
 void	env_builtin(t_data *data);
-void	exit_builtin(t_data *data, t_cmd *cmd);
+int		exit_builtin(t_data *data, t_cmd *cmd);
 int		check_builtins(t_data *data, t_cmd *cmd);
 int		check_outside_builtins(t_data *data, t_cmd *cmd);
 
 //builtins2.c
 int		echo_flag(char **cmd_complete);
-void	echo_builtin(t_cmd *cmd);
+void	echo_builtin(t_data *data, t_cmd *cmd);
 void	update_env(t_data *data, int index_exp, int i);
-void	export_builtin(t_data *data);
-void	unset_builtin(t_data *data);
+int		export_builtin(t_data *data);
+int		unset_builtin(t_data *data);
 
 //builtins3.c
 int		search_word_del(char **arr, char *str);
