@@ -6,66 +6,11 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 12:33:53 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:34:32 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-void	create_pipes(t_cmd **cmds)
-{
-	t_cmd	*node;
-
-	node = *cmds;
-	node->prev_fd = 0;
-	while (node->next)
-	{
-		pipe(node->fd);
-		node->next->prev_fd = node->fd;
-		node = node->next;
-	}
-}
-
-void	close_pipes(t_cmd **cmds)
-{
-	t_cmd	*node;
-
-	node = *cmds;
-	while (node->next)
-	{
-		close(node->fd[0]);
-		close(node->fd[1]);
-		node->next->prev_fd = node->fd;
-		node = node->next;
-	}
-}
-
-void	check_heredocs(t_data *data)
-{
-	t_cmd	*cmd;
-	t_files	*f;
-	int		i;
-
-	i = 0;
-	cmd = *(data->cmds);
-	while (cmd)
-	{
-		if (cmd->stdins && *(cmd->stdins))
-		{
-			f = *(cmd->stdins);
-			while (f)
-			{
-				if (f->append == 1)
-				{
-					run_heredoc_2(&f, i);
-					i++;
-				}
-				f = f->next;
-			}
-		}
-		cmd = cmd->next;
-	}
-}
 
 void	pipes_and_dups_works(t_data *data, t_cmd *cmd, int i)
 {
@@ -84,34 +29,49 @@ void	pipes_and_dups_works(t_data *data, t_cmd *cmd, int i)
 	close_pipes(data->cmds);
 }
 
-int	execute_commands(t_data *data)
-{	
-	int		i;
-	pid_t	pid[data->num_cmds];
-	t_cmd	*cmd;
-	int		child_status;
-	int		first_sgl;
+int	pipeline_final(int *child_status, int *code, int *first_sgl)
+{
 	int		last_sgl;
-	int		code;
+	int		i;
 
-	code = 0;
-	first_sgl = 0;
-	last_sgl = 0;
-	cmd = *(data->cmds);
 	i = 0;
-	create_pipes(data->cmds);
-	check_heredocs(data);
+	last_sgl = 0;
+	if ((WIFSIGNALED(*child_status) && (WTERMSIG(*child_status) == SIGINT)))
+		last_sgl = 1;
+	if (!(*first_sgl) && last_sgl)
+		return (*code);
+	else if (*first_sgl)
+		return (130);
+	else if (WIFEXITED(*child_status))
+		return (WEXITSTATUS(*child_status));
+	else if (WTERMSIG(*child_status) == SIGSEGV)
+		return (transform_error_code(0, 11));
+	return (*child_status);
+}
+
+int		builtins_execution(int *i, t_data *data, t_cmd *cmd, int *child_status)
+{
+	if (*i == 0)
+		exit_builtin(data, cmd);
+	*child_status = check_outside_builtins(data, cmd);
+	if (*child_status != -100)
+	{
+		cmd = cmd->next;
+		(*i)++;
+		return (1);
+	}
+	return (0);
+}
+
+void	execute_process(t_data *data, t_cmd *cmd, pid_t *pid, int *child_status)
+{
+	int	i;
+
+	i = 0;
 	while (cmd)
 	{
-		if (i == 0)
-			exit_builtin(data, cmd);
-		child_status = check_outside_builtins(data, cmd);
-		if (child_status != -100)
-		{
-			cmd = cmd->next;
-			i++;
+		if (builtins_execution(&i, data, cmd, child_status))
 			continue ;
-		}
 		else if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 0)
 		{
 			pid[i] = fork();
@@ -131,7 +91,28 @@ int	execute_commands(t_data *data)
 		cmd = cmd->next;
 		i++;
 	}
+}
+
+
+int	execute_commands(t_data *data)
+{	
+	int		i;
+	pid_t	*pid;
+	t_cmd	*cmd;
+	int		child_status;
+	int		first_sgl;
+	int		last_sgl;
+	int		code;
+
+	pid = malloc(sizeof(pid_t) * data->num_cmds);
+	code = 0;
+	first_sgl = 0;
+	last_sgl = 0;
+	cmd = *(data->cmds);
 	i = 0;
+	create_pipes(data->cmds);
+	check_heredocs(data);
+	execute_process(data, cmd, pid, &child_status);
 	close_pipes(data->cmds);
 	while (wait(&child_status) != -1)
 	{
@@ -144,15 +125,6 @@ int	execute_commands(t_data *data)
 		}
 		i++;
 	}
-	if ((WIFSIGNALED(child_status) && (WTERMSIG(child_status) == SIGINT)))
-		last_sgl = 1;
-	if (!first_sgl && last_sgl)
-		return (code);
-	else if (first_sgl)
-		return (130);
-	else if (WIFEXITED(child_status))
-		return (WEXITSTATUS(child_status));
-	else if (WTERMSIG(child_status) == SIGSEGV)
-		return (transform_error_code(0, 11));
-	return (child_status);
+	free(pid);
+	return (pipeline_final(&child_status, &code, &first_sgl));
 }
