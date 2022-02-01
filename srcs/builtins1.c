@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:44:19 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 13:51:08 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,28 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	char	*old_pwd;
 	char	*buf;
 	int		i;
-
+	char	*home_dir;
+	char	*home;
 
 	old_pwd = getcwd(NULL, MAXPATHLEN);
-	i = chdir(cmd->cmd_complete[1]);
-	if (i == -1)
+	if (!cmd->cmd_complete[1])
 	{
-		free(old_pwd);
-		return (cd_error(cmd->cmd_complete[1], errno, data));
+		home = "$HOME";
+		home_dir = expansor(&home, 0, data);
+		if (ft_strlen(home_dir) == 0)
+			return (cd_error(0, -2, data));
+		else
+			i = chdir(home_dir);
+		free(home_dir);
+	}
+	else
+	{
+		i = chdir(cmd->cmd_complete[1]);
+		if (i == -1)
+		{
+			free(old_pwd);
+			return (cd_error(cmd->cmd_complete[1], errno, data));
+		}
 	}
 	buf = getcwd(NULL, MAXPATHLEN);
 	i = -1;

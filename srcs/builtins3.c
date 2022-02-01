@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/21 17:36:21 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 13:56:25 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	search_word_del(char **arr, char *str)
 	while (arr[i])
 	{
 		j = 0;
-		while (arr[i][j] && str[j])
+		while (arr[i] && arr[i][j] && str[j])
 		{
 			if (str[j] != arr[i][j])
 				break ;
@@ -44,7 +44,7 @@ int	search_word(char **arr, char *str)
 	while (arr[i])
 	{
 		j = 0;
-		while (arr[i][j] && str[j])
+		while (arr[i] && arr[i][j] && str[j])
 		{
 			if (str[j] != arr[i][j])
 				break ;
