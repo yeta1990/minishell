@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 13:51:08 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:35:00 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,10 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 		home = "$HOME";
 		home_dir = expansor(&home, 0, data);
 		if (ft_strlen(home_dir) == 0)
+		{
+			free(home_dir);
 			return (cd_error(0, -2, data));
+		}
 		else
 			i = chdir(home_dir);
 		free(home_dir);
