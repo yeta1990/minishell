@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:43:49 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 11:27:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,8 +186,10 @@ void	free_files(t_files *first);
 void	reset_data(t_data *data);
 
 //test_printers.c
+void	check_leaks(void);
 void	print_t_cmd(t_cmd **cmds);
 void	help_usage(void);
+int		testing_mode(int argc, char **argv, t_data *data);
 
 //executor.c
 int		execute_commands(t_data *data);
@@ -246,6 +248,11 @@ int		get_first_coming_separator(char *str);
 char	what_quotes(int type);
 char	*what_quotes_str(int type);
 int		what_flag(char c);
+
+//parser.c
+void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data);
+t_cmd	*split_and_parse_instruction(char *str, t_data *data);
+void	parsing_handler(t_data *data, char **str);
 
 //expansor_2.c
 void	expansor_advance(t_expansor_vars *v);
