@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/02/01 13:56:25 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:30:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,11 @@ char	**del_entry(char **old_arr, int index)
 	{
 		if (i != index)
 			arr[j++] = old_arr[i];
+		else
+			free(old_arr[i]);
 		i++;
 	}
-	arr[i] == 0;
+	arr[i] = 0;
 	free(old_arr);
 	return (arr);
 }

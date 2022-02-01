@@ -96,6 +96,10 @@ void	help_usage(void)
 	printf("########################################\n\n");
 }
 
+void	check_leaks(void)
+{
+	system("leaks minishell");
+}
 
 int	testing_mode(int argc, char **argv, t_data *data)
 {
@@ -121,10 +125,7 @@ int	testing_mode(int argc, char **argv, t_data *data)
 		printf("exit status code: %i\n", data->last_code);
 		return (1);
 	}
+	else if (argc == 2 && argv[1][0] == 51)
+		atexit(check_leaks);
 	return (0);
-}
-
-void	check_leaks(void)
-{
-	system("leaks minishell");
 }
