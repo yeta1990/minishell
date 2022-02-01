@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 10:49:15 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:59:10 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,19 +14,17 @@
 #include <string.h>
 #include <sys/wait.h>
 
-t_data	data;
-
 void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 {
-	char *str;
+	char	*str;
 
 	str = s;
-    while (str && *str && data->syntax_error == 0)
-    {
+	while (str && *str && data->syntax_error == 0)
+	{
 		while (*str && *str == ' ')
 			str++;
 		if (*str == '<')
-        {
+		{
 			str++;
 			if (str && *str && *str == '<')
 			{
@@ -35,7 +33,7 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			}
 			else// if (str && *str && *str != '<')
 				str += add_redirection(str, parsed_instruction, 0, data);
-        }
+		}
 		else if (*str == '>')
 		{
 			str++;
@@ -51,7 +49,7 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			str += add_cmd(str, parsed_instruction);
 		while (*str && *str == ' ')
 			str++;
-    }
+	}
 	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd), data);
 }
 
@@ -114,6 +112,7 @@ int	main(int argc, char **argv, char **envp)
 	argc += 0;
 	data.env = create_env(envp);
 	data.exp = create_exp(envp);
+	inc_shell_level();
 	while (argv[i])
 		i++;
 	i = 0;
@@ -143,7 +142,6 @@ int	main(int argc, char **argv, char **envp)
 				add_history(str);
 			else
 			{
-				printf("ey\n");
 				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
 				if (custom_str)
 				{

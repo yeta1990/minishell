@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:43:49 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:43:12 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ typedef struct s_expansor_vars
 	int		j;
 	int		z;		
 }	t_expansor_vars;
+
+t_data	data;
 
 void	handler_c(int a);
 
@@ -249,5 +251,8 @@ int		what_flag(char c);
 
 //expansor_2.c
 void	expansor_advance(t_expansor_vars *v);
+
+//shell_level.c
+void	inc_shell_level(void);
 
 #endif
