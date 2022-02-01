@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 13:11:47 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 09:40:24 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '<')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 0, data);
+				str += add_redirection(str, parsed_instruction, 1, data);
 			}
 			else// if (str && *str && *str != '<')
-				str += add_redirection(str, parsed_instruction, 0, 0, data);
+				str += add_redirection(str, parsed_instruction, 0, data);
         }
 		else if (*str == '>')
 		{
@@ -42,10 +42,10 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 			if (str && *str && *str == '>')
 			{
 				str++;
-				str += add_redirection(str, parsed_instruction, 1, 1, data);
+				str += add_redirection(str, parsed_instruction, 3, data);
 			}
 			else// if (str && *str && *str != '>')
-				str += add_redirection(str, parsed_instruction, 0, 1, data);
+				str += add_redirection(str, parsed_instruction, 2, data);
 		}
 		else if (*str != '<' && *str != '>')
 			str += add_cmd(str, parsed_instruction);
@@ -100,8 +100,10 @@ int	main(int argc, char **argv, char **envp)
 	char				**instructions;
 	int					i;
 	struct sigaction	ctrl_c;
+	char				*custom_str;
 
-	ctrl_c.sa_handler = (void *)handler_c;
+	custom_str = 0;
+	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
@@ -128,13 +130,29 @@ int	main(int argc, char **argv, char **envp)
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
 			data.syntax_error = 0;
-			add_history(str);
+			data.cmd_by_stdin = 0;
 			instructions = ft_split_pipes(str, &data);
-			while (instructions && instructions[i])
+			if (parse_check(instructions[0]) == 0)
+				data.syntax_error = 2;
+			while (data.syntax_error != 2 && instructions && instructions[i])
 			{
 				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
 				data.num_cmds++;
 				i++;
+			}
+			if (data.cmd_by_stdin == 0)
+				add_history(str);
+			else
+			{
+				printf("ey\n");
+				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
+				if (custom_str)
+				{
+					add_history(custom_str);
+					free(custom_str);
+				}
+				else
+					add_history(str);
 			}
 			free_double_string(instructions);
 			free(str);

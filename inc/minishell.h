@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 10:42:29 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 09:43:49 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,49 @@ typedef struct s_data
 	char				**env;
 	char				**exp;
 	int					syntax_error;
+	int					cmd_by_stdin;
 }	t_data;
 
-void	handler_c(int signo);
+typedef struct s_pipe_sep_vars
+{
+	int		nwords;
+	int		f_dquote;
+	int		f_quote;
+	int		i;
+	int		last;
+	t_files	**separated_pipes;
+}	t_pipe_sep_vars;
+
+typedef struct s_split_cmds_vars
+{
+	char	*aux;
+	t_files	**full_strings;
+	int		flag;
+	char	*result;
+	char	*r;
+	char	*trimmed;
+	char	*subs;
+	char	*expanded;
+	int		forward;
+}	t_split_cmds_vars;
+
+typedef struct s_expansor_vars
+{
+	char	*a;
+	char	*exp;
+	char	*aux_exp;
+	char	*aux_exp2;
+	char	*aux_exp3;
+	char	*tail;
+	int		i;
+	int		j;
+	int		z;		
+}	t_expansor_vars;
+
+void	handler_c(int a);
 
 //cmd_arrange.c
-int		is_cmd(char *file, char **cmd_ok);
+int		is_cmd(char *file, char **cmd_ok, t_data *data);
 char	**create_args(char *raw_cmd, char **cmd, t_data *data);
 void	cmd_not_raw(char **args);
 char	*expansor(char **arg, int type, t_data *data);
@@ -87,7 +124,7 @@ t_files	*ft_lstnew(void *content);
 char	**from_list_to_double_char(t_files **full_strings);
 
 // lexer_setters.c
-int		add_redirection(char *raw_file, t_cmd *parsed_instruction, int append, int type, t_data *data);
+int		add_redirection(char *raw_file, t_cmd *cmd, int type, t_data *data);
 int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
 
 //path_operations.c
@@ -95,6 +132,7 @@ char	**get_paths(char *path);
 char	**path_surgery(char **path_to_cut, int path_emergency);
 void	free_paths(char **paths);
 int		ft_memcmp(const void *s1, const void *s2, size_t n);
+char	*our_getenv(t_data *data, char *to_find);
 
 // get_char_pos.c
 int		has_closed_quotes(char *str);
@@ -102,7 +140,16 @@ int		get_char_pos(char *str, char c);
 char	**split_quote_sensitive(char *str, t_data *data);
 
 //split_quotes.c
-int		get_char_pos_final_quotes(char q, char *str);
+int		get_char_pos_final_quotes(char *str);
+int		search_after_pipe(int len, int j, char *aux, t_data *data);
+char	*search_next_pipe(int *len, char *aux, t_data *data);
+
+//split_quotes_2.c
+void			set_quotes_flags(char c, int *f_dquote, int *f_quote);
+int				get_nwords(char *str, char c);
+int				check_pipes_syntax_error(char *str, t_data *data);
+void			add_pipe(t_files **sep_pipes, char *s, t_pipe_sep_vars *w, t_data *data);
+t_pipe_sep_vars	*initialise_save_words_vars(void);
 
 //utils
 char	**ft_split(char const *s, char c);
@@ -151,8 +198,8 @@ int		ft_exec_last(t_data *data, t_cmd *cmd, int fds[2]);
 void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
 char	*ft_strtrim(char const *s1, char const *set);
-char	*get_cmd_from_user(void);
-void	run_heredoc_2(t_files **f, t_cmd *cmd, int i);
+char	*get_cmd_from_user(t_data *data);
+void	run_heredoc_2(t_files **f, int i);
 
 //error_handlers.c
 int		transform_error_code(char *cmd, int err);
@@ -161,6 +208,10 @@ void	std_error(int errn);
 int		isalnum_string(char *str);
 int		is_valid_infile(char *str);
 void	syntax_error(char *wrong_portion, t_data *data);
+int		parse_check(char *str);
+int		cd_error(char *filename, int errn, t_data *data);
+int		export_error(char *filename, t_data *data);
+
 //envp.c
 int		get_env_size(char **envp);
 char	**create_env(char **envp);
@@ -170,7 +221,7 @@ char	*export_join(char *str);
 
 //builtins1.c
 void	pwd_builtin(t_data *data);
-int		cd_bultin(t_data *data);
+int		cd_bultin(t_data *data, t_cmd *cmd);
 void	env_builtin(t_data *data);
 int		exit_builtin(t_data *data, t_cmd *cmd);
 int		check_builtins(t_data *data, t_cmd *cmd);
@@ -178,15 +229,25 @@ int		check_outside_builtins(t_data *data, t_cmd *cmd);
 
 //builtins2.c
 int		echo_flag(char **cmd_complete);
-void	echo_builtin(t_data *data, t_cmd *cmd);
+void	echo_builtin(t_cmd *cmd, t_data *data);
 void	update_env(t_data *data, int index_exp, int i);
-int		export_builtin(t_data *data);
-int		unset_builtin(t_data *data);
+int		export_builtin(t_data *data, t_cmd *cmd);
+int		unset_builtin(t_data *data, t_cmd *cmd);
 
 //builtins3.c
 int		search_word_del(char **arr, char *str);
 int		search_word(char **arr, char *str);
 char	**add_entry(char **old_arr, char *new_str);
 char	**del_entry(char **old_arr, int index);
+
+//quote_parser_utils.c
+int		get_next_separator(char *str, char sep);
+int		get_first_coming_separator(char *str);
+char	what_quotes(int type);
+char	*what_quotes_str(int type);
+int		what_flag(char c);
+
+//expansor_2.c
+void	expansor_advance(t_expansor_vars *v);
 
 #endif

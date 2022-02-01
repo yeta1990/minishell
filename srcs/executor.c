@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/31 11:23:13 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 09:39:45 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,18 +50,38 @@ void	check_heredocs(t_data *data)
 	cmd = *(data->cmds);
 	while (cmd)
 	{
-		f = *(cmd->stdins);
-		while (f)
+		if (cmd->stdins && *(cmd->stdins))
 		{
-			if (f->append == 1)
+			f = *(cmd->stdins);
+			while (f)
 			{
-				run_heredoc_2(&f, cmd, i);
-				i++;
+				if (f->append == 1)
+				{
+					run_heredoc_2(&f, i);
+					i++;
+				}
+				f = f->next;
 			}
-			f = f->next;
 		}
 		cmd = cmd->next;
 	}
+}
+
+void	pipes_and_dups_works(t_data *data, t_cmd *cmd, int i)
+{
+	if (i < data->num_cmds - 1)
+	{
+		dup2(cmd->fd[1], 1);
+		close(cmd->fd[1]);
+	}
+	if (i != 0)
+	{
+		dup2((cmd->prev_fd)[0], 0);
+		close((cmd->prev_fd)[0]);
+	}
+	ft_dup_infile(cmd->stdins);
+	ft_dup_output(cmd->stdouts);
+	close_pipes(data->cmds);
 }
 
 int	execute_commands(t_data *data)
@@ -86,24 +106,18 @@ int	execute_commands(t_data *data)
 		if (i == 0)
 			exit_builtin(data, cmd);
 		child_status = check_outside_builtins(data, cmd);
-		if (child_status == -1)
+		if (child_status != -100)
+		{
+			cmd = cmd->next;
+			i++;
+			continue ;
+		}
+		else if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 0)
 		{
 			pid[i] = fork();
 			if (pid[i] == 0)
 			{
-				if (i < data->num_cmds - 1)
-				{
-					dup2(cmd->fd[1], 1);
-					close(cmd->fd[1]);
-				}
-				if (i != 0)
-				{
-					dup2((cmd->prev_fd)[0], 0);
-					close((cmd->prev_fd)[0]);
-				}
-				ft_dup_infile(cmd->stdins);
-				ft_dup_output(cmd->stdouts);
-				close_pipes(data->cmds);
+				pipes_and_dups_works(data, cmd, i);
 				if (cmd->cmd && check_builtins(data, cmd) == 1)
 					exit(data->last_code);
 				else if (cmd->cmd && execve(cmd->cmd, &(cmd->cmd_complete[0]), data->env) < 0)

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/31 11:11:15 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 09:41:50 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,36 @@ int	transform_error_code(char *cmd, int err)
 		perror("minishell");
 		return (1);
 	}
+}
+
+int	cd_error(char *filename, int errn, t_data *data)
+{
+	ft_putstr_fd("minishell: cd: ", 2);
+	write(2, filename, ft_strlen(filename));
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(strerror(errn), 2);
+	ft_putstr_fd("\n", 2);
+	if (errn == 2)
+	{
+		data->last_code = 127;
+		return (127);
+	}
+	if (errn == 13)
+	{
+		data->last_code = 126;
+		return (126);
+	}
+	data->last_code = 1;
+	return (1);
+}
+
+int	export_error(char *filename, t_data *data)
+{
+	ft_putstr_fd("minishell: export: `", 2);
+	write(2, filename, ft_strlen(filename));
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	data->last_code = 1;
+	return (1);
 }
 
 void	file_error(char *filename, int errn)
@@ -110,4 +140,18 @@ void	syntax_error(char *wrong_portion, t_data *data)
 	data->syntax_error = 1;
 	data->last_code = 258;
 	free(msg);
+}
+
+int	parse_check(char *str)
+{
+	int		i;
+
+	i = 0;
+	if (!str || ft_strlen(str) == 0)
+		return (0);
+	while (str && str[i] && str[i] == ' ')
+		str++;
+	if (i < (int) ft_strlen(str))
+		return (1);
+	return (0);
 }

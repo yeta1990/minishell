@@ -6,108 +6,69 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/21 13:16:49 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/26 15:25:30 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	get_nwords(char const *str, char c)
+int	set_cut_sizes(t_pipe_sep_vars *w, char *s, char c)
 {
-	int	nwords;
-	int	f_dquote;
-	int	f_quote;
-	char	*s;
+	if (s[w->i] != c)
+		w->i++;
+	else if ((s[w->i] == c) && w->f_dquote && ft_strchr(s + w->i, '\"'))
+		w->i += ft_strchr(s + w->i, '\"') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && ft_strchr(s + w->i, '\''))
+		w->i += ft_strchr(s + w->i, '\'') - (s + w->i);
+	else if ((s[w->i] == c) && w->f_quote && !(ft_strchr(s + w->i, '\'')))
+		w->f_quote = 0;
+	else if ((s[w->i] == c) && w->f_dquote && !(ft_strchr(s + w->i, '\"')))
+		w->f_dquote = 0;
+	else
+		return (0);
+	return (1);
+}
+
+static char	**save_words(char *str, t_data *data, char c)
+{
+	t_pipe_sep_vars	*w;
+	char			*s;
 
 	s = (char *)str;
-	f_dquote = 0;
-	f_quote = 0;
-	nwords = 0;
-//	printf("->%s\n", str);
-	if (!*s)
-		return (0);
-	while (s && *s)
+	w = initialise_save_words_vars();
+	while (s && s[w->i] && data->syntax_error == 0)
 	{
-		if ((*s == '"') && f_dquote == 0 && f_quote == 0)
-			f_dquote = 1;
-		else if ((*s == '"') && f_dquote == 1)
-			f_dquote = 0;
-		if ((*s == '\'') && f_quote == 0 && f_dquote == 0)
-			f_quote = 1;
-		else if ((*s == '\'') && f_quote == 1)
-			f_quote = 0;
-		if (*s != c)
-			s++;
-		else if ((*s == c) && ((f_dquote && ft_strchr(s, '\"')) || (f_quote && ft_strchr(s, '\''))))
-			s += ft_strchr(s, '\"') - s;
-		else
+		set_quotes_flags(s[w->i], &w->f_dquote, &w->f_quote);
+		if (set_cut_sizes(w, s, c) == 0)
 		{
-			nwords++;
-			while (*s == c)
-				s++;
+			while (s[w->i] == c)
+				w->i++;
+			add_pipe(w->separated_pipes, s, w, data);
+			s += w->i;
+			w->i = 0;
 		}
 	}
-	nwords++;
-//	printf("words: %i\n", nwords);
-	return (nwords);
+	if (s && data->syntax_error == 0)
+	{
+		w->last = 1;
+		w->i = ft_strlen(s);
+		add_pipe(w->separated_pipes, s, w, data);
+	}
+	free(w);
+	return (from_list_to_double_char(w->separated_pipes));
 }
 
-static void	save_words(char **ptr, char *str, int nwords, t_data *data)
+int	get_char_pos_final_quotes(char *str)
 {
 	int		i;
-	int		j;
-	char	*aux;
-	int		len;
+	char	q;
 
-	i = 0;
-	j = 0;
-	len = 0;
-	if ((nwords > 0) && str && *str)
-	{
-		aux = str;
-		while (aux && *aux && data->syntax_error == 0)
-		{
-			j = 0;
-			if (has_closed_quotes(aux + len) == 1)
-				len = get_char_pos_final_quotes('\'', aux + len) - 1;
-			else if (has_closed_quotes(aux + len) == 2)
-				len += get_char_pos_final_quotes('\"', aux + len) - 1;
-			if (has_closed_quotes(aux + len) == 0) 
-			{
-				while (aux && aux[len] && aux[len] != '|')
-					len++;
-			//	printf("aux: %s, len %i\n", aux, len);
-				ptr[i++] = ft_substr(aux, 0, len);
-			 //	printf("ptr: %s\n", ptr[i - 1]);
-				if (aux && aux[len] && aux[len] == '|')
-					len++;
-				if (aux && aux[len] && aux[len] == '|')
-					syntax_error((aux + len), data);
-				while (aux && aux[j + len] && aux[j + len] == ' ')
-					j++;
-			//	printf("aux: %s, len %i, j:%i\n", aux + len, len, j);
-				if (data->syntax_error == 1)
-					break ;
-				if ((int)ft_strlen(aux + len) == j && j > 0)
-					ptr[i++] = get_cmd_from_user();
-					//printf("pedir comando\n");
-				else if (j == 0 && len > 1 && *(aux + len - 1) == '|')
-					ptr[i++] = get_cmd_from_user();
-					//printf("pedir comando\n");
-				else if (j == 0 && len == 1 && aux && *aux == '|')
-					syntax_error((aux), data);
-				aux +=(len + j);
-				len = 0;
-			}
-		}
-	ptr[nwords] = 0;
-	}
-}
-
-int	get_char_pos_final_quotes(char q, char *str)
-{
-	int	i;
-
+	if (has_closed_quotes(str) == 0)
+		return (0);
+	if (has_closed_quotes(str) == 1)
+		q = '\'';
+	else if (has_closed_quotes(str) == 2)
+		q = '\"';
 	i = 0;
 	if (!str)
 		return (0);
@@ -120,9 +81,19 @@ int	get_char_pos_final_quotes(char q, char *str)
 			i++;
 		if (str[i] && str[i] == q)
 			i++;
-		return (i + 1);
+		return (i);
 	}
 	return (i);
+}
+
+static char	**copy_word_to_double_ptr(char *str)
+{
+	char	**ptr;
+
+	ptr = malloc(sizeof(char *) * 2);
+	ptr[0] = ft_strdup(str);
+	ptr[1] = 0;
+	return (ptr);
 }
 
 char	**ft_split_pipes(char const *s, t_data *data)
@@ -130,29 +101,20 @@ char	**ft_split_pipes(char const *s, t_data *data)
 	int		nwords;
 	char	**ptr;
 	char	*str;
-	char	d[2];
+	char	*aux;
 
-	d[0] = '|';
-	d[1] = '\0';
+	ptr = 0;
 	if (s)
 	{
-
-//	write(2, "oa", 5);
-	//	str = ft_strtrim(s, d);
-
 		str = ft_strdup(s);
-	//	printf("%s\n", str);
+		aux = str;
 		if (str)
 		{
-			nwords = get_nwords(str, '|');
-			ptr = ft_calloc((nwords + 1), sizeof(char *));
-			if (ptr && nwords == 1)
-			{
-				ptr[0] = ft_strdup(s);
-				ptr[1] = 0;
-			}
-			else if (ptr)
-				save_words(ptr, str, nwords, data);
+			nwords = get_nwords(aux, '|');
+			if (nwords > 1 && str && *str)
+				ptr = save_words(str, data, '|');
+			else if (nwords == 1)
+				ptr = copy_word_to_double_ptr(str);
 			free(str);
 			return (ptr);
 		}

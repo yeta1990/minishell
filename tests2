@@ -1,0 +1,12 @@
+exit 0 | exit 1
+
+echo hola '| "|" '|'
+
+
+||||||||
+
+ls |&
+
+
+export a=">>"
+ls $a pepe

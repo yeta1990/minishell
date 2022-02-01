@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 13:04:19 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/23 18:09:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/01/25 19:29:31 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	ft_lstadd_back_files(t_files **lst, t_files *new)
 t_files	*ft_lstnew(void *content)
 {
 	t_files	*element;
-	
+
 	element = malloc(sizeof(t_files));
 	if (!element)
 		return (NULL);
