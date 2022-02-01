@@ -33,7 +33,6 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	char	*home_dir;
 	char	*home;
 
-	old_pwd = getcwd(NULL, MAXPATHLEN);
 	if (!cmd->cmd_complete[1])
 	{
 		home = "$HOME";
@@ -46,6 +45,7 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	}
 	else
 	{
+		old_pwd = getcwd(NULL, MAXPATHLEN);
 		i = chdir(cmd->cmd_complete[1]);
 		if (i == -1)
 		{

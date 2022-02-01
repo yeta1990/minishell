@@ -67,13 +67,14 @@ char	**add_entry(char **old_arr, char *new_str)
 
 	i = 0;
 	size = get_env_size(old_arr) + 1;
-	arr = ft_calloc(size + 1, sizeof(char *));
+	arr = ft_calloc(size + 2, sizeof(char *));
 	while (old_arr[i])
 	{
 		arr[i] = old_arr[i];
 		i++;
 	}
 	arr[i] = new_str;
+	arr[i + 1] = 0;
 	free(old_arr);
 	return (arr);
 }
@@ -88,13 +89,14 @@ char	**del_entry(char **old_arr, int index)
 	i = 0;
 	j = 0;
 	size = get_env_size(old_arr);
-	arr = ft_calloc(size, sizeof(char *));
+	arr = ft_calloc(size, sizeof(char *) + 1);
 	while (old_arr[i])
 	{
 		if (i != index)
 			arr[j++] = old_arr[i];
 		i++;
 	}
+	arr[i] == 0;
 	free(old_arr);
 	return (arr);
 }
