@@ -123,3 +123,8 @@ int	testing_mode(int argc, char **argv, t_data *data)
 	}
 	return (0);
 }
+
+void	check_leaks(void)
+{
+	system("leaks minishell");
+}

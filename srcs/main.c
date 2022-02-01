@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 10:46:09 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 11:26:24 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,74 +15,6 @@
 #include <sys/wait.h>
 
 t_data	data;
-
-void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
-{
-	char *str;
-
-	str = s;
-    while (str && *str && data->syntax_error == 0)
-    {
-		while (*str && *str == ' ')
-			str++;
-		if (*str == '<')
-        {
-			str++;
-			if (str && *str && *str == '<')
-			{
-				str++;
-				str += add_redirection(str, parsed_instruction, 1, data);
-			}
-			else// if (str && *str && *str != '<')
-				str += add_redirection(str, parsed_instruction, 0, data);
-        }
-		else if (*str == '>')
-		{
-			str++;
-			if (str && *str && *str == '>')
-			{
-				str++;
-				str += add_redirection(str, parsed_instruction, 3, data);
-			}
-			else// if (str && *str && *str != '>')
-				str += add_redirection(str, parsed_instruction, 2, data);
-		}
-		else if (*str != '<' && *str != '>')
-			str += add_cmd(str, parsed_instruction);
-		while (*str && *str == ' ')
-			str++;
-    }
-	parsed_instruction->cmd_complete = create_args(parsed_instruction->cmd_and_its_flags, &(parsed_instruction->cmd), data);
-}
-
-t_cmd	*split_and_parse_instruction(char *str, t_data *data)
-{
-	int		i;
-	t_cmd	*parsed_instruction;
-
-	i = 0;
-	parsed_instruction = malloc(sizeof(t_cmd));
-	parsed_instruction->next = 0;
-	parsed_instruction->stdins = malloc(sizeof(t_files *));
-	parsed_instruction->stdins[0] = 0;
-	parsed_instruction->stdouts = malloc(sizeof(t_files *));
-	parsed_instruction->stdouts[0] = 0;
-	parsed_instruction->stderrs = malloc(sizeof(t_files *));
-	parsed_instruction->stderrs[0] = 0;
-	parsed_instruction->heredocs = malloc(sizeof(t_files *));
-	parsed_instruction->heredocs[0] = 0;
-	parsed_instruction->cmd = 0;
-	parsed_instruction->cmd_complete = 0;
-	parsed_instruction->cmd_and_its_flags = 0;
-	parsed_instruction->next = 0;
-	parse_instruction(str, parsed_instruction, data);
-	return (parsed_instruction);
-}
-
-void	check_leaks(void)
-{
-	system("leaks minishell");
-}
 
 void	handler_c(int signo)
 {
@@ -116,24 +48,6 @@ void	history_management(t_data *data, char **str)
 	*str = 0;
 }
 
-void	parsing_handler(t_data *data, char **str)
-{
-	char	**instructions;
-	int		i;
-
-	i = 0;
-	instructions = ft_split_pipes(*str, data);
-	if (parse_check(instructions[0]) == 0)
-		data->syntax_error = 2;
-	while (data->syntax_error != 2 && instructions && instructions[i])
-	{
-		ft_lstadd_back_cmd(data->cmds, split_and_parse_instruction(instructions[i], data));
-		data->num_cmds++;
-		i++;
-	}
-	free_double_string(instructions);
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
@@ -153,7 +67,7 @@ int	main(int argc, char **argv, char **envp)
 		sigaction(SIGINT, &ctrl_c, NULL);
 		str = readline("minishell $ ");
 		if (str && ft_strlen(str) > 0)
- 		{
+		{
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
@@ -164,7 +78,7 @@ int	main(int argc, char **argv, char **envp)
 			if (testing_mode(argc, argv, &data))
 				;
 			else if (data.syntax_error == 0)
-			 	data.last_code = execute_commands(&data);
+				data.last_code = execute_commands(&data);
 			free_data(&data);
 			reset_data(&data);
 		}
