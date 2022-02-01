@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 18:08:32 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 21:32:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:52:36 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	set_quotes_flags(char c, int *f_dquote, int *f_quote)
 
 int	get_nwords(char *s, char c)
 {
-	t_pipe_sep_vars	w;
+	t_sep	w;
 
 	w.f_dquote = 0;
 	w.f_quote = 0;
@@ -80,7 +80,7 @@ int	check_pipes_syntax_error(char *str, t_data *data)
 	return (0);
 }
 
-void	add_pipe(t_files **sep_pipes, char *s, t_pipe_sep_vars *w, t_data *data)
+void	add_pipe(t_files **sep_pipes, char *s, t_sep *w, t_data *data)
 {
 	char			*trimmed;
 	char			*raw_pipe;
@@ -103,12 +103,12 @@ void	add_pipe(t_files **sep_pipes, char *s, t_pipe_sep_vars *w, t_data *data)
 	free(trimmed);
 }
 
-t_pipe_sep_vars	*initialise_save_words_vars(void)
+t_sep	*initialise_save_words_vars(void)
 {
-	t_pipe_sep_vars	*w;
-	t_files			**separated_pipes;
+	t_sep	*w;
+	t_files	**separated_pipes;
 
-	w = malloc(sizeof(t_pipe_sep_vars));
+	w = malloc(sizeof(t_sep));
 	w->f_dquote = 0;
 	w->f_quote = 0;
 	w->i = 0;
