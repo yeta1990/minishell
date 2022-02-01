@@ -107,9 +107,9 @@ char	**ft_split_pipes(char const *s, t_data *data)
 	if (s)
 	{
 		str = ft_strdup(s);
-		aux = str;
 		if (str)
 		{
+			aux = str;
 			nwords = get_nwords(aux, '|');
 			if (nwords > 1 && str && *str)
 				ptr = save_words(str, data, '|');

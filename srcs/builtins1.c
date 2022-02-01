@@ -33,12 +33,14 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	char	*home_dir;
 	char	*home;
 
+	old_pwd = getcwd(NULL, MAXPATHLEN);
 	if (!cmd->cmd_complete[1])
 	{
 		home = "$HOME";
 		home_dir = expansor(&home, 0, data);
 		if (ft_strlen(home_dir) == 0)
 		{
+			free(old_pwd);
 			free(home_dir);
 			return (cd_error(0, -2, data));
 		}
@@ -48,7 +50,6 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	}
 	else
 	{
-		old_pwd = getcwd(NULL, MAXPATHLEN);
 		i = chdir(cmd->cmd_complete[1]);
 		if (i == -1)
 		{
@@ -68,10 +69,11 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 		else if (ft_strncmp("OLDPWD=", data->env[i], 7) == 0)
 		{
 			free(data->env[i]);
+			printf("old_pwd %s\n", old_pwd);
 			data->env[i] = ft_strjoin("OLDPWD=", old_pwd);
 		}
 	}
-	i = -1;
+/*	i = -1;
 	while (data->exp[++i])
 	{
 		if (data->exp[i][0] == 'P' && data->exp[i][1] == 'W' && data->exp[i][2] == 'D' && data->exp[i][3] == '=')
@@ -84,7 +86,7 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 			free(data->exp[i]);
 			data->exp[i] = ft_strjoin("OLDPWD=", old_pwd);
 		}
-	}
+	}*/
 	free(old_pwd);
 	free(buf);
 	return (0);

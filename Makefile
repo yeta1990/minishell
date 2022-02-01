@@ -19,7 +19,7 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS	= -Wall -Wextra -g #-fsanitize=address
 
 NAME	= minishell
 
