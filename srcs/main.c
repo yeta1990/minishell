@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 11:26:24 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 11:57:54 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 #include <string.h>
 #include <sys/wait.h>
 
-t_data	data;
+t_data	g_data;
 
 void	handler_c(int signo)
 {
 	signo++;
-	data.last_code = 1;
+	g_data.last_code = 1;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
@@ -35,7 +35,8 @@ void	history_management(t_data *data, char **str)
 		add_history(*str);
 	else
 	{
-		custom_str = ft_strjoin(*str, ft_lstlast_cmd((*data->cmds))->cmd_and_its_flags);
+		custom_str = ft_strjoin(*str,
+				ft_lstlast_cmd((*data->cmds))->cmd_and_its_flags);
 		if (custom_str)
 		{
 			add_history(custom_str);
@@ -46,6 +47,23 @@ void	history_management(t_data *data, char **str)
 	}
 	free(*str);
 	*str = 0;
+}
+
+void	main_controller(t_data *data, char *str, int argc, char **argv)
+{
+	data->cmds = malloc(sizeof(t_cmd *));
+	data->cmds[0] = 0;
+	data->num_cmds = 0;
+	data->syntax_error = 0;
+	data->cmd_by_stdin = 0;
+	parsing_handler(data, &str);
+	history_management(data, &str);
+	if (testing_mode(argc, argv, data))
+		;
+	else if (data->syntax_error == 0)
+		data->last_code = execute_commands(data);
+	free_data(data);
+	reset_data(data);
 }
 
 int	main(int argc, char **argv, char **envp)
@@ -59,29 +77,15 @@ int	main(int argc, char **argv, char **envp)
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
-	data.env = create_env(envp);
-	data.exp = create_exp(envp);
-	data.last_code = 0;
+	g_data.env = create_env(envp);
+	g_data.exp = create_exp(envp);
+	g_data.last_code = 0;
 	while (1)
 	{
 		sigaction(SIGINT, &ctrl_c, NULL);
 		str = readline("minishell $ ");
 		if (str && ft_strlen(str) > 0)
-		{
-			data.cmds = malloc(sizeof(t_cmd *));
-			data.cmds[0] = 0;
-			data.num_cmds = 0;
-			data.syntax_error = 0;
-			data.cmd_by_stdin = 0;
-			parsing_handler(&data, &str);
-			history_management(&data, &str);
-			if (testing_mode(argc, argv, &data))
-				;
-			else if (data.syntax_error == 0)
-				data.last_code = execute_commands(&data);
-			free_data(&data);
-			reset_data(&data);
-		}
+			main_controller(&g_data, str, argc, argv);
 		else if (!str)
 		{
 			write(1, "exit\n", 5);
