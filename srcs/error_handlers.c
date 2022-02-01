@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 13:50:08 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 16:30:15 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,22 +50,14 @@ int	cd_error(char *filename, int errn, t_data *data)
 {
 	ft_putstr_fd("minishell: cd: ", 2);
 	write(2, filename, ft_strlen(filename));
-	ft_putstr_fd(": ", 2);
 	if (errn == -2)
 		ft_putstr_fd("HOME not set", 2);
 	else
+	{
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(strerror(errn), 2);
-	ft_putstr_fd("\n", 2);
-/*	if (errn == 2)
-	{
-		data->last_code = 1;
-		return (1);
 	}
-	if (errn == 13)
-	{
-		data->last_code = 1;
-		return (1);
-	}*/
+	ft_putstr_fd("\n", 2);
 	data->last_code = 1;
 	return (1);
 }
