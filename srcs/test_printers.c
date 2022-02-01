@@ -95,3 +95,31 @@ void	help_usage(void)
 	printf("#                                      #\n");
 	printf("########################################\n\n");
 }
+
+
+int	testing_mode(int argc, char **argv, t_data *data)
+{
+	if (argc == 2 && argv[1][0] == 49)
+	{
+		printf("test mode 1\n");
+		print_t_cmd(data->cmds);
+		data->last_code = execute_commands(data);
+		return (1);
+	}
+	else if (argc == 2 && argv[1][0] == 48)
+	{
+		printf("test mode 0\n");
+		data->last_code = execute_commands(data);
+		printf("exit status code: %i\n", data->last_code);
+		return (1);
+	}
+	else if (argc == 2 && argv[1][0] == 50)
+	{
+		printf("test mode 2\n");
+		print_t_cmd(data->cmds);
+		data->last_code = execute_commands(data);
+		printf("exit status code: %i\n", data->last_code);
+		return (1);
+	}
+	return (0);
+}

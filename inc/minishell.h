@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:43:49 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 10:30:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	reset_data(t_data *data);
 //test_printers.c
 void	print_t_cmd(t_cmd **cmds);
 void	help_usage(void);
+int		testing_mode(int argc, char **argv, t_data *data);
 
 //executor.c
 int		execute_commands(t_data *data);

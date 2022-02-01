@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:40:24 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 10:46:09 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,30 +94,59 @@ void	handler_c(int signo)
 	rl_redisplay();
 }
 
+void	history_management(t_data *data, char **str)
+{
+	char	*custom_str;
+
+	custom_str = 0;
+	if (data->cmd_by_stdin == 0)
+		add_history(*str);
+	else
+	{
+		custom_str = ft_strjoin(*str, ft_lstlast_cmd((*data->cmds))->cmd_and_its_flags);
+		if (custom_str)
+		{
+			add_history(custom_str);
+			free(custom_str);
+		}
+		else
+			add_history(*str);
+	}
+	free(*str);
+	*str = 0;
+}
+
+void	parsing_handler(t_data *data, char **str)
+{
+	char	**instructions;
+	int		i;
+
+	i = 0;
+	instructions = ft_split_pipes(*str, data);
+	if (parse_check(instructions[0]) == 0)
+		data->syntax_error = 2;
+	while (data->syntax_error != 2 && instructions && instructions[i])
+	{
+		ft_lstadd_back_cmd(data->cmds, split_and_parse_instruction(instructions[i], data));
+		data->num_cmds++;
+		i++;
+	}
+	free_double_string(instructions);
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
-	char				**instructions;
-	int					i;
 	struct sigaction	ctrl_c;
-	char				*custom_str;
 
-	custom_str = 0;
+	if (argc == 1)
+		help_usage();
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
-	if (argc == 1)
-		help_usage();
-	if (argc == 2 && argv[1][0] == 51)
-		atexit(check_leaks);
-	i = 0;
-	argc += 0;
 	data.env = create_env(envp);
 	data.exp = create_exp(envp);
-	while (argv[i])
-		i++;
-	i = 0;
 	data.last_code = 0;
 	while (1)
 	{
@@ -125,57 +154,15 @@ int	main(int argc, char **argv, char **envp)
 		str = readline("minishell $ ");
 		if (str && ft_strlen(str) > 0)
  		{
-			i = 0;
 			data.cmds = malloc(sizeof(t_cmd *));
 			data.cmds[0] = 0;
 			data.num_cmds = 0;
 			data.syntax_error = 0;
 			data.cmd_by_stdin = 0;
-			instructions = ft_split_pipes(str, &data);
-			if (parse_check(instructions[0]) == 0)
-				data.syntax_error = 2;
-			while (data.syntax_error != 2 && instructions && instructions[i])
-			{
-				ft_lstadd_back_cmd(data.cmds, split_and_parse_instruction(instructions[i], &data));
-				data.num_cmds++;
-				i++;
-			}
-			if (data.cmd_by_stdin == 0)
-				add_history(str);
-			else
-			{
-				printf("ey\n");
-				custom_str = ft_strjoin(str, ft_lstlast_cmd((*data.cmds))->cmd_and_its_flags);
-				if (custom_str)
-				{
-					add_history(custom_str);
-					free(custom_str);
-				}
-				else
-					add_history(str);
-			}
-			free_double_string(instructions);
-			free(str);
-			str = 0;
-			if (argc == 2 && argv[1][0] == 49)
-			{
-				printf("test mode 1\n");
-				print_t_cmd(data.cmds);
-				data.last_code = execute_commands(&data);
-			}
-			else if (argc == 2 && argv[1][0] == 48)
-			{
-				printf("test mode 0\n");
-				data.last_code = execute_commands(&data);
-				printf("exit status code: %i\n", data.last_code);
-			}
-			else if (argc == 2 && argv[1][0] == 50)
-			{
-				printf("test mode 2\n");
-				print_t_cmd(data.cmds);
-				data.last_code = execute_commands(&data);
-				printf("exit status code: %i\n", data.last_code);
-			}
+			parsing_handler(&data, &str);
+			history_management(&data, &str);
+			if (testing_mode(argc, argv, &data))
+				;
 			else if (data.syntax_error == 0)
 			 	data.last_code = execute_commands(&data);
 			free_data(&data);
