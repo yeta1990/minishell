@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 11:25:15 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 13:03:56 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:42:34 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,5 +99,6 @@ void	parsing_handler(t_data *data, char **str)
 		data->num_cmds++;
 		i++;
 	}
+	data->pid = malloc(sizeof(pid_t) * data->num_cmds);
 	free_double_string(instructions);
 }
