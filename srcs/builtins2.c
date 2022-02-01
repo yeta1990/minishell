@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:23:19 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 21:47:53 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ int	export_error_checker(t_data *data, char *cmd_complete, int unset)
 	return (0);
 }
 
-int	export_builtin(t_data *data, t_cmd *cmd)
+int	export_alone(t_data *data, t_cmd *cmd)
 {
-	int		i;
-	int		index_exp;
-	int		return_code;
+	int	i;
 
-	return_code = 0;	
 	i = 0;
-	if (!cmd->cmd_complete[1] || (cmd->cmd_complete[1] && ft_strlen(cmd->cmd_complete[1]) == 0))
+	if (!cmd->cmd_complete[1] || (cmd->cmd_complete[1]
+			&& ft_strlen(cmd->cmd_complete[1]) == 0))
 	{
 		while (data->exp[i])
 		{
@@ -77,8 +75,21 @@ int	export_builtin(t_data *data, t_cmd *cmd)
 			ft_putstr_fd("\n", 1);
 		}
 		data->last_code = 0;
-		return (0);
+		return (1);
 	}
+	return (0);
+}
+
+int	export_builtin(t_data *data, t_cmd *cmd)
+{
+	int		i;
+	int		index_exp;
+	int		return_code;
+
+	if (export_alone(data, cmd) == 1)
+		return (0);
+	return_code = 0;
+	i = 0;
 	while (cmd->cmd_complete[++i])
 	{
 		if (export_error_checker(data, cmd->cmd_complete[i], 0))
@@ -91,7 +102,7 @@ int	export_builtin(t_data *data, t_cmd *cmd)
 			else
 				if (index_exp < 0)
 					data->exp = add_entry(data->exp,
-						ft_strdup(cmd->cmd_complete[i]));
+							ft_strdup(cmd->cmd_complete[i]));
 		}
 	}
 	data->last_code = return_code;
