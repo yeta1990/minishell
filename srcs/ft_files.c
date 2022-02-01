@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 12:59:56 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:41:51 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 12:32:27 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,24 +44,40 @@ void	run_heredoc_2(t_files **f, int i)
 	int		fd;
 	char	*str;
 	char	*filename;
+	int		fds[2];
+	int		pid;
 
 	filename = prepare_file_to_save(i);
-	signal(SIGINT, SIG_DFL);
-	fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	str = readline("> ");
-	while (ft_strlen(str) == 0 || check_eof(str, (*f)->name) == 0)
+	pipe(fds);
+	pid = fork();
+	if (pid == 0)
 	{
-		write(fd, str, ft_strlen(str));
-		write(fd, "\n", 1);
-		free(str);
+		signal(SIGINT, SIG_DFL);
+		close(fds[1]);
+		close(fds[0]);
+		fd = open(filename, O_WRONLY | O_CREAT | O_APPEND, 0644);
 		str = readline("> ");
+		while (ft_strlen(str) == 0 || check_eof(str, (*f)->name) == 0)
+		{
+			if (!str)
+				break ;
+			write(fd, str, ft_strlen(str));
+			write(fd, "\n", 1);
+			free(str);
+			str = readline("> ");
+		}
+		if (str)
+			free(str);
+		str = 0;
+		close(fd);
+		exit(0);
 	}
-	if (str)
-		free(str);
+	signal(SIGINT, SIG_IGN);
+	close(fds[0]);
+	close(fds[1]);
+	wait(NULL);
 	free((*f)->name);
 	(*f)->name = ft_strdup(filename);
-	str = 0;
-	close(fd);
 	free(filename);
 }
 

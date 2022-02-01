@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 09:40:24 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 10:49:15 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ int	main(int argc, char **argv, char **envp)
 	custom_str = 0;
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
-	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
 	if (argc == 1)
 		help_usage();
