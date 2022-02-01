@@ -6,11 +6,29 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/13 13:40:09 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 16:27:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+void	no_env_var(void)
+{
+	char	*buf;
+	char	*aux;
+
+	buf = getcwd(NULL, MAXPATHLEN);
+	data.env = ft_calloc(3, sizeof(char *));
+	data.exp = ft_calloc(4, sizeof(char *));
+	data.env[0] = ft_strjoin("PWD=", buf);
+	data.env[1] = ft_strdup("SHLVL=1");
+	data.exp[0] = ft_strdup("OLDPWD");
+	aux = ft_strjoin("PWD=\"", buf);
+	data.exp[1] = ft_strjoin(aux, "\"");
+	data.exp[2] = ft_strdup("SHLVL=\"1\"");
+	free(buf);
+	free(aux);
+}
 
 int	get_env_size(char **envp)
 {

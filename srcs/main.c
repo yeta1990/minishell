@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 15:59:10 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 16:34:28 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,9 +110,14 @@ int	main(int argc, char **argv, char **envp)
 		atexit(check_leaks);
 	i = 0;
 	argc += 0;
-	data.env = create_env(envp);
-	data.exp = create_exp(envp);
-	inc_shell_level();
+	if (*envp)
+	{
+		data.env = create_env(envp);
+		data.exp = create_exp(envp);
+		inc_shell_level();
+	}
+	else
+		no_env_var();
 	while (argv[i])
 		i++;
 	i = 0;

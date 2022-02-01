@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 15:43:12 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 16:23:28 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,7 @@ char	**create_env(char **envp);
 char	**create_exp(char **envp);
 void	free_env(char **env);
 char	*export_join(char *str);
+void	no_env_var(void);
 
 //builtins1.c
 void	pwd_builtin(t_data *data);
