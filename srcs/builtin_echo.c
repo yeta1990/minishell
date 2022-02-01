@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:22:18 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:22:25 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:42:04 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,23 @@ int	echo_flag(char **cmd_complete)
 	return (flags);
 }
 
+char	*echo_init(t_cmd *cmd, int *i, int *new_line)
+{
+	char	*aux;
+
+	aux = 0;
+	if (cmd->cmd_complete && cmd->cmd_complete[0])
+	{
+		*i = echo_flag(&(cmd->cmd_complete[1])) + 1;
+		if (*i > 1)
+			*new_line = 0;
+		aux = ft_strdup(cmd->cmd_complete[*i]);
+	}
+	else
+		aux = ft_strdup("");
+	return (aux);
+}
+
 void	echo_builtin(t_cmd *cmd, t_data *data)
 {
 	char	*aux;
@@ -47,17 +64,8 @@ void	echo_builtin(t_cmd *cmd, t_data *data)
 
 	first_space = 0;
 	i = 0;
-	aux = 0;
 	new_line = 1;
-	if (cmd->cmd_complete && cmd->cmd_complete[0])
-	{
-		i = echo_flag(&(cmd->cmd_complete[1])) + 1;
-		if (i > 1)
-			new_line = 0;
-		aux = ft_strdup(cmd->cmd_complete[i]);
-	}
-	else
-		aux = ft_strdup("");
+	aux = echo_init(cmd, &i, &new_line);
 	first_space = i;
 	while (aux)
 	{
