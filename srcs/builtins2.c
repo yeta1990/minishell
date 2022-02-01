@@ -6,73 +6,11 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 17:26:43 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:23:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-int	echo_flag(char **cmd_complete)
-{
-	int		flags;
-	char	*aux;
-
-	flags = 0;
-	aux = cmd_complete[flags];
-	while (aux)
-	{
-		if (*aux && *aux != '-')
-			return (flags);
-		aux++;
-		if (*aux && *aux == 'n')
-			aux++;
-		else
-			return (flags);
-		while (*aux && *aux == 'n')
-			aux++;
-		if (*aux)
-			return (flags);
-		flags++;
-		aux = cmd_complete[flags];
-	}
-	return (flags);
-}
-
-void	echo_builtin(t_cmd *cmd, t_data *data)
-{
-	char	*aux;
-	int		i;
-	int		new_line;
-	int		first_space;
-
-	first_space = 0;
-	i = 0;
-	aux = 0;
-	new_line = 1;
-	if (cmd->cmd_complete && cmd->cmd_complete[0])
-	{
-		i = echo_flag(&(cmd->cmd_complete[1])) + 1;
-		if (i > 1)
-			new_line = 0;
-		aux = ft_strdup(cmd->cmd_complete[i]);
-	}
-	else
-		aux = ft_strdup("");
-	first_space = i;
-	while (aux)
-	{
-		if ((i >= first_space + 1 && new_line == 1) || i > first_space)
-			write(1, " ", 1);
-		ft_putstr_fd(aux, 1);
-		free(aux);
-		i++;
-		aux = ft_strdup(cmd->cmd_complete[i]);
-	}
-	free(aux);
-	if (new_line)
-		write(1, "\n", 1);
-	data->last_code = 0;
-}
 
 void	update_env(t_data *data, int index_exp, int i)
 {
@@ -102,35 +40,23 @@ void	update_env(t_data *data, int index_exp, int i)
 	}
 }
 
-//export errors
-//si empieza por no alpha, error
-//si contiene no alphanum, error
-//si contiene un '$' (es decir, que el expander haya dejado la '$' tal cual, también error
-
-int	export_error_checker(t_data *data, char *cmd_complete)
+int	export_error_checker(t_data *data, char *cmd_complete, int unset)
 {
-//	int	i;
 	int	j;
 	int	equals;
 
-//	i = 1;
-//	equals = 0;
-//	while (cmd->cmd_complete[i])
-//	{
-		j = 0;
-		equals = 0;
-		if (ft_strlen(cmd_complete) > 0 && ft_isalpha(cmd_complete[0]) == 0)
+	j = 0;
+	equals = 0;
+	if (ft_strlen(cmd_complete) > 0 && ft_isalpha(cmd_complete[0]) == 0)
+		return (export_error(cmd_complete, data));
+	while (cmd_complete[j])
+	{
+		if (cmd_complete[j] == '=' && equals == 0 && unset == 0)
+			equals = 1;
+		if (equals == 0 && ft_isalnum(cmd_complete[j]) == 0)
 			return (export_error(cmd_complete, data));
-		while (cmd_complete[j])
-		{
-			if (cmd_complete[j] == '=' && equals == 0)
-				equals = 1;
-			if (equals == 0 && ft_isalnum(cmd_complete[j]) == 0)
-				return (export_error(cmd_complete, data));
-			j++;
-		}
-//		i++;
-//	}
+		j++;
+	}
 	return (0);
 }
 
@@ -155,7 +81,7 @@ int	export_builtin(t_data *data, t_cmd *cmd)
 	}
 	while (cmd->cmd_complete[++i])
 	{
-		if (export_error_checker(data, cmd->cmd_complete[i]))
+		if (export_error_checker(data, cmd->cmd_complete[i], 0))
 			return_code = 1;
 		else
 		{
@@ -183,7 +109,7 @@ int	unset_builtin(t_data *data, t_cmd *cmd)
 	i = 1;
 	while (cmd->cmd_complete[i])
 	{
-		if (export_error_checker(data, cmd->cmd_complete[i]))
+		if (export_error_checker(data, cmd->cmd_complete[i], 1))
 			return_code = 1;
 		else
 		{
