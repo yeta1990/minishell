@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 23:43:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 00:00:45 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,13 @@ void	into_the_fork(t_data *data, t_cmd *cmd, int i)
 	pipes_and_dups_works(data, cmd, i);
 	if (cmd->cmd && check_builtins(data, cmd) == 1)
 		exit(data->last_code);
-	else if (cmd->cmd && execve(cmd->cmd,
+	else if (ft_strlen(cmd->cmd) > 0 || (ft_strlen(cmd->cmd) == 0
+		&& !(*cmd->stdins) && !(*cmd->stdouts)))
+	{
+		if (cmd->cmd && execve(cmd->cmd,
 			&(cmd->cmd_complete[0]), data->env) < 0)
 		exit(transform_error_code(cmd->cmd, (int) errno));
+	}
 	else
 		exit(0);
 }
@@ -73,9 +77,7 @@ void	execute_process(t_data *data, int *child_status)
 	{
 		if (builtins_execution(&i, data, &cmd, child_status) == 1)
 			continue ;
-		else if ((cmd->cmd && ft_strlen(cmd->cmd) > 0)
-			|| (ft_strlen(cmd->cmd) == 0 && !(*cmd->stdins)
-				&& !(*cmd->stdouts)))
+		else if (cmd->cmd)
 		{
 			data->pid[i] = fork();
 			if (data->pid[i] == 0)
