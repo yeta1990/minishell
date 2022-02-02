@@ -11,7 +11,9 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/ft_isalpha.c srcs/ft_isdigit.c srcs/utils_4.c \
 		  srcs/split_quotes_utils.c srcs/get_cmd_from_user.c \
 		  srcs/quote_parser_utils.c srcs/expansor.c \
-		  srcs/expansor_2.c srcs/parser.c srcs/shell_level.c
+		  srcs/expansor_2.c srcs/parser.c srcs/builtin_echo.c \
+		  srcs/builtin_cd.c srcs/heredoc.c srcs/error_handlers_2.c \
+		  srcs/executor_helpers.c srcs/shell_level.c
 
 INCS	= inc/ 
 

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/21 17:36:21 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/01 15:30:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	search_word_del(char **arr, char *str)
 	while (arr[i])
 	{
 		j = 0;
-		while (arr[i][j] && str[j])
+		while (arr[i] && arr[i][j] && str[j])
 		{
 			if (str[j] != arr[i][j])
 				break ;
@@ -44,7 +44,7 @@ int	search_word(char **arr, char *str)
 	while (arr[i])
 	{
 		j = 0;
-		while (arr[i][j] && str[j])
+		while (arr[i] && arr[i][j] && str[j])
 		{
 			if (str[j] != arr[i][j])
 				break ;
@@ -67,13 +67,14 @@ char	**add_entry(char **old_arr, char *new_str)
 
 	i = 0;
 	size = get_env_size(old_arr) + 1;
-	arr = ft_calloc(size + 1, sizeof(char *));
+	arr = ft_calloc(size + 2, sizeof(char *));
 	while (old_arr[i])
 	{
 		arr[i] = old_arr[i];
 		i++;
 	}
 	arr[i] = new_str;
+	arr[i + 1] = 0;
 	free(old_arr);
 	return (arr);
 }
@@ -88,13 +89,16 @@ char	**del_entry(char **old_arr, int index)
 	i = 0;
 	j = 0;
 	size = get_env_size(old_arr);
-	arr = ft_calloc(size, sizeof(char *));
+	arr = ft_calloc(size, sizeof(char *) + 1);
 	while (old_arr[i])
 	{
 		if (i != index)
 			arr[j++] = old_arr[i];
+		else
+			free(old_arr[i]);
 		i++;
 	}
+	arr[i] = 0;
 	free(old_arr);
 	return (arr);
 }

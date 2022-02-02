@@ -6,11 +6,35 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 18:17:45 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 18:33:03 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	cmd_is_builtin(char *file, char **cmd_ok)
+{
+	int	b;
+
+	b = 0;
+	if (ft_strcmp("cd", file) == 0)
+		b = 1;
+	else if (ft_strcmp("pwd", file) == 0)
+		b = 1;
+	else if (ft_strcmp("env", file) == 0)
+		b = 1;
+	else if (ft_strcmp("export", file) == 0)
+		b = 1;
+	else if (ft_strcmp("unset", file) == 0)
+		b = 1;
+	else if (ft_strcmp("echo", file) == 0)
+		b = 1;
+	else if (ft_strcmp("exit", file) == 0)
+		b = 1;
+	if (cmd_ok && b == 1)
+		*cmd_ok = ft_strdup(file);
+	return (b);
+}
 
 int	is_raw_cmd(char *file, char **cmd_ok)
 {
@@ -73,9 +97,9 @@ char	**create_args(char *raw_cmd, char **cmd, t_data *data)
 
 	i = 0;
 	args = split_quote_sensitive(raw_cmd, data);
-	if (!(is_raw_cmd(args[0], cmd)))
+	if (!(is_raw_cmd(args[0], cmd)) && !(cmd_is_builtin(args[0], cmd)))
 		is_cmd(args[0], cmd, data);
 	if (!args)
-		printf("eoooooooooo");
+		return (0);
 	return (args);
 }

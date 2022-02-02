@@ -6,13 +6,13 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/01/26 15:25:30 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:53:13 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	set_cut_sizes(t_pipe_sep_vars *w, char *s, char c)
+int	set_cut_sizes(t_sep *w, char *s, char c)
 {
 	if (s[w->i] != c)
 		w->i++;
@@ -31,8 +31,8 @@ int	set_cut_sizes(t_pipe_sep_vars *w, char *s, char c)
 
 static char	**save_words(char *str, t_data *data, char c)
 {
-	t_pipe_sep_vars	*w;
-	char			*s;
+	t_sep	*w;
+	char	*s;
 
 	s = (char *)str;
 	w = initialise_save_words_vars();
@@ -107,9 +107,9 @@ char	**ft_split_pipes(char const *s, t_data *data)
 	if (s)
 	{
 		str = ft_strdup(s);
-		aux = str;
 		if (str)
 		{
+			aux = str;
 			nwords = get_nwords(aux, '|');
 			if (nwords > 1 && str && *str)
 				ptr = save_words(str, data, '|');

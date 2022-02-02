@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/08 17:09:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/26 19:03:55 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:43:24 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	free_double_string(char **str)
 void	reset_data(t_data *data)
 {
 	free(data->cmds);
+	free(data->pid);
 	data->cmds = 0;
 	data->num_cmds = 0;
 	data->num_pipes = 0;

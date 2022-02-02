@@ -58,6 +58,7 @@ char	**create_env(char **envp)
 		envp++;
 		i++;
 	}
+	env[i] = 0;
 	return (env);
 }
 
@@ -97,5 +98,6 @@ char	**create_exp(char **envp)
 		envp++;
 		i++;
 	}
+	exp[i] = 0;
 	return (exp);
 }

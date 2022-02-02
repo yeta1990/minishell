@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 11:25:15 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 11:46:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/01 22:42:34 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	parse_infiles(t_data *data, t_cmd *parsed_instruction, char **str)
 		*str += add_redirection(*str, parsed_instruction, 1, data);
 	}
 	else
-		*str += add_redirection(*str, parsed_instruction, 0, data);
+		*str += add_redirection(*str, parsed_instruction, 0, data) - 1;
 }
 
 void	parse_outfiles(t_data *data, t_cmd *parsed_instruction, char **str)
@@ -33,7 +33,7 @@ void	parse_outfiles(t_data *data, t_cmd *parsed_instruction, char **str)
 		*str += add_redirection(*str, parsed_instruction, 3, data);
 	}
 	else
-		*str += add_redirection(*str, parsed_instruction, 2, data);
+		*str += add_redirection(*str, parsed_instruction, 2, data) - 1;
 }
 
 void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
@@ -99,5 +99,6 @@ void	parsing_handler(t_data *data, char **str)
 		data->num_cmds++;
 		i++;
 	}
+	data->pid = malloc(sizeof(pid_t) * data->num_cmds);
 	free_double_string(instructions);
 }

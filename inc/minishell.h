@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 10:12:40 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 10:16:54 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,10 @@ typedef struct s_data
 	char				**exp;
 	int					syntax_error;
 	int					cmd_by_stdin;
+	int					*pid;
 }	t_data;
 
-typedef struct s_pipe_sep_vars
+typedef struct s_sep
 {
 	int		nwords;
 	int		f_dquote;
@@ -77,7 +78,7 @@ typedef struct s_pipe_sep_vars
 	int		i;
 	int		last;
 	t_files	**separated_pipes;
-}	t_pipe_sep_vars;
+}	t_sep;
 
 typedef struct s_split_cmds_vars
 {
@@ -147,11 +148,11 @@ int		search_after_pipe(int len, int j, char *aux, t_data *data);
 char	*search_next_pipe(int *len, char *aux, t_data *data);
 
 //split_quotes_2.c
-void			set_quotes_flags(char c, int *f_dquote, int *f_quote);
-int				get_nwords(char *str, char c);
-int				check_pipes_syntax_error(char *str, t_data *data);
-void			add_pipe(t_files **sep_pipes, char *s, t_pipe_sep_vars *w, t_data *data);
-t_pipe_sep_vars	*initialise_save_words_vars(void);
+void	set_quotes_flags(char c, int *f_dquote, int *f_quote);
+int		get_nwords(char *str, char c);
+int		check_pipes_syntax_error(char *str, t_data *data);
+void	add_pipe(t_files **sep_pipes, char *s, t_sep *w, t_data *data);
+t_sep	*initialise_save_words_vars(void);
 
 //utils
 char	**ft_split(char const *s, char c);
@@ -192,6 +193,12 @@ void	check_leaks(void);
 void	print_t_cmd(t_cmd **cmds);
 void	help_usage(void);
 int		testing_mode(int argc, char **argv, t_data *data);
+
+//executor_helpers.c
+void	pipes_and_dups_works(t_data *data, t_cmd *cmd, int i);
+void	create_pipes(t_cmd **cmds);
+void	close_pipes(t_cmd **cmds);
+void	check_heredocs(t_data *data);
 
 //executor.c
 int		execute_commands(t_data *data);
