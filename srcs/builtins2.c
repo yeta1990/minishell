@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 21:47:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 23:03:16 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,11 @@ int	export_error_checker(t_data *data, char *cmd_complete, int unset)
 	equals = 0;
 	if (ft_strlen(cmd_complete) > 0 && ft_isalpha(cmd_complete[0]) == 0)
 		return (export_error(cmd_complete, data));
+	while (cmd_complete[j] == ' ')
+		j++;
+	if (j == (int) ft_strlen(cmd_complete))
+		return (export_error(cmd_complete, data));
+	j = 0;
 	while (cmd_complete[j])
 	{
 		if (cmd_complete[j] == '=' && equals == 0 && unset == 0)
@@ -65,8 +70,7 @@ int	export_alone(t_data *data, t_cmd *cmd)
 	int	i;
 
 	i = 0;
-	if (!cmd->cmd_complete[1] || (cmd->cmd_complete[1]
-			&& ft_strlen(cmd->cmd_complete[1]) == 0))
+	if (!cmd->cmd_complete[1])
 	{
 		while (data->exp[i])
 		{
