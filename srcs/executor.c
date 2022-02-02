@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 00:00:45 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 00:33:13 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,8 @@ void	into_the_fork(t_data *data, t_cmd *cmd, int i)
 	if (cmd->cmd && check_builtins(data, cmd) == 1)
 		exit(data->last_code);
 	else if (ft_strlen(cmd->cmd) > 0 || (ft_strlen(cmd->cmd) == 0
-		&& !(*cmd->stdins) && !(*cmd->stdouts)))
+		&& !(*cmd->stdins) && !(*cmd->stdouts)
+		&& ft_strchr(cmd->cmd_and_its_flags, '$') == 0))
 	{
 		if (cmd->cmd && execve(cmd->cmd,
 			&(cmd->cmd_complete[0]), data->env) < 0)
