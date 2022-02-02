@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 18:22:04 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 13:06:31 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 00:23:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,18 @@
 //heredoc. type 1
 //standard output redirected to a file. type 2
 //standard output redirected to a file in append mode. type 3
+
+void	set_filename(char *name, t_data *data, t_files *file, int size)
+{
+	char	*piece;
+	char	*trimmed;
+
+	piece = ft_strdup_space(name, &size, 0);
+	trimmed = ft_strtrim(piece, "\"");
+	file->name = expansor(&trimmed, 0, data);
+	free(piece);
+	free(trimmed);
+}
 
 int	add_redirection(char *name, t_cmd *cmd, int type, t_data *data)
 {
@@ -30,7 +42,7 @@ int	add_redirection(char *name, t_cmd *cmd, int type, t_data *data)
 		size++;
 		name++;
 	}
-	file->name = ft_strdup_space(name, &size, 0);
+	set_filename(name, data, file, size);
 	if (ft_strlen(file->name) == 0)
 		syntax_error(file->name, data);
 	else if (is_valid_infile(file->name) == 0)
