@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:50:22 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 14:13:46 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 23:52:02 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,20 @@ t_expansor_vars	*initialise_expansor_vars(char **arg)
 
 void	expansor_first(t_expansor_vars *v, char **arg, int type)
 {
+	while (v->a && v->a[v->i] && v->a[v->i] == ' ')
+		v->i++;
+	if (v->a[v->i] && v->a[v->i] == '$')
+	{
+		v->i++;
+		while (v->a && v->a[v->i] && v->a[v->i] == ' ')
+			v->i++;
+		if (v->i == (int) ft_strlen(*arg))
+			v->exp = ft_strdup(*arg);
+		else
+			v->i = 0;
+	}
+	else
+		v->i = 0;
 	while (v->a && v->a[v->i] && v->a[v->i] != '$')
 		v->i++;
 	if (v->i != 0)
