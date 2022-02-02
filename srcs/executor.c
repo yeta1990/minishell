@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 13:09:23 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 23:08:25 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,9 @@ void	execute_process(t_data *data, int *child_status)
 	{
 		if (builtins_execution(&i, data, &cmd, child_status) == 1)
 			continue ;
-		else if (cmd->cmd && ft_strlen(cmd->cmd_complete[0]) > 0)
+		else if (cmd->cmd)// && cmd->cmd_complete[0])//ft_strlen(cmd->cmd_complete[0]) > 0)
 		{
+			printf("siiI");
 			data->pid[i] = fork();
 			if (data->pid[i] == 0)
 				into_the_fork(data, cmd, i);

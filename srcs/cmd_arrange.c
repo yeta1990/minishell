@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 14:44:06 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:33:03 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 23:24:33 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,26 +67,25 @@ int	is_cmd(char *file, char **cmd_ok, t_data *data)
 	char	*cmd_try;
 	char	**paths;
 
-	j = 0;
+	j = -1;
 	paths = get_cut_paths(data);
-	while (paths[j])
+	while (paths[++j])
 	{
 		cmd_try = ft_strjoin(paths[j], file);
 		if (access(cmd_try, X_OK) != -1)
 		{
 			if ((cmd_ok) && ft_strlen(cmd_try) > ft_strlen(paths[j]))
 				*cmd_ok = ft_strdup(cmd_try);
+			else
+				*cmd_ok = ft_strdup("");
 			free(cmd_try);
 			free_paths(paths);
 			return (1);
 		}
 		free(cmd_try);
-		j++;
 	}
 	free_paths(paths);
-	*cmd_ok = 0;
-	if (file)
-		*cmd_ok = ft_strdup(file);
+	*cmd_ok = ft_strdup(file);
 	return (0);
 }
 

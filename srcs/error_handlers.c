@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 22:54:09 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 23:16:21 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	transform_error_code(char *cmd, int err)
 {
-	if (err == 13 && access(cmd, F_OK) == 0)
+	if (err == 13 && (access(cmd, F_OK) != 0 || access(cmd, X_OK) == -1))
 	{
 		write(2, "minishell: ", 11);
 		write(2, cmd, ft_strlen(cmd));
