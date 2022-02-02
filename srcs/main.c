@@ -6,15 +6,13 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 11:57:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 10:12:53 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 #include <string.h>
 #include <sys/wait.h>
-
-t_data	g_data;
 
 void	handler_c(int signo)
 {

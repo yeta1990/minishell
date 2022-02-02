@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 11:27:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 10:12:40 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,8 @@ typedef struct s_expansor_vars
 	int		j;
 	int		z;		
 }	t_expansor_vars;
+
+t_data	g_data;
 
 void	handler_c(int a);
 
@@ -220,6 +222,7 @@ char	**create_env(char **envp);
 char	**create_exp(char **envp);
 void	free_env(char **env);
 char	*export_join(char *str);
+void	no_env_var(void);
 
 //builtins1.c
 void	pwd_builtin(t_data *data);
@@ -256,5 +259,8 @@ void	parsing_handler(t_data *data, char **str);
 
 //expansor_2.c
 void	expansor_advance(t_expansor_vars *v);
+
+//shell_level.c
+void	inc_shell_level(void);
 
 #endif
