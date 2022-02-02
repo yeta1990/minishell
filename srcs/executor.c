@@ -6,30 +6,34 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 22:47:38 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/02 12:39:38 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pipeline_final(int *child_status, int *code, int *first_sgl)
+int	wait_children(int *child_status, int *code, int *signal)
 {
-	int		last_sgl;
-	int		i;
+	int		success;
+	int		last_pid;
+	int		pid;
 
-	i = 0;
-	last_sgl = 0;
-	if ((WIFSIGNALED(*child_status) && (WTERMSIG(*child_status) == SIGINT)))
-		last_sgl = 1;
-	if (!(*first_sgl) && last_sgl)
-		return (*code);
-	else if (*first_sgl)
-		return (130);
-	else if (WIFEXITED(*child_status))
-		return (WEXITSTATUS(*child_status));
-	else if (WTERMSIG(*child_status) == SIGSEGV)
-		return (transform_error_code(0, 11));
-	return (*child_status);
+	pid = 0;
+	last_pid = 0;
+	while (pid != -1)
+	{
+		if (WTERMSIG(*child_status) == SIGINT)
+			if (last_pid == 0)
+				*signal = 1;
+		if (pid > last_pid)
+		{
+			last_pid = pid;
+			*code = WEXITSTATUS(*child_status);
+			success = WIFEXITED(*child_status);
+		}
+		pid = wait(child_status);
+	}
+	return (success);
 }
 
 int	builtins_execution(int *i, t_data *data, t_cmd *cmd, int *child_status)
@@ -84,29 +88,23 @@ void	execute_process(t_data *data, int *child_status)
 
 int	execute_commands(t_data *data)
 {	
-	int		i;
 	int		child_status;
-	int		first_sgl;
 	int		code;
+	int		signal;
+	int		success;
 
+	signal = 0;
 	code = 0;
-	first_sgl = 0;
-	i = 0;
 	create_pipes(data->cmds);
 	check_heredocs(data);
 	execute_process(data, &child_status);
 	close_pipes(data->cmds);
-	while (wait(&child_status) != -1)
-	{
-		if (i == 0)
-		{
-			if (WIFEXITED(child_status))
-				code = WEXITSTATUS(child_status);
-			else if (WIFSIGNALED(child_status)
-				&& (WTERMSIG(child_status) == SIGINT))
-				first_sgl = 1;
-		}
-		i++;
-	}
-	return (pipeline_final(&child_status, &code, &first_sgl));
+	success = wait_children(&child_status, &code, &signal);
+	if (WTERMSIG(child_status) == SIGSEGV)
+		return (transform_error_code(0, 11));
+	else if (signal == 1)
+		return (130);
+	else if (success)
+		return (code);
+	return (child_status);
 }
