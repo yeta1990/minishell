@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 11:25:15 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 22:42:34 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 01:04:31 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	parse_infiles(t_data *data, t_cmd *parsed_instruction, char **str)
 	if (str && *str && **str && **str == '<')
 	{
 		(*str)++;
-		*str += add_redirection(*str, parsed_instruction, 1, data);
+		*str += add_redirection(*str, parsed_instruction, 1, data) - 1;
 	}
 	else
 		*str += add_redirection(*str, parsed_instruction, 0, data) - 1;
@@ -30,7 +30,7 @@ void	parse_outfiles(t_data *data, t_cmd *parsed_instruction, char **str)
 	if (str && *str && **str && **str == '>')
 	{
 		(*str)++;
-		*str += add_redirection(*str, parsed_instruction, 3, data);
+		*str += add_redirection(*str, parsed_instruction, 3, data) - 1;
 	}
 	else
 		*str += add_redirection(*str, parsed_instruction, 2, data) - 1;
