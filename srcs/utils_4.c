@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:01:54 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 16:04:19 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 13:23:04 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,45 @@ int	ft_strcmp(char *s1, char *s2)
 	return (a);
 }
 
-int	std_space_get_cut_space(char *s1)
+size_t	get_double_quote_cut(char *s)
 {
 	size_t	l;
 	char	*aux;
 
+	aux = s + 1;
+	if (ft_strchr(aux, '"') && *(ft_strchr(aux, '"') + 1) == ' ')
+		l = (ft_strchr(aux, '"') - aux) + 2;
+	else if (ft_strchr(aux, '"'))
+		l = (ft_strchr(aux, '"') - aux) + 2;
+	while (s && s[l] && s[l] != ' ')
+		l++;
+	return (l);
+}
+
+size_t	get_simple_quote_cut(char *s)
+{
+	size_t	l;
+	char	*aux;
+
+	aux = s + 1;
+	if (ft_strchr(aux, '\'') && *(ft_strchr(aux, '\'') + 1) == ' ')
+		l = (ft_strchr(aux, '\'') - aux) + 2;
+	else if (ft_strchr(aux, '\''))
+		l = (ft_strchr(aux, '\'') - aux) + 2;
+	while (s && s[l] && s[l] != ' ')
+		l++;
+	return (l);
+}
+
+size_t	std_space_get_cut_space(char *s1)
+{
+	size_t	l;
+
 	l = 0;
 	if (s1 && *s1 == '"')
-	{
-		aux = s1 + 1;
-		if (ft_strchr(aux, '"') && *(ft_strchr(aux, '"') + 1) == ' ')
-			l = (ft_strchr(aux, '"') - aux) + 2;
-		else
-			while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
-				l++;
-	}
+		return (get_double_quote_cut(s1));
+	else if (s1 && *s1 == '\'')
+		return (get_simple_quote_cut(s1));
 	else
 		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
 			l++;
