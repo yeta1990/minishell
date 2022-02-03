@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:01:54 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 13:23:04 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:51:32 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,4 +77,14 @@ size_t	std_space_get_cut_space(char *s1)
 		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
 			l++;
 	return (l);
+}
+
+void	init_checker(int argc, char **argv)
+{
+	if (argc > 1)
+	{
+		ft_putstr_fd("Usage: ./minishell\n", 1);
+		exit (0);
+	}
+	argv += 0;
 }

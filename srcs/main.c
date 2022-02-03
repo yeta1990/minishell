@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 21:32:28 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:54:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,7 @@ int	main(int argc, char **argv, char **envp)
 	char				*str;
 	struct sigaction	ctrl_c;
 
-	if (argc > 1)
-	{
-		ft_putstr_fd("Usage: ./minishell\n", 1);
-		exit (0);
-	}
-	argv += 0;
+	init_checker(argc, argv);
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;

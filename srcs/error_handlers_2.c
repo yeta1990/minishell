@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 21:49:57 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 14:06:20 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:53:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	isalnum_string(char *str)
 	i = 0;
 	while (str && str[i])
 	{
-		if (isalnum(str[i]) == 0)
+		if (ft_isalnum(str[i]) == 0)
 			return (0);
 		i++;
 	}
