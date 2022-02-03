@@ -2,7 +2,7 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/utils_2.c srcs/utils_3.c srcs/path_operations.c \
 		  srcs/ft_strtrim_full_string.c srcs/ft_split_mod.c \
 		  srcs/ft_memcmp.c srcs/ft_strjoin.c srcs/ft_memmove.c \
-		  srcs/cmd_arrange.c srcs/ft_putstr_fd.c srcs/test_printers.c \
+		  srcs/cmd_arrange.c srcs/ft_putstr_fd.c \
 		  srcs/split_quotes.c srcs/get_char_pos.c srcs/free_utils.c srcs/builtins1.c \
 		  srcs/builtins2.c srcs/builtins3.c srcs/envp.c \
 		  srcs/executor.c srcs/ft_files.c srcs/ft_strncmp.c \
@@ -22,7 +22,7 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror
 
 NAME	= minishell
 
@@ -43,8 +43,5 @@ fclean:		clean
 			$(RM) $(NAME)
 
 re:			fclean all
-
-san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline -o $(NAME) -g0 -O -fsanitize=address 
 
 .PHONY:		all clean fclean re

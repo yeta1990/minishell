@@ -1,7 +1,0 @@
-
-	char **cmdargs;
-	cmdargs = create_args(argv[2], &cmd, envp);
-	execve(cmd, &cmdargs[0], envp);
-	perror("pipex");
-	exit(errno);
-

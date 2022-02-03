@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:57:16 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:57:27 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:26:38 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,8 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 	}
 	buf = getcwd(NULL, MAXPATHLEN);
 	if (!buf)
-		cd_error("error retrieving current directory: getcwd: cannot access parent directories", errno, data);
+		cd_error("error retrieving current directory: "
+			"getcwd: cannot access parent directories", errno, data);
 	cd_set_new_vars(data, &buf, &old_pwd);
 	return (0);
 }

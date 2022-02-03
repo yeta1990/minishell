@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 16:31:07 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:33:35 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,17 +31,6 @@ typedef struct s_files
 	struct s_files	*next;
 	int				append;
 }	t_files;
-
-//	cmd: primer parámetro de exexve
-//	cmd_complete: segundo parametro de execve
-//	cmd_and_its_flags: el lexer une todas las palabras sospechosas 
-//de ser un comando y sus flags en una cadena de carácteres separadas 
-//por espacios. luego esta se utiliza para crear "cmd" y "cmd complete",
-//luego ya es inútil.
-//	stdins: nombres de archivo de redirecciones stdin
-//	stdouts: nombres de archivo de redirecciones stout
-//	stderrs: nombres de archivo de redirecciones sterr
-//	heredocs
 
 typedef struct s_cmd
 {
@@ -187,12 +176,6 @@ void	free_double_string(char **str);
 void	free_data(t_data *data);
 void	free_files(t_files *first);
 void	reset_data(t_data *data);
-
-//test_printers.c
-void	check_leaks(void);
-void	print_t_cmd(t_cmd **cmds);
-void	help_usage(void);
-int		testing_mode(int argc, char **argv, t_data *data);
 
 //executor_helpers.c
 void	pipes_and_dups_works(t_data *data, t_cmd *cmd, int i);

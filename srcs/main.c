@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 10:37:07 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/03 21:32:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	history_management(t_data *data, char **str)
 	*str = 0;
 }
 
-void	main_controller(t_data *data, char *str, int argc, char **argv)
+void	main_controller(t_data *data, char *str)
 {
 	data->cmds = malloc(sizeof(t_cmd *));
 	data->cmds[0] = 0;
@@ -56,9 +56,7 @@ void	main_controller(t_data *data, char *str, int argc, char **argv)
 	data->cmd_by_stdin = 0;
 	parsing_handler(data, &str);
 	history_management(data, &str);
-	if (testing_mode(argc, argv, data))
-		;
-	else if (data->syntax_error == 0)
+	if (data->syntax_error == 0)
 		data->last_code = execute_commands(data);
 	free_data(data);
 	reset_data(data);
@@ -81,8 +79,12 @@ int	main(int argc, char **argv, char **envp)
 	char				*str;
 	struct sigaction	ctrl_c;
 
-	if (argc == 1)
-		help_usage();
+	if (argc > 1)
+	{
+		ft_putstr_fd("Usage: ./minishell\n", 1);
+		exit (0);
+	}
+	argv += 0;
 	ctrl_c.sa_handler = &handler_c;
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;
@@ -94,7 +96,7 @@ int	main(int argc, char **argv, char **envp)
 		sigaction(SIGINT, &ctrl_c, NULL);
 		str = readline("minishell $ ");
 		if (str && ft_strlen(str) > 0)
-			main_controller(&g_data, str, argc, argv);
+			main_controller(&g_data, str);
 		else if (!str)
 		{
 			write(1, "exit\n", 5);
