@@ -13,7 +13,7 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/quote_parser_utils.c srcs/expansor.c \
 		  srcs/expansor_2.c srcs/parser.c srcs/builtin_echo.c \
 		  srcs/builtin_cd.c srcs/heredoc.c srcs/error_handlers_2.c \
-		  srcs/executor_helpers.c srcs/shell_level.c
+		  srcs/executor_helpers.c srcs/shell_level.c srcs/ft_strrchr.c
 
 INCS	= inc/ 
 
@@ -21,17 +21,17 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror -g #-fsanitize=address
+CFLAGS	= -Wall -Wextra -Werror -g -fsanitize=address
 
 NAME	= minishell
 
 RM		= rm -f
 
 %.o:%.c
-			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS) 
+			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS) -I/usr/local/opt/readline/include
 
 $(NAME):	$(OBJS) 
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -o $(NAME) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -o $(NAME) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -lreadline
 
 all:		$(NAME)
 
@@ -44,6 +44,6 @@ fclean:		clean
 re:			fclean all
 
 san:		$(OBJS)
-			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline -o $(NAME) -g0 -O -fsanitize=address 
+			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -I/usr/local/opt/readline/include -L/usr/local/opt/readline/lib -lreadline -o $(NAME) -g0 -O -fsanitize=address 
 
 .PHONY:		all clean fclean re

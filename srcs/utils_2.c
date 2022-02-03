@@ -6,12 +6,12 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:46:00 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/17 20:17:55 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:20:32 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+/*
 static int	isinset(char const *set, char c)
 {
 	while (*set)
@@ -22,7 +22,35 @@ static int	isinset(char const *set, char c)
 	}
 	return (0);
 }
+*/
+char	*ft_strtrim(char const *s1, char const *set)
+{
+	char	*s;
+	size_t	i;
+	size_t	j;
 
+	i = 0;
+	if (!s1 || !set)
+		return (0);
+	j = ft_strlen(s1);
+	if (!set)
+	{
+		s = ft_strdup(s1);
+		if (!s)
+			return (0);
+		return (s);
+	}
+	while (s1[i] && ft_strchr(set, s1[i]))
+		i++;
+	while (j > i && ft_strrchr(set, s1[j]))
+		j--;
+	s = ft_substr((char *)s1, i, j - i + 1);
+	if (!s)
+		return (0);
+	return (s);
+}
+
+/*
 char	*ft_strtrim(char const *s1, char const *set)
 {
 	int		len;
@@ -49,7 +77,7 @@ char	*ft_strtrim(char const *s1, char const *set)
 		return (ptr);
 	}
 	return (0);
-}
+}*/
 
 size_t	ft_strlen(const char *s)
 {

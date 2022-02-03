@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/02/03 12:05:25 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:42:20 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,7 @@ static char	**save_words(char *str, t_data *data, char c)
 		w->i = ft_strlen(s);
 		add_pipe(w->separated_pipes, s, w, data);
 	}
-	free(w);
-	return (from_list_to_double_char(w->separated_pipes));
+	return (from_list_to_double_char_sep(&w));
 }
 
 int	get_char_pos_final_quotes(char *str)

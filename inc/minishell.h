@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 13:21:14 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:43:46 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,6 +125,7 @@ t_files	*ft_lstnew(void *content);
 
 // list_utils_2.c
 char	**from_list_to_double_char(t_files **full_strings);
+char	**from_list_to_double_char_sep(t_sep **w);
 
 // lexer_setters.c
 int		add_redirection(char *raw_file, t_cmd *cmd, int type, t_data *data);
@@ -181,6 +182,7 @@ int		ft_atoi(const char *str);
 int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
+char	*ft_strrchr(const char *s, int c);
 
 //freezers
 void	free_double_string(char **str);
