@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 12:52:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 17:47:23 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	wait_children(int *child_status, int *code, int *signal)
 
 int	builtins_execution(int *i, t_data *data, t_cmd **cmd, int *child_status)
 {
-	if (*i == 0)
+	if (*i == 0 && data->num_cmds == 1)
 		exit_builtin(data, *cmd);
 	if (ft_strcmp("exit", (*cmd)->cmd_complete[0]) != 0)
 	{
