@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 14:41:09 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/03 16:31:36 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,16 @@ void	pwd_builtin(t_data *data)
 	free(buf);
 }
 
-void	env_builtin(t_data *data)
+void	env_builtin(t_data *data, t_cmd *cmd)
 {
 	int	i;
 
 	i = 0;
+	if (cmd->cmd_complete[1])
+	{
+		ft_putstr_fd("usage: env [without any options]\n", 2);
+		exit(1);
+	}
 	while (data->env[i])
 	{
 		ft_putstr_fd(data->env[i], 1);
@@ -77,9 +82,8 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 		cd_bultin(data, cmd);
 	else if (ft_strcmp("pwd", cmd->cmd_complete[0]) == 0)
 		pwd_builtin(data);
-	else if ((ft_strcmp("env", cmd->cmd_complete[0]) == 0)
-		&& (!cmd->cmd_complete[1]))
-		env_builtin(data);
+	else if (ft_strcmp("env", cmd->cmd_complete[0]) == 0)
+		env_builtin(data, cmd);
 	else if (ft_strcmp("export", cmd->cmd_complete[0]) == 0)
 		export_builtin(data, cmd);
 	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0)

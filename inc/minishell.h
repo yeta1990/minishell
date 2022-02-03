@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 14:03:36 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 16:31:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,7 +235,7 @@ void	no_env_var(void);
 //builtins1.c
 void	pwd_builtin(t_data *data);
 int		cd_bultin(t_data *data, t_cmd *cmd);
-void	env_builtin(t_data *data);
+void	env_builtin(t_data *data, t_cmd *cmd);
 int		exit_builtin(t_data *data, t_cmd *cmd);
 int		check_builtins(t_data *data, t_cmd *cmd);
 int		check_outside_builtins(t_data *data, t_cmd *cmd);
