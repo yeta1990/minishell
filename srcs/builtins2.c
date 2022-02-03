@@ -34,7 +34,7 @@ void	update_env(t_data *data, int index_exp, int i)
 	else
 	{
 		data->exp = add_entry(data->exp,
-				ft_strdup(data->cmds[0]->cmd_complete[i]));
+				export_join(data->cmds[0]->cmd_complete[i]));
 		data->env = add_entry(data->env,
 				ft_strdup(data->cmds[0]->cmd_complete[i]));
 	}
