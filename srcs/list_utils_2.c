@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 13:09:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/27 12:08:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:55:11 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,31 @@ char	**set_empty_double_char(t_files **full_strings)
 	s[1] = 0;
 	free_files(*full_strings);
 	free(full_strings);
+	return (s);
+}
+
+char	**from_list_to_double_char_sep(t_sep **w)
+{
+	char	**s;
+	t_files	*aux;
+	int		size;
+
+	size = t_files_size((*w)->separated_pipes);
+	aux = *(*w)->separated_pipes;
+	if (size == 0)
+		return (set_empty_double_char((*w)->separated_pipes));
+	s = malloc(sizeof(char *) * (size + 1));
+	size = 0;
+	while (aux)
+	{
+		s[size] = ft_strdup(aux->name);
+		aux = aux->next;
+		size++;
+	}
+	s[size] = 0;
+	free_files(*(*w)->separated_pipes);
+	free((*w)->separated_pipes);
+	free(*w);
 	return (s);
 }
 

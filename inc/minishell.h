@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 21:51:48 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:49:26 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ t_files	*ft_lstlast_files(t_files *lst);
 t_files	*ft_lstnew(void *content);
 
 // list_utils_2.c
+char	**from_list_to_double_char_sep(t_sep **w);
 char	**from_list_to_double_char(t_files **full_strings);
 
 // lexer_setters.c
@@ -171,7 +172,7 @@ int		ft_isalnum(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 void	init_checker(int argc, char **argv);
-
+char	*ft_strrchr(const char *s, int c);
 //freezers
 void	free_double_string(char **str);
 void	free_data(t_data *data);

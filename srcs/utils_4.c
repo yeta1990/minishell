@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:01:54 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 21:51:32 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:53:38 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ size_t	get_double_quote_cut(char *s)
 	char	*aux;
 
 	aux = s + 1;
+	l = 0;
 	if (ft_strchr(aux, '"') && *(ft_strchr(aux, '"') + 1) == ' ')
 		l = (ft_strchr(aux, '"') - aux) + 2;
 	else if (ft_strchr(aux, '"'))
@@ -55,6 +56,7 @@ size_t	get_simple_quote_cut(char *s)
 	char	*aux;
 
 	aux = s + 1;
+	l = 0;
 	if (ft_strchr(aux, '\'') && *(ft_strchr(aux, '\'') + 1) == ' ')
 		l = (ft_strchr(aux, '\'') - aux) + 2;
 	else if (ft_strchr(aux, '\''))

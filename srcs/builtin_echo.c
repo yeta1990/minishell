@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:22:18 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:42:04 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:50:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,14 @@ int	echo_flag(char **cmd_complete)
 	{
 		if (*aux && *aux != '-')
 			return (flags);
+		if (ft_strlen(aux) <= 1)
+			return (flags);
 		aux++;
-		if (*aux && *aux == 'n')
+		if (aux && *aux && *aux == 'n')
 			aux++;
 		else
 			return (flags);
-		while (*aux && *aux == 'n')
+		while (aux && *aux && *aux == 'n')
 			aux++;
 		if (*aux)
 			return (flags);

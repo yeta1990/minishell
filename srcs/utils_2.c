@@ -6,49 +6,37 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:46:00 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/17 20:17:55 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 23:52:50 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-static int	isinset(char const *set, char c)
-{
-	while (*set)
-	{
-		if (*set == c)
-			return (1);
-		set++;
-	}
-	return (0);
-}
-
 char	*ft_strtrim(char const *s1, char const *set)
 {
-	int		len;
-	char	*ptr;
+	char	*s;
+	size_t	i;
+	size_t	j;
 
-	if (s1 && set)
+	i = 0;
+	if (!s1 || !set)
+		return (0);
+	j = ft_strlen(s1);
+	if (!set)
 	{
-		while (*s1)
-		{
-			if (isinset(set, *s1) == 1)
-				s1++;
-			else
-				break ;
-		}
-		len = ft_strlen(s1);
-		while (*(s1 + len - 1) && (len >= 0))
-		{
-			if (isinset(set, *(s1 + len - 1)))
-				len--;
-			else
-				break ;
-		}
-		ptr = ft_substr(s1, 0, len);
-		return (ptr);
+		s = ft_strdup(s1);
+		if (!s)
+			return (0);
+		return (s);
 	}
-	return (0);
+	while (s1[i] && ft_strchr(set, s1[i]))
+		i++;
+	while (j > i && ft_strrchr(set, s1[j]))
+		j--;
+	s = ft_substr((char *)s1, i, j - i + 1);
+	if (!s)
+		return (0);
+	return (s);
 }
 
 size_t	ft_strlen(const char *s)
