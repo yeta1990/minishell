@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 13:47:57 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 15:08:50 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,5 @@ void	file_error(char *filename, int errn)
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(strerror(errn), 2);
 	ft_putstr_fd("\n", 2);
-	exit(errn);
+	exit(1);
 }
