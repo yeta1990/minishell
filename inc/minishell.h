@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 10:16:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 13:21:14 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ t_sep	*initialise_save_words_vars(void);
 char	**ft_split(char const *s, char c);
 char	*ft_strdup_space(const char *s1, int *size, int cmd);
 int		std_space_get_cut_position(char *s1);
-int		std_space_get_cut_space(char *s1);
+size_t	std_space_get_cut_space(char *s1);
 char	*ft_strdup(const char *s1);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
