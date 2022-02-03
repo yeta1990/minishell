@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 01:08:42 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 12:41:01 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,12 +40,15 @@ int	builtins_execution(int *i, t_data *data, t_cmd **cmd, int *child_status)
 {
 	if (*i == 0)
 		exit_builtin(data, *cmd);
-	*child_status = check_outside_builtins(data, *cmd);
-	if (*child_status != -100)
+	if (ft_strcmp("exit", (*cmd)->cmd_complete[0]) != 0)
 	{
-		*cmd = (*cmd)->next;
-		(*i)++;
-		return (1);
+		*child_status = check_outside_builtins(data, *cmd);
+		if (*child_status != -100)
+		{
+			*cmd = (*cmd)->next;
+			(*i)++;
+			return (1);
+		}
 	}
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 10:12:53 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 10:37:07 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,18 @@ void	main_controller(t_data *data, char *str, int argc, char **argv)
 	reset_data(data);
 }
 
+void	init_env(char **envp)
+{
+	if (*envp)
+	{
+		g_data.env = create_env(envp);
+		g_data.exp = create_exp(envp);
+		inc_shell_level();
+	}
+	else
+		no_env_var();
+}
+
 int	main(int argc, char **argv, char **envp)
 {
 	char				*str;
@@ -75,8 +87,7 @@ int	main(int argc, char **argv, char **envp)
 	ctrl_c.sa_flags = 0;
 	ctrl_c.sa_flags |= SA_SIGINFO;
 	signal(SIGQUIT, SIG_IGN);
-	g_data.env = create_env(envp);
-	g_data.exp = create_exp(envp);
+	init_env(envp);
 	g_data.last_code = 0;
 	while (1)
 	{

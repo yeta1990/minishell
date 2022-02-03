@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 10:16:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 12:48:18 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,7 @@ int		search_word_del(char **arr, char *str);
 int		search_word(char **arr, char *str);
 char	**add_entry(char **old_arr, char *new_str);
 char	**del_entry(char **old_arr, int index);
+int		is_not_numeric(char *str);
 
 //quote_parser_utils.c
 int		get_next_separator(char *str, char sep);

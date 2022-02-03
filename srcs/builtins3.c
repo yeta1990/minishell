@@ -6,11 +6,27 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/02/01 15:30:29 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 12:47:47 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	is_not_numeric(char *str)
+{
+	if (str)
+	{
+		while (*str)
+		{
+			if (((*str < '0') || (*str > '9'))
+				&& (*str != ' ' && *str != 9 && *str != 10
+					&& *str != 11 && *str != 12 && *str != 13))
+				return (1);
+			str++;
+		}
+	}
+	return (0);
+}
 
 int	search_word_del(char **arr, char *str)
 {

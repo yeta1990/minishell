@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 18:58:05 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 12:47:39 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,20 @@ int	exit_builtin(t_data *data, t_cmd *cmd)
 	data->last_code = code;
 	if (cmd->cmd && ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 	{
+		if (is_not_numeric(cmd->cmd_complete[1]))
+		{
+			ft_putstr_fd("Minishell: exit: ", 1);
+			ft_putstr_fd(cmd->cmd_complete[1], 1);
+			ft_putstr_fd(": numeric argument required\n", 1);
+			code = 255;
+			data->last_code = code;
+		}
+		else if (cmd->cmd_complete[2])
+		{
+			ft_putstr_fd("minishell: exit: too many arguments\n", 1);
+			data->last_code = 1;
+			return (1);
+		}
 		if (data->num_cmds == 1)
 		{
 			ft_putstr_fd("exit\n", 1);
@@ -78,7 +92,11 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 	else if (ft_strcmp("echo", cmd->cmd_complete[0]) == 0)
 		echo_builtin(cmd, data);
 	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
+	{
+		if (cmd->cmd_complete[2])
+			return (1);
 		exit_builtin(data, cmd);
+	}
 	else
 		is_builting = 0;
 	return (is_builting);
