@@ -76,6 +76,8 @@ int	cd_bultin(t_data *data, t_cmd *cmd)
 		}
 	}
 	buf = getcwd(NULL, MAXPATHLEN);
+	if (!buf)
+		cd_error("error retrieving current directory: getcwd: cannot access parent directories", errno, data);
 	cd_set_new_vars(data, &buf, &old_pwd);
 	return (0);
 }
