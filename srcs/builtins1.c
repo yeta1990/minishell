@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 12:47:39 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/03 14:04:03 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,19 +49,17 @@ int	exit_builtin(t_data *data, t_cmd *cmd)
 	data->last_code = code;
 	if (cmd->cmd && ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 	{
-		if (is_not_numeric(cmd->cmd_complete[1]))
+		if (cmd->cmd_complete[1] && cmd->cmd_complete[2])
 		{
-			ft_putstr_fd("Minishell: exit: ", 1);
-			ft_putstr_fd(cmd->cmd_complete[1], 1);
-			ft_putstr_fd(": numeric argument required\n", 1);
-			code = 255;
-			data->last_code = code;
-		}
-		else if (cmd->cmd_complete[2])
-		{
-			ft_putstr_fd("minishell: exit: too many arguments\n", 1);
+			exit_errors(0, 1);
 			data->last_code = 1;
 			return (1);
+		}
+		else if (is_not_numeric(cmd->cmd_complete[1]))
+		{
+			exit_errors(cmd->cmd_complete[1], 2);
+			code = 255;
+			data->last_code = code;
 		}
 		if (data->num_cmds == 1)
 		{
@@ -117,7 +115,8 @@ int	check_outside_builtins(t_data *data, t_cmd *cmd)
 	else if (ft_strcmp("unset", cmd->cmd_complete[0]) == 0
 		&& data->num_cmds == 1)
 		return (unset_builtin(data, cmd));
-	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
+	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0
+		&& data->num_cmds == 1)
 		exit_builtin(data, cmd);
 	else
 		is_builting = 0;

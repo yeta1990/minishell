@@ -13,7 +13,7 @@ SRCS	= srcs/main.c srcs/utils.c srcs/lexer_setters.c srcs/list_utils.c \
 		  srcs/quote_parser_utils.c srcs/expansor.c \
 		  srcs/expansor_2.c srcs/parser.c srcs/builtin_echo.c \
 		  srcs/builtin_cd.c srcs/heredoc.c srcs/error_handlers_2.c \
-		  srcs/executor_helpers.c srcs/shell_level.c
+		  srcs/executor_helpers.c srcs/shell_level.c srcs/error_handlers_3.c
 
 INCS	= inc/ 
 

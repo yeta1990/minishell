@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 13:27:21 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/03 14:03:36 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,6 +222,7 @@ void	syntax_error(char *wrong_portion, t_data *data);
 int		parse_check(char *str);
 int		cd_error(char *filename, int errn, t_data *data);
 int		export_error(char *filename, t_data *data);
+void	exit_errors(char *s, int type);
 
 //envp.c
 int		get_env_size(char **envp);
