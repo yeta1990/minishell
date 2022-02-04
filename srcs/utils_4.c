@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 16:01:54 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 23:53:38 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:05:13 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,8 @@ size_t	std_space_get_cut_space(char *s1)
 	else if (s1 && *s1 == '\'')
 		return (get_simple_quote_cut(s1));
 	else
-		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>')
+		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != '<' && s1[l] != '>'
+			&& s1[l] != 9)
 			l++;
 	return (l);
 }

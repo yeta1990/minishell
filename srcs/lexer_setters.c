@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 18:22:04 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 13:07:06 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:54:42 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	add_redirection(char *name, t_cmd *cmd, int type, t_data *data)
 
 	size = 1;
 	file = malloc(sizeof(t_files));
-	while (name && *name && *name == ' ')
+	while (name && *name && (*name == ' ' || *name == 9))
 	{
 		size++;
 		name++;
