@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:51:43 by crisfern          #+#    #+#             */
-/*   Updated: 2022/02/03 12:47:47 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:47:22 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,20 @@
 
 int	is_not_numeric(char *str)
 {
+	int	i;
+
+	i = 0;
 	if (str)
 	{
 		while (*str)
 		{
 			if (((*str < '0') || (*str > '9'))
 				&& (*str != ' ' && *str != 9 && *str != 10
-					&& *str != 11 && *str != 12 && *str != 13))
+					&& *str != 11 && *str != 12 && *str != 13)
+				&& (*str == '-' && i != 0))
 				return (1);
 			str++;
+			i++;
 		}
 	}
 	return (0);
