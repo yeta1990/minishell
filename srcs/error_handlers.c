@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 09:43:30 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:17:19 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,9 +66,12 @@ int	cd_error(char *filename, int errn, t_data *data)
 	return (1);
 }
 
-int	export_error(char *filename, t_data *data)
+int	export_error(char *filename, t_data *data, int unset)
 {
-	ft_putstr_fd("minishell: export: `", 2);
+	if (unset == 0)
+		ft_putstr_fd("minishell: export: `", 2);
+	else if (unset == 1)
+		ft_putstr_fd("minishell: unset: `", 2);
 	write(2, filename, ft_strlen(filename));
 	ft_putstr_fd("': not a valid identifier\n", 2);
 	data->last_code = 1;

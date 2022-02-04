@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/13 16:28:57 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/19 08:58:47 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:24:07 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 int	ft_isalpha(int c)
 {
 	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122))
+		return (1);
+	return (0);
+}
+
+int	ft_isalpha_mod(int c)
+{
+	if ((c >= 65 && c <= 90) || (c >= 97 && c <= 122) || c == 95)
 		return (1);
 	return (0);
 }

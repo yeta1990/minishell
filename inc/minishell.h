@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 09:54:59 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:29:18 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -171,10 +171,13 @@ int		ft_strncmp(const char *s1, const char *s2, size_t n);
 char	*ft_itoa(int n);
 int		ft_atoi(const char *str);
 int		ft_isalnum(int c);
+int		ft_isalnum_mod(int c);
 int		ft_isalpha(int c);
 int		ft_isdigit(int c);
 void	init_checker(int argc, char **argv);
 char	*ft_strrchr(const char *s, int c);
+int		ft_isalpha_mod(int c);
+
 //freezers
 void	free_double_string(char **str);
 void	free_data(t_data *data);
@@ -208,7 +211,7 @@ int		is_valid_infile(char *str);
 void	syntax_error(char *wrong_portion, t_data *data);
 int		parse_check(char *str);
 int		cd_error(char *filename, int errn, t_data *data);
-int		export_error(char *filename, t_data *data);
+int		export_error(char *filename, t_data *data, int unset);
 void	exit_errors(char *s, int type);
 
 //envp.c
