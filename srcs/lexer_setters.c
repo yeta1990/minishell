@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 18:22:04 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 11:31:24 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 12:05:01 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,13 +63,20 @@ void	expand_cmd(char *raw_cmd, t_cmd *parsed_instr, t_data *data, int *size)
 {
 	char	*expanded;
 	char	*false_dup;
+	int		i;
+	char	*s;
 
+	i = 0;
 	expanded = 0;
 	false_dup = ft_strdup_space(raw_cmd, size, 1);
 	free(false_dup);
-	expanded = expansor(&raw_cmd, 0, data);
+	while (i < (int) ft_strlen(raw_cmd) && raw_cmd[i] != ' ' && raw_cmd[i] != 9)
+		i++;
+	s = ft_substr(raw_cmd, 0, i);
+	expanded = expansor(&s, 0, data);
 	parsed_instr->cmd_and_its_flags = ft_strdup(expanded);
 	free(expanded);
+	free(s);
 }
 
 int	add_cmd(char *raw_cmd, t_cmd *pars_instr, t_data *data)
