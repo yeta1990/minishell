@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   executor_helpers.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 22:33:49 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 22:46:59 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:51:50 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	check_heredocs(t_data *data)
 			{
 				if (f->append == 1)
 				{
-					run_heredoc_2(&f, i);
+					run_heredoc_2(&f, i, 0);
 					i++;
 				}
 				f = f->next;

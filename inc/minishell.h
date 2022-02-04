@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 09:38:40 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:54:59 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ typedef struct s_data
 	int					syntax_error;
 	int					cmd_by_stdin;
 	int					*pid;
+	int					sgl_heredoc;
 }	t_data;
 
 typedef struct s_sep
@@ -196,7 +197,7 @@ void	ft_dup_infile(t_files **stdins);
 void	ft_dup_output(t_files **stdouts);
 char	*ft_strtrim(char const *s1, char const *set);
 char	*get_cmd_from_user(t_data *data);
-void	run_heredoc_2(t_files **f, int i);
+void	run_heredoc_2(t_files **f, int i, int child_status);
 
 //error_handlers.c
 int		transform_error_code(char *cmd, int err);

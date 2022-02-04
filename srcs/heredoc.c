@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid.c      +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 21:38:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/01 21:38:57 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:54:34 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	heredoc_process(t_files **f, char *filename)
 	close(fd);
 }
 
-void	run_heredoc_2(t_files **f, int i)
+void	run_heredoc_2(t_files **f, int i, int child_status)
 {
 	char	*filename;
 	int		fds[2];
@@ -81,7 +81,9 @@ void	run_heredoc_2(t_files **f, int i)
 	signal(SIGINT, SIG_IGN);
 	close(fds[0]);
 	close(fds[1]);
-	wait(NULL);
+	wait(&child_status);
+	if (WIFSIGNALED(child_status) == 1 && WTERMSIG(child_status) == SIGINT)
+		g_data.sgl_heredoc = 1;
 	free((*f)->name);
 	(*f)->name = ft_strdup(filename);
 	free(filename);

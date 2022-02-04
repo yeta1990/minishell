@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 21:54:07 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:55:21 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ void	main_controller(t_data *data, char *str)
 	data->num_cmds = 0;
 	data->syntax_error = 0;
 	data->cmd_by_stdin = 0;
+	data->sgl_heredoc = 0;
 	parsing_handler(data, &str);
 	history_management(data, &str);
 	if (data->syntax_error == 0)

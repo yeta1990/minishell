@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/09 18:31:46 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 17:47:23 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:55:56 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,6 +105,11 @@ int	execute_commands(t_data *data)
 	code = 0;
 	create_pipes(data->cmds);
 	check_heredocs(data);
+	if (data->sgl_heredoc)
+	{
+		data->sgl_heredoc = 0;
+		return (1);
+	}
 	execute_process(data, &child_status);
 	close_pipes(data->cmds);
 	success = wait_children(&child_status, &code, &signal);
