@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 10:29:18 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:53:14 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ char	**from_list_to_double_char(t_files **full_strings);
 
 // lexer_setters.c
 int		add_redirection(char *raw_file, t_cmd *cmd, int type, t_data *data);
-int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction);
+int		add_cmd(char *raw_cmd, t_cmd *parsed_instruction, t_data *data);
 
 //path_operations.c
 char	**get_paths(char *path);
