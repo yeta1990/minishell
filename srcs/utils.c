@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/21 13:03:04 by crisfern          #+#    #+#             */
-/*   Updated: 2022/02/03 13:23:51 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:04:50 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,14 +116,15 @@ int	std_space_get_cut_position(char	*s1)
 	if (s1 && *s1 == '\"')
 	{
 		aux = s1 + 1;
-		if (ft_strchr(aux, '\"') && *(ft_strchr(aux, '\"') + 1) == ' ')
+		if (ft_strchr(aux, '\"') && (*(ft_strchr(aux, '\"') + 1) == ' '
+				|| *(ft_strchr(aux, '\"') + 1) == 9))
 			l = (ft_strchr(aux, '\"') - aux) + 2;
 		else
-			while (s1 && s1[l] && s1[l] != ' ')
+			while (s1 && s1[l] && s1[l] != ' ' && s1[l] != 9)
 				l++;
 	}
 	else
-		while (s1 && s1[l] && s1[l] != ' ')
+		while (s1 && s1[l] && s1[l] != ' ' && s1[l] != 9)
 			l++;
 	return (l);
 }
