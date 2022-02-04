@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_cd.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
+/*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:57:16 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 21:26:38 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 12:39:46 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,12 @@ int	cd_go_home(t_data *data, char **old_pwd, t_cmd *cmd)
 	return (0);
 }
 
-void	cd_set_new_vars(t_data *data, char **buf, char **old_pwd)
+int	cd_set_env(t_data *data, char **buf, char **old_pwd)
 {
 	int	i;
 
 	i = -1;
+	flag = 0;
 	while (data->env[++i])
 	{
 		if (ft_strncmp("PWD=", data->env[i], 4) == 0)
@@ -53,6 +54,43 @@ void	cd_set_new_vars(t_data *data, char **buf, char **old_pwd)
 			data->env[i] = ft_strjoin("OLDPWD=", *old_pwd);
 		}
 	}
+	return (flag);
+}
+
+void	cd_set_exp(t_data *data, char **buf, char **old_pwd)
+{
+	int		i;
+	char	*aux;
+
+	i = -1;
+	while (data->exp[++i])
+	{
+		if (ft_strncmp("PWD=", data->exp[i], 4) == 0)
+		{
+			free(data->exp[i]);
+			aux = ft_strjoin("PWD=", *buf);
+			data->exp[i] = export_join(aux);
+			free(aux);
+		}
+		else if (ft_strncmp("OLDPWD=", data->exp[i], 7) == 0
+			|| (ft_strncmp("OLDPWD", data->exp[i], 6) == 0
+				&& ft_strlen(data->exp[i]) == 6))
+		{
+			free(data->exp[i]);
+			aux = ft_strjoin("OLDPWD=", *old_pwd);
+			data->exp[i] = export_join(aux);
+			free(aux);
+		}
+	}
+}
+
+void	cd_set_new_vars(t_data *data, char **buf, char **old_pwd)
+{
+	int		flag_env;
+	int		flag_exp;
+
+	flag_env = cd_set_env(data, buf, old_pwd);
+	flag_exp = cd_set_exp(data, buf, old_pwd);
 	free(*old_pwd);
 	free(*buf);
 }
