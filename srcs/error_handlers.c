@@ -6,22 +6,31 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 10:06:51 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 15:08:50 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:43:30 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int	execution_errors(char *cmd)
+{
+	struct stat	stats;
+
+	write(2, "minishell: ", 11);
+	write(2, cmd, ft_strlen(cmd));
+	stat(cmd, &stats);
+	if (S_ISDIR(stats.st_mode))
+		write(2, ": is a directory\n", 17);
+	else
+		write(2, ": Permission denied\n", 20);
+	return (126);
+}
+
 int	transform_error_code(char *cmd, int err)
 {
 	if (err == 13 && (access(cmd, F_OK) != 0
 			|| access(cmd, X_OK) == -1) && ft_strchr(cmd, '/') != 0)
-	{
-		write(2, "minishell: ", 11);
-		write(2, cmd, ft_strlen(cmd));
-		write(2, ": Permission denied\n", 20);
-		return (126);
-	}
+		return (execution_errors(cmd));
 	else if (err == 2 || err == 13)
 	{
 		write(2, "minishell: ", 11);

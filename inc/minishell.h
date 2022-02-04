@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 23:49:26 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 09:38:40 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include "readline/history.h"
 # include <sys/param.h>
 # include <sys/wait.h>
+# include <sys/stat.h>
 # include <string.h>
 # include <fcntl.h>
 # include <errno.h>
