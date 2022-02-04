@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/25 18:22:04 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 11:18:35 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 11:31:24 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,16 +62,13 @@ int	add_redirection(char *name, t_cmd *cmd, int type, t_data *data)
 void	expand_cmd(char *raw_cmd, t_cmd *parsed_instr, t_data *data, int *size)
 {
 	char	*expanded;
-	int		false_size;
 	char	*false_dup;
 
 	expanded = 0;
-	false_size = 0;
 	false_dup = ft_strdup_space(raw_cmd, size, 1);
 	free(false_dup);
-	expanded = expansor(&raw_cmd, 2, data);
-	parsed_instr->cmd_and_its_flags
-		= ft_strdup_space(expanded, &false_size, 1);
+	expanded = expansor(&raw_cmd, 0, data);
+	parsed_instr->cmd_and_its_flags = ft_strdup(expanded);
 	free(expanded);
 }
 
@@ -86,7 +83,9 @@ int	add_cmd(char *raw_cmd, t_cmd *pars_instr, t_data *data)
 	{
 		if (ft_strlen(raw_cmd) > 1 && *raw_cmd != '\''
 			&& ft_strchr(raw_cmd, '$') != 0)
+		{
 			expand_cmd(raw_cmd, pars_instr, data, &size);
+		}
 		else
 			pars_instr->cmd_and_its_flags = ft_strdup_space(raw_cmd, &size, 1);
 	}
