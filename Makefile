@@ -29,7 +29,7 @@ NAME	= minishell
 RM		= rm -f
 
 %.o:%.c
-			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS) 
+			$(CC) $(CFLAGS) -c $< -o $(<:.c=.o) -I$(INCS) -I/Users/$(USER)/.brew/opt/readline/include
 
 $(NAME):	$(OBJS) 
 			$(CC) $(CFLAGS) $(OBJS) -I$(INCS) -o $(NAME) -L/Users/$(USER)/.brew/opt/readline/lib -I/Users/$(USER)/.brew/opt/readline/include -lreadline
