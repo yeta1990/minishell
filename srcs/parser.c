@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 11:25:15 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 09:52:41 by albgarci         ###   ########.fr       */
+/*   Updated: 2022/02/04 10:53:29 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ void	parse_instruction(char *s, t_cmd *parsed_instruction, t_data *data)
 		else if (*str == '>')
 			parse_outfiles(data, parsed_instruction, &str);
 		else if (*str != '<' && *str != '>')
-			str += add_cmd(str, parsed_instruction);
+			str += add_cmd(str, parsed_instruction, data);
 		while (*str && (*str == ' ' || *str == 9))
 			str++;
 	}
