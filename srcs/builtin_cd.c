@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/02/01 18:57:16 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/04 12:39:46 by crisfern         ###   ########.fr       */
+/*   Updated: 2022/02/04 12:48:03 by crisfern         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,10 @@ int	cd_go_home(t_data *data, char **old_pwd, t_cmd *cmd)
 	return (0);
 }
 
-int	cd_set_env(t_data *data, char **buf, char **old_pwd)
+void	cd_set_env(t_data *data, char **buf, char **old_pwd)
 {
 	int	i;
+	int	flag;
 
 	i = -1;
 	flag = 0;
@@ -52,9 +53,11 @@ int	cd_set_env(t_data *data, char **buf, char **old_pwd)
 		{
 			free(data->env[i]);
 			data->env[i] = ft_strjoin("OLDPWD=", *old_pwd);
+			flag++;
 		}
 	}
-	return (flag);
+	if (!flag)
+		data->env = add_entry(data->env, ft_strjoin("OLDPWD=", *old_pwd));
 }
 
 void	cd_set_exp(t_data *data, char **buf, char **old_pwd)
@@ -86,11 +89,8 @@ void	cd_set_exp(t_data *data, char **buf, char **old_pwd)
 
 void	cd_set_new_vars(t_data *data, char **buf, char **old_pwd)
 {
-	int		flag_env;
-	int		flag_exp;
-
-	flag_env = cd_set_env(data, buf, old_pwd);
-	flag_exp = cd_set_exp(data, buf, old_pwd);
+	cd_set_env(data, buf, old_pwd);
+	cd_set_exp(data, buf, old_pwd);
 	free(*old_pwd);
 	free(*buf);
 }
