@@ -1,7 +1,7 @@
 # minishell (42 project)
 
 <p align="center">
-<img src="minishell-record.gif">
+<img src="minishell-record.gif" width="450px">
 </p>
 
 ## Description
