@@ -22,7 +22,7 @@ CC		= gcc
 
 OBJS	= $(SRCS:.c=.o)
 
-CFLAGS	= -Wall -Wextra -Werror
+CFLAGS	= -g3 -fsanitize=address 
 
 NAME	= minishell
 

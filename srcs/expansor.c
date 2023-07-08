@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/27 12:50:22 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 23:52:02 by albgarci         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:19:28 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,6 +109,7 @@ void	expansor_third(t_expansor_vars *v)
 char	*expansor(char **arg, int type, t_data *data)
 {
 	t_expansor_vars	*v;
+	char			*exp;
 
 	if (ft_strchr(*arg, '$') == 0 || type == 1)
 		return (ft_strdup(*arg));
@@ -117,10 +118,7 @@ char	*expansor(char **arg, int type, t_data *data)
 	while (v->a && v->a[v->i])
 	{
 		if (ft_strchr(v->a + v->i - 1, '$') == 0)
-		{
-			free(v);
-			return (ft_strdup(*arg));
-		}
+			return (free(v), ft_strdup(*arg));
 		expansor_advance(v);
 		if (v->i == (int) ft_strlen(v->a) && type == 2)
 		{
@@ -130,6 +128,7 @@ char	*expansor(char **arg, int type, t_data *data)
 		expansor_second(v, data);
 		expansor_third(v);
 	}
+	exp = ft_strdup(v->exp);
 	free(v);
-	return (v->exp);
+	return (exp);
 }

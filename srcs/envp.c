@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/30 13:32:33 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/02 10:13:40 by albgarci         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:27:05 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,8 @@ char	*export_join(char *str)
 	char	*aux3;
 
 	aux1 = ft_strchr(str, '=');
+	if (!aux1)
+		return (ft_strdup(""));
 	last = ft_strdup(aux1 + 1);
 	first = ft_substr(str, 0, aux1 + 1 - str);
 	aux1 = ft_strjoin(first, "\"");

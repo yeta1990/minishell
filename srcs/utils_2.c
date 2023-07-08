@@ -6,7 +6,7 @@
 /*   By: albgarci <albgarci@student.42madrid>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:46:00 by albgarci          #+#    #+#             */
-/*   Updated: 2022/02/03 23:52:50 by albgarci         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:24:08 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,11 +44,11 @@ size_t	ft_strlen(const char *s)
 	int	n;
 
 	n = 0;
-	if (!s)
+	if (!s || !*s)
 		return (0);
 	if (s && *s)
 	{
-		while (*s++)
+		while (s && *s++)
 			n++;
 	}
 	return (n);

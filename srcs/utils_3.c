@@ -6,7 +6,7 @@
 /*   By: crisfern <crisfern@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/13 12:45:52 by albgarci          #+#    #+#             */
-/*   Updated: 2022/01/25 16:02:54 by albgarci         ###   ########.fr       */
+/*   Updated: 2023/07/08 18:22:49 by albgarci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strchr(const char *s, int c)
 {
-	while (*s)
+	while (s && *s)
 		if (*s++ == (char)c)
 			return ((char *)--s);
 	if ((char)c == 0)
