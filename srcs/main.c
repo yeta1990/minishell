@@ -14,6 +14,8 @@
 #include <string.h>
 #include <sys/wait.h>
 
+t_data g_data;
+
 void	handler_c(int signo)
 {
 	signo++;

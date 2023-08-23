@@ -63,7 +63,7 @@ int	check_builtins(t_data *data, t_cmd *cmd)
 		echo_builtin(cmd, data);
 	else if (ft_strcmp("exit", cmd->cmd_complete[0]) == 0)
 	{
-		if (cmd->cmd_complete[2])
+		if (cmd && cmd->cmd_complete[1] && cmd->cmd_complete[2])
 			return (1);
 		exit_builtin(data, cmd);
 	}

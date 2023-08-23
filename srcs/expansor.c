@@ -129,6 +129,7 @@ char	*expansor(char **arg, int type, t_data *data)
 		expansor_third(v);
 	}
 	exp = ft_strdup(v->exp);
+	free(v->exp);
 	free(v);
 	return (exp);
 }

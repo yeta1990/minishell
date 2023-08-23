@@ -97,7 +97,7 @@ typedef struct s_expansor_vars
 	int		z;		
 }	t_expansor_vars;
 
-t_data	g_data;
+extern t_data	g_data;
 
 void	handler_c(int a);
 
